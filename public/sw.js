@@ -1,8 +1,12 @@
-const CACHE_NAME = 'tmobile-sales-edge-v1.1.1';
+const CACHE_NAME = 'tmobile-sales-edge-v1.2.1';
 const urlsToCache = [
   '/',
   '/index.html',
   '/manifest.json',
+  '/favicon.png',
+  '/icon-192.png',
+  '/icon-180.png',
+  '/icon-512.png',
   '/src/main.jsx',
   '/src/App.jsx',
   '/src/App.css'
