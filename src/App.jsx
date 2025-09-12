@@ -6,12 +6,12 @@ import ResultsDisplay from './components/ResultsDisplay';
 import QuoteGenerator from './components/QuoteGenerator';
 
 function App() {
-  const [currentStep, setCurrentStep] = useState('customerType');
+  const [currentStep, setCurrentStep] = useState('lines');
   const [customerData, setCustomerData] = useState({
     isExisting: false,
     newCustomer: true,
-    carrier: '',
-    lines: 1,
+    carrier: '', // We'll only ask this if Keep & Switch is the best deal
+    lines: 0,
     devices: [],
     selectedPlan: 'GO5G_Next',
     accessories: {
@@ -35,69 +35,47 @@ function App() {
     }
   }, []);
 
-  const handleAnswer = (answer) => {
-    const newData = { ...customerData };
-    
-    switch(currentStep) {
-      case 'customerType':
-        newData.isExisting = answer === 'existing';
-        newData.newCustomer = answer === 'new';
-        setCurrentStep('carrier');
-        break;
-      
-      case 'carrier':
-        newData.carrier = answer;
-        setCurrentStep('lines');
-        break;
-      
-      case 'lines':
-        newData.lines = answer;
-        newData.devices = Array(answer).fill().map(() => ({
-          currentPhone: '',
-          newPhone: '',
-          storage: ''
-        }));
-        setCurrentStep('currentPhones');
-        break;
-      
-      case 'currentPhones':
-        // Handle in device selector component
-        setCurrentStep('newPhones');
-        break;
-      
-      case 'newPhones':
-        // Handle in device selector component
-        setCurrentStep('plan');
-        break;
-      
-      case 'plan':
-        newData.selectedPlan = answer;
-        setCurrentStep('accessories');
-        break;
-      
-      case 'accessories':
-        newData.accessories = answer;
-        calculateResults(newData);
-        break;
+  const handleAnswer = (answer, nextStep = null) => {
+    // Handle navigation
+    if (answer === 'back' && nextStep) {
+      setCurrentStep(nextStep);
+      return;
     }
     
-    setCustomerData(newData);
+    if (answer === 'continue' && nextStep) {
+      setCurrentStep(nextStep);
+      return;
+    }
+
+    // Handle final calculation
+    if (currentStep === 'accessories') {
+      calculateResults(customerData);
+    }
   };
 
   const calculateResults = (data) => {
     const optimizer = new DealOptimizer(data);
     const scenarios = optimizer.calculateAllScenarios();
+    
+    // Check if Keep & Switch is the best deal
+    const keepAndSwitchScenario = scenarios.find(s => s.type === 'keep_and_switch');
+    if (keepAndSwitchScenario && keepAndSwitchScenario === scenarios[0]) {
+      // If Keep & Switch is best, we might want to ask about carrier eligibility
+      // For now, we'll assume they're eligible
+      data.carrier = 'Verizon'; // Default to eligible carrier
+    }
+    
     setResults(scenarios);
     setShowResults(true);
   };
 
   const resetFlow = () => {
-    setCurrentStep('customerType');
+    setCurrentStep('lines');
     setCustomerData({
       isExisting: false,
       newCustomer: true,
       carrier: '',
-      lines: 1,
+      lines: 0,
       devices: [],
       selectedPlan: 'GO5G_Next',
       accessories: {
@@ -128,7 +106,17 @@ function App() {
             <h1 className="app-title">Smart Quote Optimizer</h1>
           </div>
           <div className="header-actions">
-            <div className="rep-info">
+            <div 
+              className="rep-info" 
+              style={{cursor: 'pointer'}}
+              onClick={() => {
+                const name = prompt('Enter your name:', repInfo.name);
+                const storeId = prompt('Enter store ID:', repInfo.storeId);
+                if (name && storeId) {
+                  saveRepInfo({ name, storeId });
+                }
+              }}
+            >
               <span>👤</span>
               <span>{repInfo.name || 'Set Rep Info'}</span>
             </div>
@@ -155,33 +143,17 @@ function App() {
               customerData={customerData}
               repInfo={repInfo}
             />
-          </>
-        )}
-
-        <div className="action-buttons">
-          {showResults ? (
-            <>
+            
+            <div className="action-buttons">
               <button className="btn btn-secondary" onClick={resetFlow}>
                 New Quote
               </button>
               <button className="btn btn-primary" onClick={() => window.print()}>
                 Print Quote
               </button>
-            </>
-          ) : (
-            <button className="btn btn-primary" onClick={() => {
-              if (currentStep === 'customerType' && !repInfo.name) {
-                const name = prompt('Enter your name:');
-                const storeId = prompt('Enter store ID:');
-                if (name && storeId) {
-                  saveRepInfo({ name, storeId });
-                }
-              }
-            }}>
-              {currentStep === 'customerType' && !repInfo.name ? 'Set Rep Info' : 'Continue'}
-            </button>
-          )}
-        </div>
+            </div>
+          </>
+        )}
       </main>
     </div>
   );
