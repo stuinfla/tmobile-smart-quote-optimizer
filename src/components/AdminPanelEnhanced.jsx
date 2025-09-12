@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { phoneData, tradeInValues } from '../data/phoneData';
 import { promotions } from '../data/promotions';
+import { monthlyPrograms, programCategories, defaultActivePrograms } from '../data/monthlyPrograms';
 import adminStorage from '../utils/adminStorage';
 
 function AdminPanelEnhanced({ onClose, onStoreSetup }) {
@@ -10,6 +11,10 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
   const [promotionData, setPromotionData] = useState(promotions);
   const [phoneDataState, setPhoneDataState] = useState(phoneData);
   const [tradeInData, setTradeInData] = useState(tradeInValues);
+  
+  // Programs management
+  const [activePrograms, setActivePrograms] = useState(defaultActivePrograms);
+  const [programSettings, setProgramSettings] = useState({});
   
   // Store management
   const [stores, setStores] = useState([]);
@@ -347,6 +352,12 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
             📱 Card Scanner
           </button>
           <button 
+            className={activeTab === 'programs' ? 'active' : ''}
+            onClick={() => setActiveTab('programs')}
+          >
+            📋 Programs
+          </button>
+          <button 
             className={activeTab === 'promotions' ? 'active' : ''}
             onClick={() => setActiveTab('promotions')}
           >
@@ -632,6 +643,140 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
             </div>
           )}
 
+          {/* Programs Management Tab */}
+          {activeTab === 'programs' && (
+            <div className="programs-management">
+              <h4>📋 T-Mobile Monthly Programs</h4>
+              <p>Select which T-Mobile programs are available for your store. These will be offered as options during quote calculations.</p>
+              
+              <div className="programs-grid">
+                {Object.entries(programCategories).map(([category, programIds]) => (
+                  <div key={category} className="program-category">
+                    <h5 className="category-title">
+                      {category.charAt(0).toUpperCase() + category.slice(1).replace(/([A-Z])/g, ' $1')} Programs
+                    </h5>
+                    
+                    <div className="category-programs">
+                      {programIds.map(programId => {
+                        const program = monthlyPrograms[programId];
+                        if (!program) return null;
+                        
+                        const isActive = activePrograms.includes(programId);
+                        
+                        return (
+                          <div key={programId} className={`program-item ${isActive ? 'active' : ''}`}>
+                            <div className="program-header">
+                              <label className="program-toggle">
+                                <input
+                                  type="checkbox"
+                                  checked={isActive}
+                                  onChange={(e) => {
+                                    if (e.target.checked) {
+                                      setActivePrograms([...activePrograms, programId]);
+                                    } else {
+                                      setActivePrograms(activePrograms.filter(id => id !== programId));
+                                    }
+                                  }}
+                                />
+                                <span className="program-name">{program.name}</span>
+                              </label>
+                              
+                              {!program.activeProgram && (
+                                <span className="status-badge inactive">Inactive</span>
+                              )}
+                              {program.validUntil && (
+                                <span className="status-badge expires">
+                                  Expires: {new Date(program.validUntil).toLocaleDateString()}
+                                </span>
+                              )}
+                            </div>
+                            
+                            <p className="program-description">{program.description}</p>
+                            
+                            <div className="program-benefits">
+                              <div className="benefits-grid">
+                                {program.benefits.payoffAmount > 0 && (
+                                  <div className="benefit-item">
+                                    <span className="benefit-icon">💰</span>
+                                    <span className="benefit-text">Up to ${program.benefits.payoffAmount.toLocaleString()} device payoff</span>
+                                  </div>
+                                )}
+                                {program.benefits.tradeinCredit > 0 && (
+                                  <div className="benefit-item">
+                                    <span className="benefit-icon">📱</span>
+                                    <span className="benefit-text">${program.benefits.tradeinCredit} trade-in credit</span>
+                                  </div>
+                                )}
+                                {program.benefits.planDiscount > 0 && (
+                                  <div className="benefit-item">
+                                    <span className="benefit-icon">📅</span>
+                                    <span className="benefit-text">${program.benefits.planDiscount}/mo per line discount</span>
+                                  </div>
+                                )}
+                                {program.benefits.activationWaiver && (
+                                  <div className="benefit-item">
+                                    <span className="benefit-icon">✅</span>
+                                    <span className="benefit-text">Activation fees waived</span>
+                                  </div>
+                                )}
+                              </div>
+                              
+                              {program.eligibility && (
+                                <div className="eligibility-info">
+                                  <strong>Eligibility:</strong> {program.eligibility}
+                                </div>
+                              )}
+                              
+                              {program.eligibleCarriers && (
+                                <div className="eligible-carriers">
+                                  <strong>Eligible Carriers:</strong> {program.eligibleCarriers.join(', ')}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div className="programs-summary">
+                <div className="summary-stats">
+                  <div className="stat-item">
+                    <span className="stat-number">{activePrograms.length}</span>
+                    <span className="stat-label">Active Programs</span>
+                  </div>
+                  <div className="stat-item">
+                    <span className="stat-number">{Object.keys(monthlyPrograms).length}</span>
+                    <span className="stat-label">Total Available</span>
+                  </div>
+                </div>
+                
+                <div className="programs-actions">
+                  <button 
+                    onClick={() => setActivePrograms(Object.keys(monthlyPrograms))}
+                    className="btn-secondary"
+                  >
+                    Enable All Programs
+                  </button>
+                  <button 
+                    onClick={() => setActivePrograms(defaultActivePrograms)}
+                    className="btn-secondary"
+                  >
+                    Reset to Defaults
+                  </button>
+                  <button 
+                    onClick={() => setActivePrograms([])}
+                    className="btn-secondary"
+                  >
+                    Disable All Programs
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Rest of existing tabs (promotions, phones, tradein) remain the same */}
         </div>
 
@@ -746,6 +891,185 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
 
           .btn-danger:hover {
             background-color: #c82333;
+          }
+
+          /* Programs Management Styles */
+          .programs-management {
+            max-height: 70vh;
+            overflow-y: auto;
+          }
+
+          .programs-grid {
+            display: grid;
+            gap: 2rem;
+            margin: 1.5rem 0;
+          }
+
+          .program-category {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            background: #f9f9f9;
+          }
+
+          .category-title {
+            margin: 0 0 1rem 0;
+            color: var(--tmobile-magenta);
+            font-size: 1.1rem;
+            border-bottom: 2px solid var(--tmobile-magenta);
+            padding-bottom: 0.5rem;
+          }
+
+          .category-programs {
+            display: grid;
+            gap: 1rem;
+          }
+
+          .program-item {
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            padding: 1rem;
+            transition: all 0.2s;
+          }
+
+          .program-item.active {
+            border-color: var(--tmobile-magenta);
+            background: rgba(226, 0, 116, 0.02);
+          }
+
+          .program-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+          }
+
+          .program-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+          }
+
+          .program-name {
+            color: var(--tmobile-magenta);
+          }
+
+          .status-badge {
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+          }
+
+          .status-badge.inactive {
+            background: #ffa500;
+            color: white;
+          }
+
+          .status-badge.expires {
+            background: #dc3545;
+            color: white;
+          }
+
+          .program-description {
+            margin: 0 0 1rem 0;
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
+          }
+
+          .program-benefits {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 6px;
+          }
+
+          .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+          }
+
+          .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+          }
+
+          .benefit-icon {
+            font-size: 1rem;
+          }
+
+          .benefit-text {
+            color: #333;
+          }
+
+          .eligibility-info,
+          .eligible-carriers {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #666;
+            padding-top: 0.5rem;
+            border-top: 1px solid #eee;
+          }
+
+          .programs-summary {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(226, 0, 116, 0.1), rgba(226, 0, 116, 0.05));
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          }
+
+          .summary-stats {
+            display: flex;
+            gap: 2rem;
+          }
+
+          .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--tmobile-magenta);
+          }
+
+          .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+            text-transform: uppercase;
+          }
+
+          .programs-actions {
+            display: flex;
+            gap: 0.5rem;
+          }
+
+          @media (max-width: 768px) {
+            .programs-summary {
+              flex-direction: column;
+              gap: 1rem;
+            }
+
+            .programs-actions {
+              flex-wrap: wrap;
+            }
+
+            .benefits-grid {
+              grid-template-columns: 1fr;
+            }
           }
         `}</style>
       </div>
