@@ -1,4 +1,4 @@
-// T-Mobile Monthly Programs and Promotions (2025)
+// T-Mobile Monthly Programs and Promotions (2025) - Updated with Experience Plans Integration
 export const monthlyPrograms = {
   // Keep and Switch Programs
   keepAndSwitch: {
@@ -69,19 +69,25 @@ export const monthlyPrograms = {
     activeProgram: false // Can be enabled
   },
 
-  // Senior/Military Programs
+  // Senior/Military Programs (Updated with 2025 Experience Plan Pricing)
   seniorMilitary: {
     id: 'senior_military',
     name: 'Senior & Military Advantage',
-    description: 'Special pricing for seniors 55+ and military',
+    description: '55+ and Military/First Responder discount plans - Up to $25/mo savings per line',
     benefits: {
       payoffAmount: 500,
       tradeinCredit: 250,
-      planDiscount: 20, // Significant monthly discount
+      planDiscount: 25, // Up to $25/mo per line savings on Experience plans
       activationWaiver: true,
-      specialPricing: true
+      specialPricing: true,
+      experiencePlans: {
+        essentials: { individual: 45, family2: 35 }, // $15-25 savings
+        experienceMore: { individual: 70, family2: 30 }, // $15-25 savings  
+        experienceBeyond: { individual: 85, family2: 45 } // $15-25 savings
+      }
     },
-    eligibility: 'Seniors 55+, Military (active/veteran), First responders',
+    eligibility: 'Primary account holder 55+, Military (active/veteran), First responders',
+    verification: 'Age or military/first responder verification required',
     activeProgram: true
   },
 
