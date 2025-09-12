@@ -1,0 +1,47 @@
+{
+  "stores": [
+    {
+      "id": "7785",
+      "name": "T-Mobile Store",
+      "address": "1821 S Federal Hwy",
+      "city": "Delray Beach",
+      "state": "FL",
+      "zip": "33483",
+      "phone": "561.330.6211",
+      "manager": "Store Manager",
+      "region": "South Florida",
+      "district": "Palm Beach",
+      "hours": {
+        "monday": "10:00 AM - 8:00 PM",
+        "tuesday": "10:00 AM - 8:00 PM", 
+        "wednesday": "10:00 AM - 8:00 PM",
+        "thursday": "10:00 AM - 8:00 PM",
+        "friday": "10:00 AM - 9:00 PM",
+        "saturday": "10:00 AM - 9:00 PM",
+        "sunday": "11:00 AM - 7:00 PM"
+      }
+    }
+  ],
+  "salesReps": [
+    {
+      "id": "rep-001",
+      "name": "Cheyenne Bahadur",
+      "email": "cheyenne.bahadur@t-mobile.com",
+      "phone": "561.330.6211",
+      "role": "Mobile Expert",
+      "storeId": "7785",
+      "employeeId": "TMO001",
+      "hireDate": "2023-01-15",
+      "specialties": ["Business Accounts", "Device Expert"],
+      "certifications": ["T-Mobile Certified", "Samsung Specialist"],
+      "active": true
+    }
+  ],
+  "settings": {
+    "defaultStoreId": "7785",
+    "currentRepId": "rep-001",
+    "autoSaveInterval": 30000,
+    "backupEnabled": true,
+    "lastBackup": "2025-01-12T12:00:00Z"
+  }
+}

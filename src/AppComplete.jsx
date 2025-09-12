@@ -7,9 +7,10 @@ import ResultsDisplayEnhanced from './components/ResultsDisplayEnhanced';
 import QuoteGenerator from './components/QuoteGenerator';
 import StoreSetup from './components/StoreSetup';
 import RepSwitcher from './components/RepSwitcher';
-import AdminPanel from './components/AdminPanel';
+import AdminPanelEnhanced from './components/AdminPanelEnhanced';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { StoreManager, RepManager, sampleRepData } from './data/storeData';
+import adminStorage from './utils/adminStorage';
 import versionInfo from './version.json';
 
 function AppComplete() {
@@ -79,11 +80,75 @@ function AppComplete() {
   };
 
   const initializeApp = () => {
-    // Always start ready to sell - use defaults if not configured
+    // Always start ready to sell - use admin storage system
+    try {
+      let store = adminStorage.getCurrentStore();
+      
+      if (!store) {
+        // Initialize with default store if none exists
+        const defaultStore = {
+          id: '7785',
+          name: 'T-Mobile Store',
+          address: '1821 S Federal Hwy',
+          city: 'Delray Beach',
+          state: 'FL',
+          zip: '33483',
+          phone: '561.330.6211',
+          manager: 'Store Manager'
+        };
+        store = adminStorage.addStore(defaultStore);
+        adminStorage.setCurrentStore(store.id);
+      }
+      
+      // Convert store format for compatibility
+      const storeInfo = {
+        storeId: store.id,
+        storeName: store.name,
+        address: store.address,
+        city: store.city,
+        state: store.state,
+        zip: store.zip,
+        phone: store.phone,
+        manager: store.manager
+      };
+      setStoreInfo(storeInfo);
+      
+      // Check for current rep
+      let rep = adminStorage.getCurrentRep();
+      
+      if (!rep) {
+        const allReps = adminStorage.getSalesReps();
+        if (allReps.length === 0) {
+          // Create default rep
+          const defaultRep = {
+            name: 'T-Mobile Expert',
+            email: 'expert@t-mobile.com',
+            phone: store.phone,
+            role: 'Mobile Expert',
+            storeId: store.id
+          };
+          rep = adminStorage.addSalesRep(defaultRep);
+        } else {
+          rep = allReps[0];
+        }
+        adminStorage.setCurrentRep(rep.id);
+      }
+      
+      setCurrentRep(rep);
+      setIsConfigured(true);
+      
+    } catch (error) {
+      console.error('Error initializing app with admin storage:', error);
+      // Fallback to old system if needed
+      initializeAppLegacy();
+    }
+  };
+
+  const initializeAppLegacy = () => {
+    // Fallback initialization method
     let store = StoreManager.getStore();
     
     if (!store.storeId) {
-      // Use default store data
       store = {
         storeId: '7785',
         storeName: 'T-Mobile Store',
@@ -99,14 +164,11 @@ function AppComplete() {
       setStoreInfo(store);
     }
     
-    // Check for current rep
     let rep = RepManager.getCurrentRep();
     
-    // If no rep exists, use default rep
     if (!rep) {
       const allReps = RepManager.getAllReps();
       if (allReps.length === 0) {
-        // Use default rep data
         rep = {
           id: 'default-rep',
           name: 'T-Mobile Expert',
@@ -330,7 +392,7 @@ function AppComplete() {
       </footer>
       
       {showAdminPanel && (
-        <AdminPanel 
+        <AdminPanelEnhanced 
           onClose={() => setShowAdminPanel(false)}
           onStoreSetup={() => setShowStoreSetup(true)}
         />
