@@ -316,7 +316,7 @@ function AppComplete() {
             </svg>
             <div className="store-info">
               <h1 className="app-title">T-Mobile Sales Edge</h1>
-              <span className="store-label">Store {storeInfo?.storeId} • {storeInfo?.city}</span>
+              <span className="store-label">Store {storeInfo?.storeId} • {storeInfo?.city} • v{versionInfo.version} ({versionInfo.releaseDate})</span>
             </div>
           </div>
           <div className="header-actions">
