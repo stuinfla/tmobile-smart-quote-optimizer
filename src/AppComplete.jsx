@@ -309,11 +309,7 @@ function AppComplete() {
       <header className="header">
         <div className="header-content">
           <div className="logo-section">
-            <svg className="logo" viewBox="0 0 100 40" fill="currentColor">
-              <text x="0" y="30" fontFamily="Arial Black" fontSize="24" fontWeight="bold">T</text>
-              <rect x="25" y="10" width="4" height="20" />
-              <rect x="20" y="15" width="14" height="4" />
-            </svg>
+            <img src="/logo.png" alt="T-Mobile" className="logo" />
             <div className="store-info">
               <h1 className="app-title">T-Mobile Sales Edge</h1>
               <span className="store-label">Store {storeInfo?.storeId} • {storeInfo?.city} • v{versionInfo.version} ({versionInfo.releaseDate})</span>
@@ -325,6 +321,13 @@ function AppComplete() {
                 ✓ Auto-saved
               </span>
             )}
+            <button 
+              className="new-client-btn"
+              onClick={resetFlow}
+              title="Start New Customer Quote"
+            >
+              🆕 New Client
+            </button>
             <RepSwitcher 
               currentRep={currentRep}
               onRepChange={handleRepChange}
@@ -484,6 +487,12 @@ function AppComplete() {
           animation: fadeIn 0.3s ease;
         }
         
+        .logo {
+          width: 40px;
+          height: 40px;
+          margin-right: 1rem;
+        }
+        
         .settings-btn,
         .admin-btn {
           background: rgba(255,255,255,0.15);
@@ -497,6 +506,25 @@ function AppComplete() {
           cursor: pointer;
           font-size: 1.2rem;
           transition: all 0.2s;
+        }
+        
+        .new-client-btn {
+          background: rgba(255,255,255,0.15);
+          border: none;
+          border-radius: 20px;
+          padding: 8px 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          font-size: 0.9rem;
+          color: white;
+          margin-right: 1rem;
+          transition: all 0.2s;
+        }
+        
+        .new-client-btn:hover {
+          background: rgba(255,255,255,0.25);
         }
         
         .settings-btn:hover,

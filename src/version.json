@@ -1,5 +1,5 @@
 {
-  "version": "1.2",
+  "version": "1.3",
   "releaseDate": "2025-09-12",
   "features": [
     "T-Mobile Sales Edge PWA",
@@ -8,6 +8,9 @@
     "Florida tax calculations",
     "Professional 2-page quotes",
     "Admin panel with store setup",
-    "Fixed promotions management freeze issue"
+    "Fixed promotions management freeze issue",
+    "Updated brand logo",
+    "New Client button for quick reset",
+    "Mobile admin responsiveness"
   ]
 }

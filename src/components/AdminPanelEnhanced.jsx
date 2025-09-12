@@ -759,8 +759,7 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
               <h4>💰 Promotions & Offers Management</h4>
               <p>Upload promotion PDFs and manage current offers for your store.</p>
               
-              <>
-                <div className="upload-section">
+              <div className="upload-section">
                 <h5>📄 Upload Promotions</h5>
                 
                 <div className="upload-options">
@@ -932,7 +931,6 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
                   </button>
                 </div>
               </div>
-              </>
             </div>
           )}
 
