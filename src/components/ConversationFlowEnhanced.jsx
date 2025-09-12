@@ -80,16 +80,19 @@ function ConversationFlowEnhanced({ currentStep, customerData, onAnswer, setCust
             <h2 className="question-text">How many lines do you need?</h2>
             <div className="quick-select">
               <button className="quick-btn" onClick={() => {
-                setCustomerData({...customerData, lines: 1, devices: [{ currentPhone: '', newPhone: '', storage: '' }]});
-                setTimeout(handleContinue, 300);
+                const newData = {...customerData, lines: 1, devices: [{ currentPhone: '', newPhone: '', storage: '' }]};
+                setCustomerData(newData);
+                setTimeout(() => onAnswer('continue', 'newPhones'), 400);
               }}>Single</button>
               <button className="quick-btn popular" onClick={() => {
-                setCustomerData({...customerData, lines: 2, devices: Array(2).fill().map(() => ({ currentPhone: '', newPhone: '', storage: '' }))});
-                setTimeout(handleContinue, 300);
+                const newData = {...customerData, lines: 2, devices: Array(2).fill().map(() => ({ currentPhone: '', newPhone: '', storage: '' }))};
+                setCustomerData(newData);
+                setTimeout(() => onAnswer('continue', 'newPhones'), 400);
               }}>Couple</button>
               <button className="quick-btn best-value" onClick={() => {
-                setCustomerData({...customerData, lines: 4, devices: Array(4).fill().map(() => ({ currentPhone: '', newPhone: '', storage: '' }))});
-                setTimeout(handleContinue, 300);
+                const newData = {...customerData, lines: 4, devices: Array(4).fill().map(() => ({ currentPhone: '', newPhone: '', storage: '' }))};
+                setCustomerData(newData);
+                setTimeout(() => onAnswer('continue', 'newPhones'), 400);
               }}>Family</button>
             </div>
             <div className="answer-options">
@@ -98,14 +101,15 @@ function ConversationFlowEnhanced({ currentStep, customerData, onAnswer, setCust
                   key={num}
                   className={`option-button ${customerData.lines === num ? 'selected' : ''}`}
                   onClick={() => {
-                    setCustomerData({
+                    const newData = {
                       ...customerData, 
                       lines: num,
                       devices: Array(num).fill().map((_, i) => 
                         customerData.devices[i] || { currentPhone: '', newPhone: '', storage: '' }
                       )
-                    });
-                    setTimeout(handleContinue, 300);
+                    };
+                    setCustomerData(newData);
+                    setTimeout(() => onAnswer('continue', 'newPhones'), 400);
                   }}
                 >
                   <div style={{fontSize: '1.25rem', fontWeight: 'bold'}}>{num} {num === 1 ? 'Line' : 'Lines'}</div>
@@ -269,7 +273,7 @@ function ConversationFlowEnhanced({ currentStep, customerData, onAnswer, setCust
                   className={`plan-card ${customerData.selectedPlan === key ? 'selected' : ''} ${key === 'GO5G_Plus' ? 'popular' : ''}`}
                   onClick={() => {
                     setCustomerData({...customerData, selectedPlan: key});
-                    setTimeout(handleContinue, 300);
+                    setTimeout(() => onAnswer('continue', 'accessories'), 400);
                   }}
                 >
                   {key === 'GO5G_Plus' && <span className="badge-popular">MOST POPULAR</span>}

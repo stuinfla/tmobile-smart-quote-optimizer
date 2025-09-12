@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- T-Mobile Logo Background -->
+  <rect width="512" height="512" fill="#E20074"/>
+  
+  <!-- T-Mobile T Shape -->
+  <g fill="white">
+    <!-- Horizontal bar of T -->
+    <rect x="96" y="160" width="320" height="64"/>
+    <!-- Vertical bar of T -->
+    <rect x="224" y="160" width="64" height="192"/>
+  </g>
+  
+  <!-- Small dot (trademark style) -->
+  <circle cx="430" cy="145" r="16" fill="white"/>
+</svg>

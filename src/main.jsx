@@ -1,10 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import AppEnhanced from './AppEnhanced.jsx'
+import AppComplete from './AppComplete.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <AppEnhanced />
+    <AppComplete />
   </StrictMode>,
 )
