@@ -1098,6 +1098,97 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
             flex-direction: column;
           }
 
+          .modal-content.admin-login {
+            background: white;
+            border-radius: 12px;
+            width: 90vw;
+            max-width: 400px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+          }
+
+          .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #E20074;
+          }
+
+          .modal-header h2 {
+            margin: 0;
+            color: #E20074;
+            font-size: 1.5rem;
+          }
+
+          .close-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #666;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+          }
+
+          .close-btn:hover {
+            background: #f0f0f0;
+            color: #E20074;
+          }
+
+          .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+          }
+
+          .password-input {
+            width: 100%;
+            min-height: 50px !important;
+            padding: 15px 20px !important;
+            font-size: 18px !important;
+            border: 2px solid #ddd !important;
+            border-radius: 10px !important;
+            box-sizing: border-box !important;
+            transition: all 0.2s ease;
+          }
+
+          .password-input:focus {
+            border-color: #E20074 !important;
+            outline: none !important;
+            box-shadow: 0 0 0 3px rgba(226, 0, 116, 0.1) !important;
+          }
+
+          .login-btn {
+            width: 100%;
+            min-height: 50px;
+            background: #E20074;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+          }
+
+          .login-btn:hover {
+            background: #c1006a;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(226, 0, 116, 0.3);
+          }
+
+          .login-btn:active {
+            transform: translateY(0);
+          }
+
           .admin-content {
             flex: 1;
             overflow-y: auto;
@@ -1671,6 +1762,32 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
             .upload-options {
               grid-template-columns: 1fr;
               gap: 1rem;
+            }
+            
+            .modal-content.admin-login {
+              width: 95vw !important;
+              max-width: none !important;
+              margin: 1rem !important;
+              padding: 1.5rem !important;
+              min-height: auto !important;
+              max-height: 90vh !important;
+              overflow-y: auto !important;
+            }
+
+            .modal-header h2 {
+              font-size: 1.25rem !important;
+            }
+
+            .password-input {
+              min-height: 55px !important;
+              font-size: 18px !important;
+              padding: 16px 20px !important;
+            }
+
+            .login-btn {
+              min-height: 55px !important;
+              font-size: 18px !important;
+              margin-top: 0.5rem !important;
             }
             
             .admin-form input[type="text"],
