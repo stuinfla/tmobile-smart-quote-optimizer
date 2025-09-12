@@ -19,6 +19,8 @@ function AppComplete() {
   const [storeInfo, setStoreInfo] = useState(null);
   const [showStoreSetup, setShowStoreSetup] = useState(false);
   const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const [showCarrierModal, setShowCarrierModal] = useState(false);
+  const [carrierModalData, setCarrierModalData] = useState(null);
   
   // Use localStorage to persist customer data
   const [customerData, setCustomerData] = useLocalStorage('tmobile-customer-data', {
@@ -237,19 +239,38 @@ function AppComplete() {
     const keepAndSwitchScenario = scenarios.find(s => s.type === 'keep_and_switch');
     if (keepAndSwitchScenario && keepAndSwitchScenario === scenarios[0]) {
       const eligibleCarriers = ['Verizon', 'AT&T', 'UScellular', 'Xfinity', 'Spectrum'];
-      const carrier = prompt(
-        `Keep & Switch could save you $${keepAndSwitchScenario.totalSavings}!\n\n` +
-        `Are you with one of these carriers?\n${eligibleCarriers.join(', ')}\n\n` +
-        `Enter your carrier or Cancel if not eligible:`
-      );
-      
-      if (carrier && eligibleCarriers.some(c => carrier.toLowerCase().includes(c.toLowerCase()))) {
-        data.carrier = carrier;
-      } else {
-        scenarios.shift();
-      }
+      setCarrierModalData({
+        scenario: keepAndSwitchScenario,
+        eligibleCarriers: eligibleCarriers,
+        scenarios: scenarios,
+        data: data
+      });
+      setShowCarrierModal(true);
+      return; // Wait for user selection
     }
     
+    setResults(scenarios);
+    setShowResults(true);
+    
+    setTimeout(() => {
+      localStorage.removeItem('tmobile-customer-data');
+      localStorage.removeItem('tmobile-current-step');
+    }, 1000);
+  };
+
+  const handleCarrierSelection = (selectedCarrier) => {
+    const { scenario, eligibleCarriers, scenarios, data } = carrierModalData;
+    
+    if (selectedCarrier && eligibleCarriers.some(c => selectedCarrier.toLowerCase().includes(c.toLowerCase()))) {
+      data.carrier = selectedCarrier;
+    } else {
+      scenarios.shift(); // Remove Keep & Switch scenario if not eligible
+    }
+    
+    setShowCarrierModal(false);
+    setCarrierModalData(null);
+    
+    // Continue with results calculation
     setResults(scenarios);
     setShowResults(true);
     
@@ -402,6 +423,47 @@ function AppComplete() {
         <StoreSetup onComplete={handleStoreSetupComplete} />
       )}
       
+      {showCarrierModal && carrierModalData && (
+        <div className="modal-overlay">
+          <div className="carrier-modal">
+            <div className="modal-header">
+              <h3>🎯 Keep & Switch Special Offer!</h3>
+              <p>You could save ${carrierModalData.scenario.totalSavings} with Keep & Switch!</p>
+            </div>
+            
+            <div className="modal-content">
+              <p>Are you currently with one of these eligible carriers?</p>
+              
+              <div className="carrier-selection">
+                <select 
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      handleCarrierSelection(e.target.value);
+                    }
+                  }}
+                  defaultValue=""
+                  className="carrier-dropdown"
+                >
+                  <option value="">Select your current carrier...</option>
+                  {carrierModalData.eligibleCarriers.map(carrier => (
+                    <option key={carrier} value={carrier}>{carrier}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div className="modal-actions">
+                <button 
+                  className="btn-secondary"
+                  onClick={() => handleCarrierSelection(null)}
+                >
+                  Not Listed / Skip Offer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <style jsx>{`
         .store-info {
           display: flex;
@@ -508,6 +570,111 @@ function AppComplete() {
           0% { opacity: 1; }
           50% { opacity: 0.6; }
           100% { opacity: 1; }
+        }
+        
+        /* Carrier Modal Styles */
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+          padding: 1rem;
+        }
+        
+        .carrier-modal {
+          background: white;
+          border-radius: 12px;
+          max-width: 500px;
+          width: 100%;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+          animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        .modal-header {
+          padding: 1.5rem;
+          background: linear-gradient(135deg, var(--tmobile-magenta), rgba(226, 0, 116, 0.8));
+          color: white;
+          border-radius: 12px 12px 0 0;
+          text-align: center;
+        }
+        
+        .modal-header h3 {
+          margin: 0 0 0.5rem 0;
+          font-size: 1.5rem;
+        }
+        
+        .modal-header p {
+          margin: 0;
+          opacity: 0.9;
+        }
+        
+        .modal-content {
+          padding: 1.5rem;
+        }
+        
+        .modal-content p {
+          margin: 0 0 1rem 0;
+          text-align: center;
+          color: #666;
+        }
+        
+        .carrier-selection {
+          margin: 1.5rem 0;
+        }
+        
+        .carrier-dropdown {
+          width: 100%;
+          padding: 1rem;
+          border: 2px solid #ddd;
+          border-radius: 8px;
+          font-size: 1rem;
+          background: white;
+          cursor: pointer;
+          transition: border-color 0.2s;
+        }
+        
+        .carrier-dropdown:hover,
+        .carrier-dropdown:focus {
+          border-color: var(--tmobile-magenta);
+          outline: none;
+        }
+        
+        .modal-actions {
+          display: flex;
+          justify-content: center;
+          margin-top: 1.5rem;
+        }
+        
+        .btn-secondary {
+          background: #6c757d;
+          color: white;
+          border: none;
+          padding: 0.75rem 1.5rem;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 0.9rem;
+          transition: background-color 0.2s;
+        }
+        
+        .btn-secondary:hover {
+          background: #5a6268;
+        }
+        
+        @keyframes modalSlideIn {
+          from {
+            opacity: 0;
+            transform: translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
         
         @media (max-width: 768px) {

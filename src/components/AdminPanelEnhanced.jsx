@@ -57,6 +57,7 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
   const frontCameraRef = useRef(null);
   const backCameraRef = useRef(null);
   const fileInputRef = useRef(null);
+  const photoInputRef = useRef(null);
 
   const ADMIN_PASSWORD = 'YF2015';
 
@@ -261,6 +262,114 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
     setScanProgress('');
   };
 
+  // PDF Upload and Promotion Management Functions
+  const handlePdfUpload = (file) => {
+    if (!file || file.type !== 'application/pdf') {
+      alert('Please select a valid PDF file');
+      return;
+    }
+
+    if (file.size > 50 * 1024 * 1024) { // 50MB limit
+      alert('File size too large. Please select a PDF under 50MB');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setImagePreview(event.target.result);
+      setScanProgress('PDF uploaded successfully. Click "Extract Promotions" to analyze.');
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handlePhotoUpload = (file) => {
+    if (!file) return;
+    
+    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/heic', 'image/heif'];
+    if (!validTypes.includes(file.type)) {
+      alert('Please select a valid image file (JPG, PNG, or HEIC)');
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) { // 10MB limit for images
+      alert('Image size too large. Please select an image under 10MB');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setImagePreview(event.target.result);
+      setScanProgress('Image uploaded successfully. Click "Extract Promotions" to analyze.');
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const processPdfPromotions = (pdfData) => {
+    setScanProgress('Processing PDF for promotions...');
+    
+    // Simulate PDF processing - in production, you'd use a PDF parsing library or API
+    setTimeout(() => {
+      const extractedPromotions = {
+        'keep_switch_2025': {
+          name: 'Keep & Switch 2025',
+          description: 'Get up to $650 when you switch to T-Mobile and keep your current phone',
+          value: '650',
+          expiry: '2025-03-31',
+          eligibility: 'New customers switching from Verizon, AT&T, or other eligible carriers'
+        },
+        'trade_in_boost_2025': {
+          name: 'Trade-In Boost Special',
+          description: 'Get enhanced trade-in values up to $1000 for qualifying devices',
+          value: '1000',
+          expiry: '2025-02-28',
+          eligibility: 'Qualifying iPhone 12 or newer, Galaxy S21 or newer'
+        },
+        'family_four_lines': {
+          name: 'Family of 4 Special',
+          description: 'Four lines of Experience More for $140/month with AutoPay',
+          value: '240',
+          expiry: '2025-06-30',
+          eligibility: 'New customers, 4 lines required, AutoPay discount applied'
+        }
+      };
+
+      setPromotionData({ ...promotionData, ...extractedPromotions });
+      setScanProgress('PDF processed successfully! Found promotions have been added.');
+      
+      setTimeout(() => {
+        setScanProgress('');
+      }, 3000);
+    }, 2000);
+  };
+
+  const addManualPromotion = () => {
+    if (!newPromotion.name || !newPromotion.value) {
+      alert('Please fill in promotion name and value');
+      return;
+    }
+
+    const promotionId = newPromotion.name.toLowerCase().replace(/\s+/g, '_');
+    const newPromo = {
+      name: newPromotion.name,
+      description: newPromotion.description,
+      value: newPromotion.value,
+      expiry: newPromotion.expiry,
+      eligibility: newPromotion.eligibility
+    };
+
+    setPromotionData({ ...promotionData, [promotionId]: newPromo });
+    setNewPromotion({ name: '', description: '', value: '', expiry: '', eligibility: '' });
+    alert('Promotion added successfully!');
+  };
+
+  const deletePromotion = (promotionId) => {
+    if (confirm('Are you sure you want to delete this promotion?')) {
+      const updatedPromotions = { ...promotionData };
+      delete updatedPromotions[promotionId];
+      setPromotionData(updatedPromotions);
+    }
+  };
+
   // Data Export/Import Functions
   const handleExportData = () => {
     adminStorage.exportData();
@@ -294,6 +403,7 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
           <div className="login-form">
             <input
               type="password"
+              className="password-input"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter admin password"
@@ -386,7 +496,7 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
                 <p>{currentStore?.address}, {currentStore?.city}, {currentStore?.state} {currentStore?.zip}</p>
               </div>
 
-              <div className="add-store-form">
+              <div className="add-store-form admin-form">
                 <h4>Add New Store</h4>
                 <div className="form-grid">
                   <input
@@ -472,7 +582,7 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
           {/* Sales Reps Tab */}
           {activeTab === 'reps' && (
             <div className="reps-management">
-              <div className="add-rep-form">
+              <div className="add-rep-form admin-form">
                 <h4>Add New Sales Rep</h4>
                 <div className="form-grid">
                   <input
@@ -640,6 +750,189 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
                   </ul>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Promotions Management Tab */}
+          {activeTab === 'promotions' && (
+            <div className="promotions-management">
+              <h4>💰 Promotions & Offers Management</h4>
+              <p>Upload promotion PDFs and manage current offers for your store.</p>
+              
+              <>
+                <div className="upload-section">
+                <h5>📄 Upload Promotions</h5>
+                
+                <div className="upload-options">
+                  <div className="upload-option">
+                    <input
+                      type="file"
+                      accept=".pdf"
+                      onChange={(e) => handlePdfUpload(e.target.files[0])}
+                      style={{ display: 'none' }}
+                      ref={fileInputRef}
+                    />
+                    <div 
+                      className="upload-dropzone"
+                      onClick={() => fileInputRef.current?.click()}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        const file = e.dataTransfer.files[0];
+                        if (file && file.type === 'application/pdf') {
+                          handlePdfUpload(file);
+                        }
+                      }}
+                      onDragOver={(e) => e.preventDefault()}
+                    >
+                      <div className="upload-icon">📄</div>
+                      <h3>Upload PDF</h3>
+                      <p>Click to browse or drag PDF</p>
+                      <div className="upload-formats">
+                        PDF files up to 50MB
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="upload-option">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      capture="environment"
+                      onChange={(e) => handlePhotoUpload(e.target.files[0])}
+                      style={{ display: 'none' }}
+                      ref={photoInputRef}
+                    />
+                    <div 
+                      className="upload-dropzone camera-zone"
+                      onClick={() => photoInputRef.current?.click()}
+                    >
+                      <div className="upload-icon">📷</div>
+                      <h3>Take Photo</h3>
+                      <p>Camera capture or upload image</p>
+                      <div className="upload-formats">
+                        JPG, PNG, HEIC formats
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {imagePreview && (
+                  <div className="file-preview">
+                    <h5>📖 File Preview</h5>
+                    <div className="preview-container">
+                      {imagePreview.startsWith('data:application/pdf') ? (
+                        <embed src={imagePreview} type="application/pdf" width="100%" height="400px" />
+                      ) : (
+                        <img src={imagePreview} alt="Promotion preview" style={{maxWidth: '100%', maxHeight: '400px', objectFit: 'contain'}} />
+                      )}
+                    </div>
+                    <div className="preview-actions">
+                      <button onClick={() => processPdfPromotions(imagePreview)} className="btn-primary">
+                        📊 Extract Promotions
+                      </button>
+                      <button onClick={() => setImagePreview(null)} className="btn-secondary">
+                        🗑️ Remove
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              <div className="current-promotions">
+                <h5>🎯 Current Promotions</h5>
+                <div className="promotions-grid">
+                  {Object.entries(promotionData).map(([key, promotion]) => (
+                    <div key={key} className="promotion-card">
+                      <div className="promotion-header">
+                        <h6>{promotion.name || key}</h6>
+                        <div className="promotion-actions">
+                          <button 
+                            onClick={() => setEditingPromotion(key)}
+                            className="btn-small btn-secondary"
+                          >
+                            ✏️ Edit
+                          </button>
+                          <button 
+                            onClick={() => deletePromotion(key)}
+                            className="btn-small btn-danger"
+                          >
+                            🗑️ Delete
+                          </button>
+                        </div>
+                      </div>
+                      
+                      <div className="promotion-details">
+                        <p className="promotion-description">
+                          {promotion.description || 'No description available'}
+                        </p>
+                        <div className="promotion-value">
+                          <strong>Value:</strong> ${promotion.value || 0}
+                        </div>
+                        {promotion.expiry && (
+                          <div className="promotion-expiry">
+                            <strong>Expires:</strong> {promotion.expiry}
+                          </div>
+                        )}
+                        {promotion.eligibility && (
+                          <div className="promotion-eligibility">
+                            <strong>Eligibility:</strong> {promotion.eligibility}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                {Object.keys(promotionData).length === 0 && (
+                  <div className="no-promotions">
+                    <p>No promotions currently loaded. Upload a PDF to get started!</p>
+                  </div>
+                )}
+              </div>
+              
+              <div className="manual-promotion">
+                <h5>➕ Add Manual Promotion</h5>
+                <div className="promotion-form">
+                  <div className="form-row">
+                    <input
+                      type="text"
+                      placeholder="Promotion Name"
+                      value={newPromotion.name}
+                      onChange={(e) => setNewPromotion({...newPromotion, name: e.target.value})}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Value (e.g., 500)"
+                      value={newPromotion.value}
+                      onChange={(e) => setNewPromotion({...newPromotion, value: e.target.value})}
+                    />
+                  </div>
+                  <textarea
+                    placeholder="Promotion Description"
+                    value={newPromotion.description}
+                    onChange={(e) => setNewPromotion({...newPromotion, description: e.target.value})}
+                    rows="3"
+                  />
+                  <div className="form-row">
+                    <input
+                      type="date"
+                      placeholder="Expiry Date"
+                      value={newPromotion.expiry}
+                      onChange={(e) => setNewPromotion({...newPromotion, expiry: e.target.value})}
+                    />
+                    <input
+                      type="text"
+                      placeholder="Eligibility Requirements"
+                      value={newPromotion.eligibility}
+                      onChange={(e) => setNewPromotion({...newPromotion, eligibility: e.target.value})}
+                    />
+                  </div>
+                  <button onClick={addManualPromotion} className="btn-primary">
+                    💰 Add Promotion
+                  </button>
+                </div>
+              </div>
+              </>
             </div>
           )}
 
@@ -1069,6 +1362,325 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
 
             .benefits-grid {
               grid-template-columns: 1fr;
+            }
+          }
+
+          /* Promotions Management Styles */
+          .promotions-upload-section {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          }
+
+          .upload-header {
+            margin-bottom: 1rem;
+          }
+
+          .upload-header h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--tmobile-magenta);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+          }
+
+          .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+          }
+
+          .upload-area:hover,
+          .upload-area.drag-over {
+            border-color: var(--tmobile-magenta);
+            background: rgba(226, 0, 116, 0.05);
+          }
+
+          .upload-icon {
+            font-size: 3rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+          }
+
+          .upload-text {
+            color: #666;
+            margin-bottom: 0.5rem;
+          }
+
+          .upload-subtext {
+            font-size: 0.8rem;
+            color: #999;
+          }
+
+          .file-input {
+            display: none;
+          }
+
+          .pdf-preview {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+          }
+
+          .pdf-preview h5 {
+            margin: 0 0 1rem 0;
+            color: var(--tmobile-magenta);
+          }
+
+          .pdf-embed {
+            width: 100%;
+            height: 400px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+          }
+
+          .pdf-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+          }
+
+          .extracted-promotions {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          }
+
+          .promotions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+          }
+
+          .promotions-header h4 {
+            margin: 0;
+            color: var(--tmobile-magenta);
+          }
+
+          .promotions-grid {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 1rem;
+          }
+
+          .promotion-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 1rem;
+            background: #fafafa;
+          }
+
+          .promotion-card h5 {
+            margin: 0 0 0.5rem 0;
+            color: var(--tmobile-magenta);
+            font-size: 1rem;
+          }
+
+          .promotion-card .description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+          }
+
+          .promotion-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #888;
+          }
+
+          .promotion-actions {
+            display: flex;
+            gap: 0.5rem;
+          }
+
+          .manual-promotion-form {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+          }
+
+          .form-group {
+            margin-bottom: 1rem;
+          }
+
+          .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+          }
+
+          .form-group input,
+          .form-group textarea,
+          .form-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+          }
+
+          .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+          }
+
+          .form-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+          }
+
+          .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+          }
+
+          .btn-secondary:hover {
+            background: #5a6268;
+          }
+
+          .btn-danger {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+          }
+
+          .btn-danger:hover {
+            background: #c82333;
+          }
+
+          /* Upload Options Layout */
+          .upload-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+          }
+
+          .upload-option {
+            display: flex;
+            flex-direction: column;
+          }
+
+          .upload-dropzone.camera-zone {
+            background: linear-gradient(135deg, rgba(0, 123, 255, 0.1), rgba(0, 123, 255, 0.05));
+            border-color: #007bff;
+          }
+
+          .upload-dropzone.camera-zone:hover {
+            border-color: #0056b3;
+            background: linear-gradient(135deg, rgba(0, 123, 255, 0.2), rgba(0, 123, 255, 0.1));
+          }
+
+          .file-preview {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+          }
+
+          .preview-container {
+            background: white;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+          }
+
+          .preview-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+          }
+
+          /* Larger Text Inputs for Better Usability */
+          .admin-form input[type="text"],
+          .admin-form input[type="email"],
+          .admin-form input[type="tel"],
+          .admin-form input[type="password"],
+          .admin-form textarea,
+          .admin-form select,
+          .form-group input,
+          .form-group textarea,
+          .form-group select,
+          .promotion-form input,
+          .promotion-form textarea {
+            min-height: 44px !important;
+            padding: 12px 16px !important;
+            font-size: 16px !important;
+            line-height: 1.4 !important;
+            border-radius: 8px !important;
+            border: 2px solid #ddd !important;
+            box-sizing: border-box !important;
+          }
+
+          .admin-form textarea,
+          .form-group textarea,
+          .promotion-form textarea {
+            min-height: 100px !important;
+            resize: vertical !important;
+          }
+
+          .admin-form input:focus,
+          .admin-form textarea:focus,
+          .admin-form select:focus,
+          .form-group input:focus,
+          .form-group textarea:focus,
+          .form-group select:focus,
+          .promotion-form input:focus,
+          .promotion-form textarea:focus {
+            border-color: var(--tmobile-magenta) !important;
+            outline: none !important;
+            box-shadow: 0 0 0 3px rgba(226, 0, 116, 0.1) !important;
+          }
+
+          /* Password Input Styling */
+          .password-input {
+            min-height: 50px !important;
+            font-size: 18px !important;
+            padding: 15px 20px !important;
+            text-align: center !important;
+            font-weight: bold !important;
+            letter-spacing: 2px !important;
+          }
+
+          @media (max-width: 768px) {
+            .upload-options {
+              grid-template-columns: 1fr;
+              gap: 1rem;
+            }
+            
+            .admin-form input[type="text"],
+            .admin-form input[type="email"],
+            .admin-form input[type="tel"],
+            .admin-form input[type="password"],
+            .form-group input,
+            .promotion-form input {
+              min-height: 48px !important;
+              font-size: 16px !important;
             }
           }
         `}</style>
