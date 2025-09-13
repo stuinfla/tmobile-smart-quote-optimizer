@@ -326,51 +326,28 @@ function AppComplete() {
         <div className="header-content">
           <div className="logo-section">
             <img src="/logo.png" alt="T-Mobile" className="logo" />
-            <div className="store-info">
-              <h1 className="app-title">T-Mobile Sales Edge</h1>
-              <span className="store-label">Store {storeInfo?.storeId} • {storeInfo?.city} • v{versionInfo.version} ({versionInfo.releaseDate})</span>
-            </div>
+            <h1 className="app-title">Sales Edge</h1>
           </div>
           <div className="header-actions">
-            {saved && (
-              <span className="save-indicator">
-                ✓ Auto-saved
-              </span>
-            )}
             <button 
               className="new-client-btn"
               onClick={resetFlow}
-              title="Start New Customer Quote"
+              title="New Customer"
             >
-              🆕 New Client
+              🆕 New
             </button>
             <RepSwitcher 
               currentRep={currentRep}
               onRepChange={handleRepChange}
             />
-            <button 
-              className="admin-btn"
-              onClick={() => setShowAdminPanel(true)}
-              title="Admin Panel"
-            >
-              🔐 Admin
-            </button>
           </div>
         </div>
         <div className="pricing-validity">
-          📅 Pricing & Promotions Valid as of September 2025
+          📅 Pricing Valid: September 2025
         </div>
       </header>
 
       <main className="main-container">
-        {currentRep && (
-          <div className="rep-banner">
-            <span className="rep-label">Logged in as:</span>
-            <span className="rep-current">{currentRep.name}</span>
-            <span className="rep-role">• {currentRep.role}</span>
-          </div>
-        )}
-        
         {!showResults ? (
           <>
             {customerData.lines > 0 && currentStep !== 'lines' && (
@@ -426,6 +403,15 @@ function AppComplete() {
           </>
         )}
       </main>
+      
+      {/* Floating Admin Button */}
+      <button 
+        className="admin-fab"
+        onClick={() => setShowAdminPanel(true)}
+        title="Admin Settings"
+      >
+        ⚙️
+      </button>
       
       <footer className="app-footer">
         <div className="version-info">
@@ -513,12 +499,17 @@ function AppComplete() {
         }
         
         .settings-btn,
-        .admin-btn {
-          background: rgba(255,255,255,0.15);
-          border: none;
+        .admin-fab {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          width: 48px;
+          height: 48px;
           border-radius: 50%;
-          width: 36px;
-          height: 36px;
+          background: var(--tmobile-magenta);
+          color: white;
+          border: none;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
           display: flex;
           align-items: center;
           justify-content: center;

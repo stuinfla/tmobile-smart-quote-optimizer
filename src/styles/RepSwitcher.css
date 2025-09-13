@@ -1,0 +1,379 @@
+/* RepSwitcher Component Styles */
+
+.rep-switcher-wrapper {
+  display: inline-block;
+}
+
+.current-rep-container {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.current-rep-display {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.3rem 0.6rem;
+  background: rgba(255,255,255,0.15);
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.85rem;
+}
+
+.current-rep-display:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+.quick-edit-btn {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.quick-edit-btn:hover {
+  background: rgba(255,255,255,0.25);
+  transform: scale(1.1);
+}
+
+.rep-icon {
+  font-size: 0.9rem;
+}
+
+.rep-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.rep-info .rep-name {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: white;
+}
+
+.rep-info .rep-role {
+  font-size: 0.65rem;
+  opacity: 0.8;
+  color: white;
+}
+
+.switch-icon {
+  margin-left: 0.25rem;
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* Modal Styles */
+.rep-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+}
+
+.rep-modal-content {
+  background: white;
+  border-radius: 16px;
+  max-width: 90%;
+  width: 400px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.edit-rep-modal {
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rep-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  border-bottom: 1px solid #e5e5e7;
+  background: var(--tmobile-magenta);
+  border-radius: 16px 16px 0 0;
+}
+
+.rep-modal-header h2 {
+  margin: 0;
+  color: white;
+  font-size: 1.25rem;
+}
+
+.rep-close-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: white;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.rep-close-btn:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.1);
+}
+
+/* Form Styles */
+.edit-form {
+  padding: 1.25rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  color: #1c1c1e;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e5e5e7;
+  border-radius: 10px;
+  font-size: 16px; /* Prevents iOS zoom */
+  transition: all 0.2s;
+  background: #f2f2f7;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--tmobile-magenta);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(226, 0, 116, 0.1);
+}
+
+/* Modal Actions */
+.rep-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border-top: 1px solid #e5e5e7;
+  background: #f2f2f7;
+  border-radius: 0 0 16px 16px;
+}
+
+.rep-modal-actions .btn {
+  flex: 1;
+  padding: 0.875rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.rep-modal-actions .btn-secondary {
+  background: white;
+  color: var(--tmobile-magenta);
+  border: 2px solid var(--tmobile-magenta);
+}
+
+.rep-modal-actions .btn-primary {
+  background: var(--tmobile-magenta);
+  color: white;
+}
+
+.rep-modal-actions .btn:active {
+  transform: scale(0.98);
+}
+
+.rep-modal-actions .btn-primary:disabled {
+  background: #c7c7cc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Rep List Styles */
+.reps-list {
+  padding: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.no-reps {
+  text-align: center;
+  padding: 2rem;
+  color: var(--tmobile-gray);
+}
+
+.rep-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem;
+  border: 2px solid #e5e5e7;
+  border-radius: 10px;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: white;
+}
+
+.rep-item:hover {
+  border-color: var(--tmobile-magenta);
+  background: rgba(226, 0, 116, 0.02);
+}
+
+.rep-item.selected {
+  border-color: var(--tmobile-magenta);
+  background: rgba(226, 0, 116, 0.05);
+}
+
+.rep-select input[type="radio"] {
+  margin: 0;
+  width: 18px;
+  height: 18px;
+}
+
+.rep-details {
+  flex: 1;
+}
+
+.rep-details .rep-name {
+  font-weight: 600;
+  color: #1c1c1e;
+  margin-bottom: 0.25rem;
+  font-size: 0.95rem;
+}
+
+.rep-meta {
+  font-size: 0.8rem;
+  color: #8e8e93;
+  margin-bottom: 0.25rem;
+}
+
+.rep-contact {
+  font-size: 0.75rem;
+  color: #8e8e93;
+}
+
+.rep-actions {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.edit-rep,
+.delete-rep {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: all 0.2s;
+  padding: 0.25rem;
+  border-radius: 6px;
+}
+
+.edit-rep:hover {
+  opacity: 1;
+  background: rgba(226, 0, 116, 0.1);
+}
+
+.delete-rep:hover {
+  opacity: 1;
+  background: rgba(220, 53, 69, 0.1);
+}
+
+.switcher-actions {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  border-top: 1px solid #e5e5e7;
+  background: #f2f2f7;
+  border-radius: 0 0 16px 16px;
+}
+
+.switcher-actions .btn {
+  flex: 1;
+  padding: 0.875rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 600px) {
+  .rep-modal-content {
+    max-width: 95%;
+    max-height: 90vh;
+    margin: 0.5rem;
+  }
+  
+  .rep-modal-header {
+    padding: 1rem;
+  }
+  
+  .rep-modal-header h2 {
+    font-size: 1.1rem;
+  }
+  
+  .edit-form {
+    padding: 1rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .rep-modal-actions,
+  .switcher-actions {
+    padding: 1rem;
+  }
+}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { RepManager } from '../data/storeData';
 import BusinessCardScanner from './BusinessCardScanner';
+import '../styles/RepSwitcher.css';
 
 function RepSwitcher({ currentRep, onRepChange }) {
   const [showSwitcher, setShowSwitcher] = useState(false);
@@ -96,9 +97,9 @@ function RepSwitcher({ currentRep, onRepChange }) {
 
   if (showScanner) {
     return (
-      <div className="modal-overlay" onClick={() => setShowScanner(false)}>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-          <button className="close-btn" onClick={() => setShowScanner(false)}>×</button>
+      <div className="rep-modal-overlay" onClick={() => setShowScanner(false)}>
+        <div className="rep-modal-content" onClick={(e) => e.stopPropagation()}>
+          <button className="rep-close-btn" onClick={() => setShowScanner(false)}>×</button>
           <BusinessCardScanner onComplete={handleAddRep} />
         </div>
       </div>
@@ -107,11 +108,11 @@ function RepSwitcher({ currentRep, onRepChange }) {
 
   if (showEditor) {
     return (
-      <div className="modal-overlay" onClick={() => setShowEditor(false)}>
-        <div className="modal-content edit-rep-modal" onClick={(e) => e.stopPropagation()}>
-          <div className="modal-header">
+      <div className="rep-modal-overlay" onClick={() => setShowEditor(false)}>
+        <div className="rep-modal-content edit-rep-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="rep-modal-header">
             <h2>Edit Sales Rep</h2>
-            <button className="close-btn" onClick={() => setShowEditor(false)}>×</button>
+            <button className="rep-close-btn" onClick={() => setShowEditor(false)}>×</button>
           </div>
 
           <div className="edit-form">
@@ -122,6 +123,7 @@ function RepSwitcher({ currentRep, onRepChange }) {
                 value={editForm.name}
                 onChange={(e) => setEditForm({...editForm, name: e.target.value})}
                 placeholder="Full Name"
+                autoComplete="name"
               />
             </div>
 
@@ -146,6 +148,7 @@ function RepSwitcher({ currentRep, onRepChange }) {
                 value={editForm.email}
                 onChange={(e) => setEditForm({...editForm, email: e.target.value})}
                 placeholder="email@example.com"
+                autoComplete="email"
               />
             </div>
 
@@ -156,6 +159,7 @@ function RepSwitcher({ currentRep, onRepChange }) {
                 value={editForm.phone}
                 onChange={(e) => setEditForm({...editForm, phone: e.target.value})}
                 placeholder="(555) 123-4567"
+                autoComplete="tel"
               />
             </div>
 
@@ -170,7 +174,7 @@ function RepSwitcher({ currentRep, onRepChange }) {
             </div>
           </div>
 
-          <div className="modal-actions">
+          <div className="rep-modal-actions">
             <button 
               className="btn btn-secondary"
               onClick={() => setShowEditor(false)}
@@ -191,7 +195,7 @@ function RepSwitcher({ currentRep, onRepChange }) {
   }
 
   return (
-    <>
+    <div className="rep-switcher-wrapper">
       <div className="current-rep-container">
         <div 
           className="current-rep-display"
@@ -221,11 +225,11 @@ function RepSwitcher({ currentRep, onRepChange }) {
       </div>
 
       {showSwitcher && (
-        <div className="modal-overlay" onClick={() => setShowSwitcher(false)}>
-          <div className="modal-content rep-switcher-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
+        <div className="rep-modal-overlay" onClick={() => setShowSwitcher(false)}>
+          <div className="rep-modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="rep-modal-header">
               <h2>Switch Sales Rep</h2>
-              <button className="close-btn" onClick={() => setShowSwitcher(false)}>×</button>
+              <button className="rep-close-btn" onClick={() => setShowSwitcher(false)}>×</button>
             </div>
 
             <div className="reps-list">
@@ -245,6 +249,7 @@ function RepSwitcher({ currentRep, onRepChange }) {
                         type="radio"
                         checked={selectedRepId === rep.id}
                         onChange={() => setSelectedRepId(rep.id)}
+                        onClick={(e) => e.stopPropagation()}
                       />
                     </div>
                     <div className="rep-details">
@@ -307,299 +312,7 @@ function RepSwitcher({ currentRep, onRepChange }) {
           </div>
         </div>
       )}
-
-      <style jsx>{`
-        .current-rep-container {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-        }
-
-        .current-rep-display {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 0.5rem 1rem;
-          background: rgba(255,255,255,0.15);
-          border-radius: 20px;
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-
-        .current-rep-display:hover {
-          background: rgba(255,255,255,0.25);
-        }
-
-        .quick-edit-btn {
-          background: rgba(255,255,255,0.15);
-          border: none;
-          border-radius: 50%;
-          width: 32px;
-          height: 32px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          font-size: 1rem;
-          transition: all 0.2s;
-        }
-
-        .quick-edit-btn:hover {
-          background: rgba(255,255,255,0.25);
-          transform: scale(1.1);
-        }
-
-        .rep-icon {
-          font-size: 1.2rem;
-        }
-
-        .rep-info {
-          display: flex;
-          flex-direction: column;
-        }
-
-        .rep-name {
-          font-size: 0.9rem;
-          font-weight: 500;
-        }
-
-        .rep-role {
-          font-size: 0.75rem;
-          opacity: 0.8;
-        }
-
-        .switch-icon {
-          margin-left: 0.5rem;
-          font-size: 0.9rem;
-          opacity: 0.7;
-        }
-
-        .modal-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0,0,0,0.5);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 1000;
-          padding: 1rem;
-        }
-
-        .modal-content {
-          background: white;
-          border-radius: 12px;
-          max-width: 500px;
-          width: 100%;
-          max-height: 80vh;
-          overflow: auto;
-        }
-
-        .rep-switcher-modal {
-          padding: 0;
-        }
-
-        .modal-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 1.5rem;
-          border-bottom: 1px solid var(--tmobile-light-gray);
-        }
-
-        .modal-header h2 {
-          margin: 0;
-          color: var(--tmobile-magenta);
-        }
-
-        .close-btn {
-          background: none;
-          border: none;
-          font-size: 1.5rem;
-          cursor: pointer;
-          color: var(--tmobile-gray);
-          padding: 0;
-          width: 30px;
-          height: 30px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .reps-list {
-          padding: 1rem;
-          max-height: 400px;
-          overflow-y: auto;
-        }
-
-        .no-reps {
-          text-align: center;
-          padding: 2rem;
-          color: var(--tmobile-gray);
-        }
-
-        .rep-item {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          padding: 1rem;
-          border: 2px solid var(--tmobile-light-gray);
-          border-radius: 8px;
-          margin-bottom: 0.75rem;
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-
-        .rep-item:hover {
-          border-color: var(--tmobile-magenta);
-          background: rgba(226, 0, 116, 0.02);
-        }
-
-        .rep-item.selected {
-          border-color: var(--tmobile-magenta);
-          background: rgba(226, 0, 116, 0.05);
-        }
-
-        .rep-select input {
-          margin: 0;
-        }
-
-        .rep-details {
-          flex: 1;
-        }
-
-        .rep-details .rep-name {
-          font-weight: 600;
-          color: var(--tmobile-black);
-          margin-bottom: 0.25rem;
-        }
-
-        .rep-meta {
-          font-size: 0.875rem;
-          color: var(--tmobile-gray);
-          margin-bottom: 0.25rem;
-        }
-
-        .rep-contact {
-          font-size: 0.8rem;
-          color: var(--tmobile-gray);
-        }
-
-        .rep-actions {
-          display: flex;
-          gap: 0.5rem;
-        }
-
-        .edit-rep,
-        .delete-rep {
-          background: none;
-          border: none;
-          font-size: 1.2rem;
-          cursor: pointer;
-          opacity: 0.5;
-          transition: opacity 0.2s;
-          padding: 0.25rem;
-          border-radius: 4px;
-        }
-
-        .edit-rep:hover {
-          opacity: 1;
-          background: rgba(226, 0, 116, 0.1);
-        }
-
-        .delete-rep:hover {
-          opacity: 1;
-          background: rgba(220, 53, 69, 0.1);
-        }
-
-        .edit-form {
-          padding: 1.5rem;
-        }
-
-        .form-group {
-          margin-bottom: 1rem;
-        }
-
-        .form-group label {
-          display: block;
-          margin-bottom: 0.5rem;
-          font-weight: 600;
-          color: var(--tmobile-black);
-        }
-
-        .form-group input,
-        .form-group select {
-          width: 100%;
-          padding: 0.75rem;
-          border: 2px solid var(--tmobile-light-gray);
-          border-radius: 6px;
-          font-size: 1rem;
-          transition: border-color 0.2s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus {
-          outline: none;
-          border-color: var(--tmobile-magenta);
-        }
-
-        .modal-actions {
-          display: flex;
-          gap: 1rem;
-          padding: 1.5rem;
-          border-top: 1px solid var(--tmobile-light-gray);
-          justify-content: flex-end;
-        }
-
-        .btn {
-          padding: 0.75rem 1.5rem;
-          border: none;
-          border-radius: 6px;
-          font-size: 1rem;
-          cursor: pointer;
-          transition: background-color 0.2s;
-        }
-
-        .btn-primary {
-          background: var(--tmobile-magenta);
-          color: white;
-        }
-
-        .btn-primary:hover {
-          background: var(--tmobile-magenta-dark);
-        }
-
-        .btn-primary:disabled {
-          background: var(--tmobile-gray);
-          cursor: not-allowed;
-        }
-
-        .btn-secondary {
-          background: var(--tmobile-light-gray);
-          color: var(--tmobile-black);
-        }
-
-        .btn-secondary:hover {
-          background: var(--tmobile-gray);
-        }
-
-        .switcher-actions {
-          display: flex;
-          gap: 1rem;
-          padding: 1.5rem;
-          border-top: 1px solid var(--tmobile-light-gray);
-          justify-content: space-between;
-        }
-
-        @media (max-width: 600px) {
-          .modal-content {
-            max-height: 90vh;
-          }
-        }
-      `}</style>
-    </>
+    </div>
   );
 }
 

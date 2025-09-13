@@ -1,0 +1,75 @@
+{
+  "apple_watch": {
+    "name": "Apple Watch",
+    "plans": [
+      {
+        "id": "watch_standard",
+        "name": "Apple Watch Line",
+        "monthlyPrice": 10,
+        "promotional": {
+          "discount": 200,
+          "description": "$200 off any Apple Watch",
+          "requiresNewLine": true
+        }
+      }
+    ]
+  },
+  "ipad": {
+    "name": "iPad",
+    "plans": [
+      {
+        "id": "ipad_5gb",
+        "name": "iPad 5GB",
+        "monthlyPrice": 5,
+        "dataLimit": "5GB",
+        "promotional": {
+          "discount": 230,
+          "description": "$230 off iPad",
+          "requiresNewLine": true
+        }
+      },
+      {
+        "id": "ipad_unlimited",
+        "name": "iPad Unlimited",
+        "monthlyPrice": 20,
+        "dataLimit": "Unlimited",
+        "promotional": {
+          "discount": 230,
+          "description": "$230 off iPad",
+          "requiresNewLine": true
+        }
+      }
+    ]
+  },
+  "home_internet": {
+    "name": "Home Internet",
+    "plans": [
+      {
+        "id": "home_5g",
+        "name": "5G Home Internet",
+        "monthlyPrice": 60,
+        "promotional": {
+          "monthlyPrice": 0,
+          "description": "FREE with qualifying voice line",
+          "duration": "lifetime",
+          "requiresVoiceLine": true
+        }
+      }
+    ]
+  },
+  "insurance": {
+    "protection360": {
+      "name": "Protection 360",
+      "monthlyPrice": 18,
+      "description": "Complete device protection with AppleCare Services",
+      "eligibleDevices": ["phone"],
+      "coverage": [
+        "Unlimited screen repairs",
+        "Accidental damage",
+        "Loss and theft",
+        "Same-day delivery",
+        "Tech support"
+      ]
+    }
+  }
+}

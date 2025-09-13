@@ -1,0 +1,209 @@
+/* Quote Summary - Designed to fit on one mobile screen */
+.quote-summary {
+  background: white;
+  border-radius: 12px;
+  padding: 0.75rem;
+  max-width: 100%;
+  height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--tmobile-magenta);
+  margin-bottom: 0.75rem;
+}
+
+.summary-header h2 {
+  font-size: 1.25rem;
+  color: var(--tmobile-magenta);
+  margin: 0;
+}
+
+.share-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.share-buttons button {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid #e5e5e7;
+  background: white;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.share-buttons button:active {
+  transform: scale(0.95);
+  background: var(--tmobile-light-gray);
+}
+
+/* Summary Sections */
+.summary-section {
+  padding: 0.75rem;
+  border-radius: 10px;
+  margin-bottom: 0.75rem;
+  flex-shrink: 0;
+}
+
+.summary-section.upfront {
+  background: linear-gradient(135deg, rgba(226,0,116,0.08) 0%, rgba(255,255,255,1) 100%);
+  border: 2px solid var(--tmobile-magenta);
+}
+
+.summary-section.monthly {
+  background: #f8f8fa;
+  border: 1px solid #e5e5e7;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.summary-section h3 {
+  font-size: 0.9rem;
+  color: var(--tmobile-gray);
+  margin: 0 0 0.25rem 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.amount-large {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--tmobile-black);
+  margin-bottom: 0.5rem;
+}
+
+.summary-section.upfront .amount-large {
+  color: var(--tmobile-magenta);
+}
+
+/* Breakdown */
+.breakdown {
+  font-size: 0.85rem;
+}
+
+.line-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.line-item:last-child {
+  border-bottom: none;
+}
+
+.line-item.taxes {
+  margin-top: 0.25rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #e5e5e7;
+  font-weight: 600;
+}
+
+.line-item span:first-child {
+  color: var(--tmobile-gray);
+  flex: 1;
+}
+
+.line-item span:last-child {
+  color: var(--tmobile-black);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Footer */
+.quote-footer {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5e5e7;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--tmobile-gray);
+  flex-shrink: 0;
+}
+
+.rep-info {
+  font-weight: 500;
+}
+
+.validity {
+  text-align: right;
+}
+
+/* Responsive - Ensure it fits on iPhone screen */
+@media (max-width: 390px) {
+  .quote-summary {
+    padding: 0.5rem;
+    height: calc(100vh - 100px);
+  }
+  
+  .summary-header h2 {
+    font-size: 1.1rem;
+  }
+  
+  .amount-large {
+    font-size: 1.75rem;
+  }
+  
+  .summary-section {
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .breakdown {
+    font-size: 0.8rem;
+  }
+  
+  .line-item {
+    padding: 0.2rem 0;
+  }
+}
+
+/* Landscape mode */
+@media (orientation: landscape) and (max-height: 500px) {
+  .quote-summary {
+    flex-direction: row;
+    gap: 1rem;
+  }
+  
+  .summary-section {
+    flex: 1;
+  }
+  
+  .quote-footer {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    right: 0.5rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  .quote-summary {
+    height: auto;
+    page-break-inside: avoid;
+  }
+  
+  .share-buttons {
+    display: none;
+  }
+  
+  .summary-section.monthly {
+    overflow: visible;
+  }
+}

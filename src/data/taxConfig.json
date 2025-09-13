@@ -1,0 +1,32 @@
+{
+  "florida": {
+    "state": "FL",
+    "taxes": {
+      "state_communications_tax": 0.0688,
+      "federal_usf": 0.0124,
+      "device_sales_tax": 0.07
+    },
+    "fees": {
+      "regulatory_fee_per_line": 3.99,
+      "federal_local_surcharge_per_line": 2.50,
+      "activation_fee_per_line": 10
+    },
+    "counties": {
+      "palm_beach": {
+        "county_tax": 0.01,
+        "total_device_tax": 0.07,
+        "total_service_tax": 0.1444
+      },
+      "broward": {
+        "county_tax": 0.0,
+        "total_device_tax": 0.065,
+        "total_service_tax": 0.1344
+      },
+      "miami_dade": {
+        "county_tax": 0.01,
+        "total_device_tax": 0.07,
+        "total_service_tax": 0.1444
+      }
+    }
+  }
+}

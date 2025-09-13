@@ -156,11 +156,37 @@ NEW_PROMO: {
 
 ## 🚢 Deployment
 
-### Deploy to Vercel
+### 🚀 Intelligent Deployment with Auto-Versioning
+
+**IMPORTANT**: Always use the deploy script to ensure proper versioning and PWA updates.
+
 ```bash
-npm i -g vercel
-vercel
+# Standard deployment (patch version: 2.1.0 → 2.1.1)
+npm run deploy
+
+# Minor version update (2.1.0 → 2.2.0)
+npm run deploy:minor
+
+# Major version update (2.1.0 → 3.0.0)
+npm run deploy:major
+
+# With custom feature message
+npm run deploy --feature="Added PDF vision capability"
 ```
+
+#### What the Deploy Script Does:
+1. ✅ Auto-increments version in `package.json`
+2. ✅ Updates `src/version.json` with release date
+3. ✅ Commits version changes to Git
+4. ✅ Pushes to GitHub
+5. ✅ Deploys to Vercel production
+6. ✅ Triggers PWA update on next user visit
+
+### Manual Deployment (NOT Recommended)
+```bash
+vercel --prod
+```
+⚠️ This won't update versions and may break PWA updates!
 
 ### Deploy to Netlify
 ```bash

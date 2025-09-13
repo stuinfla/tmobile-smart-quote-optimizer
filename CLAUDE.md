@@ -11,10 +11,41 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run lint` - Run ESLint for code quality checks
 
 ### Deployment
-- `vercel --prod` - Deploy to production on Vercel
-- Production URLs:
-  - Main: https://tmobile-optimizer.vercel.app
-  - Alternative: https://tmobile-sales-edge.vercel.app
+
+**🚨 IMPORTANT: Always use the intelligent deploy script for production deployments!**
+
+```bash
+# Standard deployment (auto-increments patch version)
+npm run deploy
+
+# For minor updates (new features)
+npm run deploy:minor
+
+# For major updates (breaking changes)
+npm run deploy:major
+
+# With custom feature description
+npm run deploy --feature="Added new accessory pricing"
+```
+
+**The deploy script automatically:**
+- Increments version number (2.1.0 → 2.1.1)
+- Updates src/version.json with release date
+- Commits version changes
+- Pushes to GitHub
+- Deploys to Vercel
+- Triggers PWA auto-update
+
+**Current Version**: 2.1.0 (check package.json)
+
+**Production URLs**:
+- Main: https://tmobile-optimizer.vercel.app
+- Alternative: https://tmobile-sales-edge.vercel.app
+
+**Manual deployment (ONLY for testing):**
+```bash
+vercel --prod  # ⚠️ Won't update version numbers!
+```
 
 ## Architecture Overview
 
