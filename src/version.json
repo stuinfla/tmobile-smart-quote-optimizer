@@ -2,23 +2,8 @@
   "version": "2.3",
   "releaseDate": "2025-09-13",
   "features": [
-    "CRITICAL: Removed ALL Go5G plan references (discontinued April 2025)",
-    "FIXED: Plans now correctly show Experience Beyond/More/Essentials only",
-    "FIXED: Header compressed to 2 lines maximum for mobile",
-    "VERIFIED: All components now use plans_sept_2025.js data",
-    "NEW: Intelligent auto-versioning deployment system",
-    "NEW: Accurate accessory pricing - iPad $5/20, Watch $10",
-    "NEW: Quantity selectors for watches and iPads",
-    "NEW: Protection 360 insurance option ($18/month per phone)",
-    "NEW: One-screen quote summary that fits on iPhone",
-    "NEW: Share quotes via text, email, or clipboard",
-    "NEW: All data moved to JSON files (no hardcoding)",
-    "NEW: Tax configuration system for Florida counties",
-    "FIXED: UI contrast issues and white-on-white text",
-    "FIXED: Admin FAB moved to bottom right",
-    "FIXED: Removed duplicate rep info from header",
-    "FIXED: Edit Sales Rep modal layout issues",
-    "IMPROVED: Reduced header spacing for mobile",
-    "IMPROVED: PWA auto-updates with version tracking"
+    "Version 2.3.1 Release",
+    "Bug fixes and performance improvements",
+    "Updated dependencies"
   ]
 }
