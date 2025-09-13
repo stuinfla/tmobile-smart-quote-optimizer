@@ -108,6 +108,82 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
           </div>
         );
 
+      case 'newPhones':
+        return (
+          <div className={`question-card ${isAnimating ? `slide-${direction}` : ''}`}>
+            <h2 className="question-text">Which new phones would you like?</h2>
+            <div className="popular-picks">
+              <span className="label">Popular picks:</span>
+              <button className="pick-btn" onClick={() => {
+                const newDevices = customerData.devices.map(() => ({
+                  currentPhone: '',
+                  newPhone: 'iPhone_17',
+                  storage: '256GB',
+                  insurance: false
+                }));
+                setCustomerData({...customerData, devices: newDevices});
+              }}>All iPhone 17</button>
+              <button className="pick-btn" onClick={() => {
+                const newDevices = customerData.devices.map(() => ({
+                  currentPhone: '',
+                  newPhone: 'Galaxy_S25',
+                  storage: '256GB',
+                  insurance: false
+                }));
+                setCustomerData({...customerData, devices: newDevices});
+              }}>All Galaxy S25</button>
+            </div>
+            <div className="device-selector">
+              {customerData.devices.map((device, index) => (
+                <div key={index} className="device-card animated">
+                  <div className="input-group">
+                    <label className="input-label">Line {index + 1}</label>
+                    <select 
+                      className="input-field"
+                      value={device.newPhone}
+                      onChange={(e) => {
+                        const newDevices = [...customerData.devices];
+                        newDevices[index].newPhone = e.target.value;
+                        newDevices[index].storage = '';
+                        setCustomerData({...customerData, devices: newDevices});
+                      }}
+                    >
+                      <option value="">Select phone...</option>
+                      {Object.entries(phoneData.phones).map(([brand, phones]) => (
+                        <optgroup key={brand} label={brand.charAt(0).toUpperCase() + brand.slice(1)}>
+                          {Object.entries(phones).map(([key, phone]) => (
+                            <option key={key} value={key}>
+                              {phone.name} - from ${Object.values(phone.variants)[0]}
+                            </option>
+                          ))}
+                        </optgroup>
+                      ))}
+                    </select>
+                  </div>
+                  {device.newPhone && phoneData.phones[Object.keys(phoneData.phones).find(b => phoneData.phones[b][device.newPhone])]?.[device.newPhone] && (
+                    <div className="input-group storage-selector">
+                      {Object.entries(phoneData.phones[Object.keys(phoneData.phones).find(b => phoneData.phones[b][device.newPhone])][device.newPhone].variants).map(([storage, price]) => (
+                        <button
+                          key={storage}
+                          className={`storage-btn ${device.storage === storage ? 'selected' : ''}`}
+                          onClick={() => {
+                            const newDevices = [...customerData.devices];
+                            newDevices[index].storage = storage;
+                            setCustomerData({...customerData, devices: newDevices});
+                          }}
+                        >
+                          <span className="storage-size">{storage}</span>
+                          <span className="storage-price">${price}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
       case 'insurance':
         return (
           <div className={`question-card ${isAnimating ? `slide-${direction}` : ''}`}>
@@ -160,6 +236,97 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
                 <li>✓ AppleCare Services (iPhone)</li>
                 <li>✓ McAfee Security Suite</li>
               </ul>
+            </div>
+          </div>
+        );
+
+      case 'currentPhones':
+        return (
+          <div className={`question-card ${isAnimating ? `slide-${direction}` : ''}`}>
+            <h2 className="question-text">Trade-in or Keep & Switch?</h2>
+            <p className="help-text">
+              We'll calculate both options and show you which saves more!
+            </p>
+            <div className="trade-toggle">
+              <button 
+                className="toggle-btn"
+                onClick={() => {
+                  const newDevices = customerData.devices.map(d => ({...d, currentPhone: 'no_trade'}));
+                  setCustomerData({...customerData, devices: newDevices});
+                }}
+              >
+                Keep All Phones
+                <span className="sub-text">Get up to $800/line credit</span>
+              </button>
+              <button 
+                className="toggle-btn"
+                onClick={() => {
+                  const newDevices = customerData.devices.map(d => ({...d, currentPhone: 'iPhone_15'}));
+                  setCustomerData({...customerData, devices: newDevices});
+                }}
+              >
+                Trade All In
+                <span className="sub-text">Get instant discounts</span>
+              </button>
+            </div>
+            <div className="device-selector">
+              {customerData.devices.map((device, index) => (
+                <div key={index} className="device-card compact">
+                  <label className="input-label">Line {index + 1}</label>
+                  <select 
+                    className="input-field"
+                    value={device.currentPhone}
+                    onChange={(e) => {
+                      const newDevices = [...customerData.devices];
+                      newDevices[index].currentPhone = e.target.value;
+                      setCustomerData({...customerData, devices: newDevices});
+                    }}
+                  >
+                    <option value="">Select...</option>
+                    <option value="no_trade">Keep phone (Keep & Switch)</option>
+                    {Object.keys(tradeInValues)
+                      .filter(k => k.includes('iPhone') || k.includes('Galaxy'))
+                      .slice(0, 10)
+                      .map(phone => (
+                        <option key={phone} value={phone}>
+                          {phone.replace(/_/g, ' ')} - ${tradeInValues[phone]}
+                        </option>
+                      ))}
+                    <option value="other">Other/Damaged</option>
+                  </select>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'plan':
+        return (
+          <div className={`question-card ${isAnimating ? `slide-${direction}` : ''}`}>
+            <h2 className="question-text">Choose your plan</h2>
+            <div className="plan-comparison">
+              {Object.entries(plans.postpaid).slice(0, 3).map(([key, plan]) => (
+                <button 
+                  key={key}
+                  className={`plan-card ${customerData.selectedPlan === key ? 'selected' : ''} ${key === 'EXPERIENCE_BEYOND' ? 'popular' : ''}`}
+                  onClick={() => {
+                    setCustomerData({...customerData, selectedPlan: key});
+                    setTimeout(() => onAnswer('continue', 'accessoryLines'), 400);
+                  }}
+                >
+                  {key === 'EXPERIENCE_BEYOND' && <span className="badge-popular">MOST POPULAR</span>}
+                  <h3>{plan.name}</h3>
+                  <div className="plan-price">
+                    <span className="price-amount">${plan.pricing[customerData.lines] || plan.pricing[1] * customerData.lines}</span>
+                    <span className="price-period">/mo</span>
+                  </div>
+                  <ul className="plan-features">
+                    {plan.features.slice(0, 3).map((feature, idx) => (
+                      <li key={idx}>{feature}</li>
+                    ))}
+                  </ul>
+                </button>
+              ))}
             </div>
           </div>
         );
