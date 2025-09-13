@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { phoneData, tradeInValues } from '../data/phoneData';
-import { plans } from '../data/plans';
+import { plans } from '../data/plans_sept_2025';
 import { insurancePricing, accessoryLinePricing } from '../data/insuranceData';
 import { useSwipeGesture } from '../hooks/useSwipeGesture';
 
@@ -100,7 +100,7 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
                   <div style={{fontSize: '1.25rem', fontWeight: 'bold'}}>{num} {num === 1 ? 'Line' : 'Lines'}</div>
                   {num >= 3 && <span className="badge-free">3rd FREE!</span>}
                   <div className="price-preview">
-                    ${plans.postpaid.GO5G_Next.pricing[num]}/mo
+                    ${plans.postpaid.EXPERIENCE_BEYOND.pricing[num]}/mo
                   </div>
                 </button>
               ))}

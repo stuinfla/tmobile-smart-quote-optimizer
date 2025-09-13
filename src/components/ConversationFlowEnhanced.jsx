@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { phoneData, tradeInValues } from '../data/phoneData';
-import { plans } from '../data/plans';
+import { plans } from '../data/plans_sept_2025';
 import { useSwipeGesture } from '../hooks/useSwipeGesture';
 
 function ConversationFlowEnhanced({ currentStep, customerData, onAnswer, setCustomerData }) {
@@ -59,9 +59,9 @@ function ConversationFlowEnhanced({ currentStep, customerData, onAnswer, setCust
   const getSmartRecommendation = () => {
     if (currentStep === 'plan') {
       if (customerData.lines >= 3) {
-        return "💡 GO5G Plus recommended - 3rd line FREE!";
+        return "💡 Experience Beyond recommended - 3rd line FREE!";
       } else if (customerData.devices.some(d => d.newPhone?.includes('Pro'))) {
-        return "💡 GO5G Next recommended - Upgrade every year for Pro phones";
+        return "💡 Experience Beyond recommended - Premium features for Pro phones";
       }
     }
     if (currentStep === 'accessories') {
@@ -115,7 +115,7 @@ function ConversationFlowEnhanced({ currentStep, customerData, onAnswer, setCust
                   <div style={{fontSize: '1.25rem', fontWeight: 'bold'}}>{num} {num === 1 ? 'Line' : 'Lines'}</div>
                   {num >= 3 && <span className="badge-free">3rd FREE!</span>}
                   <div className="price-preview">
-                    ${plans.postpaid.GO5G_Next.pricing[num]}/mo
+                    ${plans.postpaid.EXPERIENCE_BEYOND.pricing[num]}/mo
                   </div>
                 </button>
               ))}
@@ -270,13 +270,13 @@ function ConversationFlowEnhanced({ currentStep, customerData, onAnswer, setCust
               {Object.entries(plans.postpaid).slice(0, 3).map(([key, plan]) => (
                 <button 
                   key={key}
-                  className={`plan-card ${customerData.selectedPlan === key ? 'selected' : ''} ${key === 'GO5G_Plus' ? 'popular' : ''}`}
+                  className={`plan-card ${customerData.selectedPlan === key ? 'selected' : ''} ${key === 'EXPERIENCE_BEYOND' ? 'popular' : ''}`}
                   onClick={() => {
                     setCustomerData({...customerData, selectedPlan: key});
                     setTimeout(() => onAnswer('continue', 'accessories'), 400);
                   }}
                 >
-                  {key === 'GO5G_Plus' && <span className="badge-popular">MOST POPULAR</span>}
+                  {key === 'EXPERIENCE_BEYOND' && <span className="badge-popular">MOST POPULAR</span>}
                   <h3>{plan.name}</h3>
                   <div className="plan-price">
                     <span className="price-amount">${plan.pricing[customerData.lines] || plan.pricing[1] * customerData.lines}</span>
@@ -285,8 +285,8 @@ function ConversationFlowEnhanced({ currentStep, customerData, onAnswer, setCust
                   <ul className="plan-features">
                     <li>{plan.features.hotspot}</li>
                     <li>{plan.features.streaming[0] || 'Basic'}</li>
-                    {key === 'GO5G_Next' && <li>📱 Upgrade yearly</li>}
-                    {key === 'GO5G_Plus' && customerData.lines >= 3 && <li>🎉 3rd line FREE</li>}
+                    {key === 'EXPERIENCE_BEYOND' && <li>📱 Premium features</li>}
+                    {key === 'EXPERIENCE_BEYOND' && customerData.lines >= 3 && <li>🎉 3rd line FREE</li>}
                   </ul>
                 </button>
               ))}

@@ -324,26 +324,28 @@ function AppComplete() {
     <div className="app">
       <header className="header">
         <div className="header-content">
-          <div className="logo-section">
-            <img src="/logo.png" alt="T-Mobile" className="logo" />
-            <h1 className="app-title">Sales Edge</h1>
-          </div>
-          <div className="header-actions">
+          <div className="header-row-1">
+            <div className="logo-section">
+              <img src="/logo.png" alt="T-Mobile" className="logo" />
+              <span className="app-title">Sales Edge</span>
+            </div>
             <button 
-              className="new-client-btn"
+              className="new-button"
               onClick={resetFlow}
-              title="New Customer"
+              title="New Quote"
             >
-              🆕 New
+              New
             </button>
+          </div>
+          <div className="header-row-2">
             <RepSwitcher 
               currentRep={currentRep}
               onRepChange={handleRepChange}
             />
+            <div className="pricing-validity">
+              Sept 2025 Pricing
+            </div>
           </div>
-        </div>
-        <div className="pricing-validity">
-          📅 Pricing Valid: September 2025
         </div>
       </header>
 
