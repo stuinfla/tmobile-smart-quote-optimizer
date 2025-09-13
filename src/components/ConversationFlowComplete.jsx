@@ -100,7 +100,7 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
                   <div style={{fontSize: '1.25rem', fontWeight: 'bold'}}>{num} {num === 1 ? 'Line' : 'Lines'}</div>
                   {num >= 3 && <span className="badge-free">3rd FREE!</span>}
                   <div className="price-preview">
-                    ${plans.postpaid.EXPERIENCE_BEYOND.pricing[num]}/mo
+                    ${(plans.postpaid.EXPERIENCE_BEYOND.pricing[num] * num).toFixed(0)}/mo total
                   </div>
                 </button>
               ))}
@@ -317,7 +317,7 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
                   {key === 'EXPERIENCE_BEYOND' && <span className="badge-popular">MOST POPULAR</span>}
                   <h3>{plan.name}</h3>
                   <div className="plan-price">
-                    <span className="price-amount">${plan.pricing[customerData.lines] || plan.pricing[1] * customerData.lines}</span>
+                    <span className="price-amount">${(plan.pricing[customerData.lines] || plan.pricing[1]) * customerData.lines}</span>
                     <span className="price-period">/mo</span>
                   </div>
                   <ul className="plan-features">

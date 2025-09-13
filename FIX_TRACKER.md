@@ -11,15 +11,21 @@
   - Current: `d.currentPhone !== undefined` fails for empty string
   - Fix needed: Check for non-empty string
   
-- [ ] **Fix Step 5 → 6 transition (Trade-in → Accessories)**
-  - Issue: Flow stops after trade-in selection
-  - Expected: Should continue to accessory devices
-  - Test: Verify Continue button works after selecting trade-in option
+- [x] **FIXED: Step 5 → 7 transition (Trade-in → Plan Selection)**
+  - Issue: Flow stops after trade-in selection  
+  - FIX: Fixed canContinue() logic in v2.4.7
+  - TESTED: Continue button now works, reaches plan selection
+  - STATUS: ✅ DEPLOYED & VERIFIED in production
+
+- [x] **PROGRESS: Flow reaches Step 7 (Connected Devices)**
+  - TESTED: Flow now progresses through plan selection
+  - GOOD: No Go5G plans showing (data integrity improved)
+  - ISSUE: Stops at "Add connected devices?" - Step 8 missing
   
-- [ ] **Fix Results Display Component**
-  - Issue: Results page not rendering
-  - Expected: Show monthly total, upfront costs, savings
-  - Test: Verify all calculations display correctly
+- [ ] **Fix Step 7 → 8 transition (Connected Devices → Results)**
+  - Issue: Flow stops at connected devices step
+  - Expected: Should show final results/summary
+  - Test: Complete accessory setup and reach results
 
 - [ ] **Fix Quote Generation**
   - Issue: Quote button may not work
