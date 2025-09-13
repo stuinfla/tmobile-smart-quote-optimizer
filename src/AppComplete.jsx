@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import './App.css';
 import './App.enhanced.css';
-import { DealOptimizer } from './utils/optimizer';
-import ConversationFlowEnhanced from './components/ConversationFlowEnhanced';
+import { DealOptimizer } from './utils/optimizerFixed';
+import ConversationFlowComplete from './components/ConversationFlowComplete';
 import ResultsDisplayEnhanced from './components/ResultsDisplayEnhanced';
 import QuoteGenerator from './components/QuoteGenerator';
 import StoreSetup from './components/StoreSetup';
@@ -358,7 +358,7 @@ function AppComplete() {
                 {customerData.devices[0]?.newPhone && ` with ${customerData.devices.filter(d => d.newPhone).length} new phone(s)`}
               </div>
             )}
-            <ConversationFlowEnhanced
+            <ConversationFlowComplete
               currentStep={currentStep}
               customerData={customerData}
               onAnswer={handleAnswer}
