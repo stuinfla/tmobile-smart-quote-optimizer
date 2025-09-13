@@ -1,28 +1,9 @@
 {
-  "version": "2.1",
+  "version": "2.2",
   "releaseDate": "2025-09-13",
   "features": [
-    "MAJOR UPDATE: September 2025 pricing implemented",
-    "CRITICAL: Removed discontinued Go5G plans (ended April 2025)",
-    "NEW: Experience Beyond, Experience More, Essentials Saver plans",
-    "iPhone-optimized UX with iOS-specific features",
-    "Native iOS haptic feedback support",
-    "iOS safe area handling for all iPhone models",
-    "Optimized touch targets for mobile interaction",
-    "Native iOS blur effects and styling",
-    "Reduced UI spacing for minimal scrolling",
-    "Fixed sales rep name editing functionality",
-    "Added pricing validity indicator (September 2025)",
-    "Single source of truth: plans_sept_2025.js",
-    "T-Mobile Sales Edge PWA",
-    "Insurance pricing integration",
-    "Accessory line management", 
-    "Comprehensive Florida wireless service tax/fee calculations",
-    "Professional 2-page quotes",
-    "Admin panel with store setup",
-    "Enhanced Keep & Switch eligibility checking",
-    "Accurate Florida Communications Services Tax (6.88%)",
-    "Federal Universal Service Fund fees included",
-    "T-Mobile Regulatory Programs fee ($3.99/line) included"
+    "Version 2.2.0 Release",
+    "Bug fixes and performance improvements",
+    "Updated dependencies"
   ]
 }
