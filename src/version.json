@@ -1,9 +1,14 @@
 {
-  "version": "2.3",
+  "version": "2.4",
   "releaseDate": "2025-09-13",
   "features": [
-    "Version 2.3.1 Release",
-    "Bug fixes and performance improvements",
-    "Updated dependencies"
+    "CRITICAL: Fixed ALL pricing calculations to be accurate",
+    "FIXED: Line pricing now uses TOTAL cost (3 lines = $230, not $76.67)",
+    "FIXED: Phone financing properly calculated with promotions",
+    "NEW: Insurance calculated per phone line ($18/line)",
+    "NEW: iPad and Apple Watch accessory support with financing",
+    "FIXED: Taxes calculated correctly (14.44% on service, 7% on devices)",
+    "FIXED: Device taxes on full price paid upfront",
+    "IMPROVED: Complete pricing logic with all fees and taxes"
   ]
 }
