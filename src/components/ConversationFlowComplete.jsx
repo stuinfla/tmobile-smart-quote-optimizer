@@ -47,7 +47,7 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
       case 'newPhones':
         return customerData.devices.every(d => d.newPhone && d.storage);
       case 'currentPhones':
-        return customerData.devices.every(d => d.currentPhone !== undefined);
+        return customerData.devices.every(d => d.currentPhone && d.currentPhone !== '');
       case 'accessoryDevices':
         return !customerData.accessoryLines || 
                (customerData.accessoryLines.watch ? customerData.watchDevice !== undefined : true) &&
