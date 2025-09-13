@@ -144,7 +144,7 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
                       onChange={(e) => {
                         const newDevices = [...customerData.devices];
                         newDevices[index].newPhone = e.target.value;
-                        newDevices[index].storage = '';
+                        newDevices[index].storage = '';  // Clear storage when phone changes
                         setCustomerData({...customerData, devices: newDevices});
                       }}
                     >

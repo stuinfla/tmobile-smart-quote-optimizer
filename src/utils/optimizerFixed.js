@@ -20,7 +20,7 @@ export class DealOptimizer {
       deviceTaxRate: county.total_device_tax,    // 7% for devices
       regulatoryFeePerLine: 3.99,
       federalSurchargePerLine: 2.50,
-      activationFeePerLine: 10
+      deviceConnectionCharge: 35 // T-Mobile charges $35 per device (phones, tablets, watches)
     };
   }
 
@@ -295,7 +295,11 @@ export class DealOptimizer {
                         monthlyTaxesAndFees.total;
     
     // Calculate upfront costs
-    const activationFees = lineCount * this.taxRates.activationFeePerLine;
+    // Count all devices for activation fees (phones + accessories)
+    let totalDeviceCount = lineCount; // Phone lines
+    if (this.customer.accessoryLines?.watch) totalDeviceCount++;
+    if (this.customer.accessoryLines?.tablet) totalDeviceCount += 2; // Assuming 2 tablets based on scenario
+    const activationFees = totalDeviceCount * this.taxRates.deviceConnectionCharge;
     const upfrontTotal = deviceCosts.upfrontTax + // Phone taxes
                         accessoryCosts.upfrontTax + // Accessory taxes
                         activationFees + 
@@ -378,7 +382,11 @@ export class DealOptimizer {
     }
     
     // Calculate upfront costs
-    const activationFees = lineCount * this.taxRates.activationFeePerLine;
+    // Count all devices for activation fees (phones + accessories)
+    let totalDeviceCount = lineCount; // Phone lines
+    if (this.customer.accessoryLines?.watch) totalDeviceCount++;
+    if (this.customer.accessoryLines?.tablet) totalDeviceCount += 2; // Assuming 2 tablets based on scenario
+    const activationFees = totalDeviceCount * this.taxRates.deviceConnectionCharge;
     const firstMonth = totalMonthly;
     const upfrontTotal = deviceCosts.total + activationFees + firstMonth;
     
