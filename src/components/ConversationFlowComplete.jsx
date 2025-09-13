@@ -321,9 +321,13 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
                     <span className="price-period">/mo</span>
                   </div>
                   <ul className="plan-features">
-                    {plan.features.slice(0, 3).map((feature, idx) => (
-                      <li key={idx}>{feature}</li>
-                    ))}
+                    {plan.features && (
+                      <>
+                        <li>{plan.features.data || 'Unlimited data'}</li>
+                        <li>{plan.features.hotspot || 'Mobile hotspot'}</li>
+                        {plan.features.streaming && <li>{Array.isArray(plan.features.streaming) ? plan.features.streaming[0] : plan.features.streaming}</li>}
+                      </>
+                    )}
                   </ul>
                 </button>
               ))}
