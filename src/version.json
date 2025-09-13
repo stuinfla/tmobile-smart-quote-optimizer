@@ -2,8 +2,19 @@
   "version": "2.2",
   "releaseDate": "2025-09-13",
   "features": [
-    "Version 2.2.0 Release",
-    "Bug fixes and performance improvements",
-    "Updated dependencies"
+    "NEW: Intelligent auto-versioning deployment system",
+    "NEW: Accurate accessory pricing - iPad $5/20, Watch $10",
+    "NEW: Quantity selectors for watches and iPads",
+    "NEW: Protection 360 insurance option ($18/month per phone)",
+    "NEW: One-screen quote summary that fits on iPhone",
+    "NEW: Share quotes via text, email, or clipboard",
+    "NEW: All data moved to JSON files (no hardcoding)",
+    "NEW: Tax configuration system for Florida counties",
+    "FIXED: UI contrast issues and white-on-white text",
+    "FIXED: Admin FAB moved to bottom right",
+    "FIXED: Removed duplicate rep info from header",
+    "FIXED: Edit Sales Rep modal layout issues",
+    "IMPROVED: Reduced header spacing for mobile",
+    "IMPROVED: PWA auto-updates with version tracking"
   ]
 }
