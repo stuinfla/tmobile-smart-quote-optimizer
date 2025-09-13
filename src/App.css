@@ -46,11 +46,13 @@ body {
 .header {
   background: var(--tmobile-magenta);
   color: var(--tmobile-white);
-  padding: 0.35rem 0.5rem;
+  padding: 0.4rem 0.5rem;
   box-shadow: var(--shadow-md);
   position: sticky;
   top: 0;
   z-index: 100;
+  max-height: 75px;
+  overflow: hidden;
 }
 
 .header-content {
@@ -74,21 +76,31 @@ body {
 }
 
 .logo {
-  height: 20px;
+  height: 18px;
   width: auto;
 }
 
 .app-title {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: bold;
 }
 
 /* Header Row 2: Rep info and pricing validity */
 .header-row-2 {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.5rem;
+  display: none; /* Hide on mobile to save space */
+}
+
+@media (min-width: 768px) {
+  .header {
+    max-height: none;
+  }
+  
+  .header-row-2 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
 }
 
 .header-actions {

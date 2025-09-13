@@ -206,22 +206,22 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
                     </div>
                     
                     <div className="insurance-toggle">
-                      <label className="toggle-container">
+                      <label style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
                         <input
                           type="checkbox"
-                          checked={device.insurance}
+                          checked={device.insurance || false}
                           onChange={(e) => {
                             const newDevices = [...customerData.devices];
                             newDevices[index].insurance = e.target.checked;
                             setCustomerData({...customerData, devices: newDevices});
                           }}
+                          style={{width: '20px', height: '20px'}}
                         />
-                        <span className="toggle-slider"></span>
+                        <div>
+                          <span className="price">${insuranceInfo.monthly}/mo</span>
+                          <span className="deductible" style={{display: 'block', fontSize: '0.9em'}}>$0 screen repair</span>
+                        </div>
                       </label>
-                      <div className="insurance-price">
-                        <span className="price">${insuranceInfo.monthly}/mo</span>
-                        <span className="deductible">$0 screen repair</span>
-                      </div>
                     </div>
                   </div>
                 );
