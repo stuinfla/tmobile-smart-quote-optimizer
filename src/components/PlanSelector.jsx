@@ -54,14 +54,8 @@ function PlanSelector({ selectedPlan, onPlanChange, customerData, showRecommenda
   };
 
   const getPlansForTab = (tab) => {
-    switch(tab) {
-      case 'experience':
-        return Object.keys(experiencePlans).map(id => ({ id, ...planDetails[id] }));
-      case 'go5g':
-        return Object.keys(go5gPlans).map(id => ({ id, ...planDetails[id] }));
-      default:
-        return [];
-    }
+    // Only show current Experience plans (Go5G discontinued April 2025)
+    return Object.keys(experiencePlans).map(id => ({ id, ...planDetails[id] }));
   };
 
   const formatPrice = (price) => {
@@ -106,16 +100,9 @@ function PlanSelector({ selectedPlan, onPlanChange, customerData, showRecommenda
 
       <div className="plan-tabs">
         <button
-          className={`tab ${activeTab === 'experience' ? 'active' : ''}`}
-          onClick={() => setActiveTab('experience')}
+          className="tab active"
         >
-          Experience Plans
-        </button>
-        <button
-          className={`tab ${activeTab === 'go5g' ? 'active' : ''}`}
-          onClick={() => setActiveTab('go5g')}
-        >
-          GO5G Plans
+          Current T-Mobile Plans (September 2025)
         </button>
       </div>
 

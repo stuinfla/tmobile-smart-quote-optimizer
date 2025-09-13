@@ -1,9 +1,14 @@
 function ResultsDisplayEnhanced({ results, customerData }) {
-  // Florida tax rates for Delray Beach (33483)
-  const FLORIDA_STATE_TAX = 0.06; // 6% state tax
-  const PALM_BEACH_COUNTY_TAX = 0.01; // 1% county tax  
-  const TOTAL_TAX_RATE = FLORIDA_STATE_TAX + PALM_BEACH_COUNTY_TAX; // 7% total
+  // Florida wireless service taxes and fees for Delray Beach (33483)
+  const FLORIDA_COMMUNICATIONS_TAX = 0.0688; // 6.88% FL communications services tax
+  const PALM_BEACH_COUNTY_TAX = 0.01; // 1% local tax
+  const FEDERAL_USF_FEE = 0.0124; // 1.24% Federal Universal Service Fund
+  const REGULATORY_FEE_PER_LINE = 3.99; // T-Mobile Regulatory Programs fee per line
+  const FEDERAL_LOCAL_SURCHARGE_PER_LINE = 2.50; // Average federal/local surcharges per line
   const ACTIVATION_FEE_PER_LINE = 10; // $10 per line activation fee
+  
+  // Total percentage-based tax rate for wireless services
+  const TOTAL_TAX_RATE = FLORIDA_COMMUNICATIONS_TAX + PALM_BEACH_COUNTY_TAX + FEDERAL_USF_FEE;
   
   if (!results || results.length === 0) {
     return (
@@ -23,8 +28,26 @@ function ResultsDisplayEnhanced({ results, customerData }) {
     }).format(amount);
   };
 
-  const calculateTax = (amount) => {
-    return amount * TOTAL_TAX_RATE;
+  const calculateServiceTaxesAndFees = (monthlyServiceAmount, lineCount) => {
+    // Percentage-based taxes
+    const percentageTaxes = monthlyServiceAmount * TOTAL_TAX_RATE;
+    
+    // Per-line fees
+    const regulatoryFees = lineCount * REGULATORY_FEE_PER_LINE;
+    const surcharges = lineCount * FEDERAL_LOCAL_SURCHARGE_PER_LINE;
+    
+    return {
+      percentageTaxes,
+      regulatoryFees,
+      surcharges,
+      total: percentageTaxes + regulatoryFees + surcharges
+    };
+  };
+
+  const calculateDeviceTax = (amount) => {
+    // Devices are subject to sales tax only (not communications tax)
+    const DEVICE_SALES_TAX = 0.06 + 0.01; // 6% state + 1% county
+    return amount * DEVICE_SALES_TAX;
   };
 
   const calculateUpfrontCosts = (scenario) => {
@@ -36,7 +59,7 @@ function ResultsDisplayEnhanced({ results, customerData }) {
       scenario.devices.forEach(device => {
         if (device.downPayment) {
           deviceCosts += device.downPayment;
-          deviceTaxes += calculateTax(device.fullPrice || 0); // Tax on full device price
+          deviceTaxes += calculateDeviceTax(device.fullPrice || 0); // Tax on full device price
         }
       });
     }
@@ -44,21 +67,21 @@ function ResultsDisplayEnhanced({ results, customerData }) {
     // Calculate activation fees
     const activationFees = customerData.lines * ACTIVATION_FEE_PER_LINE;
     
-    // First month service + tax
+    // First month service + taxes and fees
     const firstMonthService = scenario.monthlyTotal;
-    const firstMonthTax = calculateTax(firstMonthService);
+    const firstMonthTaxesAndFees = calculateServiceTaxesAndFees(firstMonthService, customerData.lines);
     
     return {
       deviceDownPayments: deviceCosts,
       deviceTaxes: deviceTaxes,
       activationFees: activationFees,
       firstMonthService: firstMonthService,
-      firstMonthTax: firstMonthTax,
-      total: deviceCosts + deviceTaxes + activationFees + firstMonthService + firstMonthTax
+      firstMonthTaxesAndFees: firstMonthTaxesAndFees,
+      total: deviceCosts + deviceTaxes + activationFees + firstMonthService + firstMonthTaxesAndFees.total
     };
   };
 
-  const bestDeal = results[0];
+  // const bestDeal = results[0]; // Reserved for future use
 
   return (
     <div className="results-section">
@@ -68,14 +91,15 @@ function ResultsDisplayEnhanced({ results, customerData }) {
           We found {results.length} ways to save. Here's your best option:
         </p>
         <div className="tax-notice">
-          📍 Tax calculated for Delray Beach, FL (7% total: 6% state + 1% county)
+          📍 Taxes & fees calculated for Delray Beach, FL - includes communications tax, federal fees, and T-Mobile regulatory charges
         </div>
       </div>
 
       <div className="scenarios-grid">
         {results.map((scenario, index) => {
           const upfrontCosts = calculateUpfrontCosts(scenario);
-          const monthlyWithTax = scenario.monthlyTotal + calculateTax(scenario.monthlyTotal);
+          const monthlyTaxesAndFees = calculateServiceTaxesAndFees(scenario.monthlyTotal, customerData.lines);
+          const monthlyWithTaxesAndFees = scenario.monthlyTotal + monthlyTaxesAndFees.total;
           
           return (
             <div 
@@ -96,15 +120,27 @@ function ResultsDisplayEnhanced({ results, customerData }) {
                     </span>
                   </div>
                   <div className="metric-row">
-                    <span className="metric-label">Tax (7%)</span>
+                    <span className="metric-label">Service Taxes ({(TOTAL_TAX_RATE * 100).toFixed(1)}%)</span>
                     <span className="metric-value">
-                      {formatCurrency(calculateTax(scenario.monthlyTotal))}
+                      {formatCurrency(monthlyTaxesAndFees.percentageTaxes)}
+                    </span>
+                  </div>
+                  <div className="metric-row">
+                    <span className="metric-label">Regulatory Fees</span>
+                    <span className="metric-value">
+                      {formatCurrency(monthlyTaxesAndFees.regulatoryFees)}
+                    </span>
+                  </div>
+                  <div className="metric-row">
+                    <span className="metric-label">Federal Surcharges</span>
+                    <span className="metric-value">
+                      {formatCurrency(monthlyTaxesAndFees.surcharges)}
                     </span>
                   </div>
                   <div className="metric-row total">
                     <span className="metric-label">Total Monthly</span>
                     <span className="metric-value">
-                      {formatCurrency(monthlyWithTax)}
+                      {formatCurrency(monthlyWithTaxesAndFees)}
                     </span>
                   </div>
                 </div>
@@ -140,9 +176,9 @@ function ResultsDisplayEnhanced({ results, customerData }) {
                     </span>
                   </div>
                   <div className="metric-row">
-                    <span className="metric-label">First Month Tax</span>
+                    <span className="metric-label">First Month Taxes & Fees</span>
                     <span className="metric-value">
-                      {formatCurrency(upfrontCosts.firstMonthTax)}
+                      {formatCurrency(upfrontCosts.firstMonthTaxesAndFees.total)}
                     </span>
                   </div>
                   <div className="metric-row total">
@@ -160,6 +196,17 @@ function ResultsDisplayEnhanced({ results, customerData }) {
                   </span>
                 </div>
               </div>
+              
+              {scenario.promotionsApplied && scenario.promotionsApplied.length > 0 && (
+                <div className="promotions-applied">
+                  <h4>Promotions Applied:</h4>
+                  <ul>
+                    {scenario.promotionsApplied.map((promo, idx) => (
+                      <li key={idx} className="promotion-item">{promo}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               
               {scenario.details && (
                 <div className="scenario-details">
@@ -188,13 +235,15 @@ function ResultsDisplayEnhanced({ results, customerData }) {
       </div>
 
       <div className="tax-disclaimer">
-        <p><strong>Tax Information:</strong></p>
+        <p><strong>Taxes & Fees Information:</strong></p>
         <ul>
-          <li>Florida State Sales Tax: 6%</li>
-          <li>Palm Beach County Tax: 1%</li>
-          <li>Total Tax Rate: 7%</li>
+          <li>Florida Communications Services Tax: 6.88%</li>
+          <li>Palm Beach County Local Tax: 1%</li>
+          <li>Federal Universal Service Fund: 1.24%</li>
+          <li>T-Mobile Regulatory Programs Fee: $3.99 per line</li>
+          <li>Federal & Local Surcharges: ~$2.50 per line</li>
           <li>Activation Fee: $10 per line</li>
-          <li>Device taxes are calculated on the full retail price</li>
+          <li>Device taxes calculated at 7% sales tax on full retail price</li>
         </ul>
       </div>
 
@@ -331,6 +380,7 @@ function ResultsDisplayEnhanced({ results, customerData }) {
           font-size: 1.25rem;
         }
 
+        .promotions-applied,
         .scenario-details,
         .scenario-requirements {
           margin-top: 1rem;
@@ -338,11 +388,19 @@ function ResultsDisplayEnhanced({ results, customerData }) {
           border-top: 1px solid var(--tmobile-light-gray);
         }
 
+        .promotions-applied h4,
         .scenario-details h4,
         .scenario-requirements h4 {
           color: var(--tmobile-black);
           font-size: 0.9rem;
           margin-bottom: 0.5rem;
+        }
+
+        .promotions-applied {
+          background: linear-gradient(135deg, rgba(76, 175, 80, 0.05), rgba(76, 175, 80, 0.02));
+          border-left: 4px solid #4caf50;
+          padding: 1rem;
+          border-radius: 0 8px 8px 0;
         }
 
         .scenario-details ul,

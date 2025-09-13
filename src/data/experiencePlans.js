@@ -1,14 +1,14 @@
 // T-Mobile Experience Plans - Updated 2025 Pricing from Official Documentation
 export const experiencePlans = {
   // Standard Experience Plans
-  essentials: {
-    id: 'essentials',
-    name: 'Essentials',
+  ESSENTIALS_SAVER: {
+    id: 'ESSENTIALS_SAVER',
+    name: 'Essentials Saver',
     category: 'basic',
     pricing: {
-      individual: 60,
-      family2: 30, // per line (2 lines minimum)
-      addALine: 15, // lines 3-6
+      individual: 55,
+      family2: 45, // per line (2 lines)
+      family3: 38.33, // per line (3 lines)
       autopayDiscount: 5
     },
     features: {
@@ -35,16 +35,17 @@ export const experiencePlans = {
     }
   },
 
-  experienceMore: {
-    id: 'experience_more',
+  EXPERIENCE_MORE: {
+    id: 'EXPERIENCE_MORE',
     name: 'Experience More',
     category: 'premium',
     pricing: {
-      individual: 85,
-      family2: 55,
-      family3to8: 30, // lines 3-8
-      family9to12: 40, // lines 9-12
-      autopayDiscount: 5
+      individual: 90,
+      family2: 75, // per line (2 lines)
+      family3: 61.67, // per line (3 lines)
+      family4: 55, // per line (4 lines)
+      family5: 51, // per line (5 lines)
+      autopayDiscount: 10
     },
     features: {
       unlimitedTalk: true,
@@ -73,16 +74,17 @@ export const experiencePlans = {
     }
   },
 
-  experienceBeyond: {
-    id: 'experience_beyond',
+  EXPERIENCE_BEYOND: {
+    id: 'EXPERIENCE_BEYOND',
     name: 'Experience Beyond',
     category: 'ultimate',
     pricing: {
-      individual: 100,
-      family2: 70,
-      family3to8: 45, // lines 3-8
-      family9to12: 65, // lines 9-12
-      autopayDiscount: 5
+      individual: 105,
+      family2: 90, // per line (2 lines)
+      family3: 76.67, // per line (3 lines)
+      family4: 70, // per line (4 lines)
+      family5: 66, // per line (5 lines)
+      autopayDiscount: 10
     },
     features: {
       unlimitedTalk: true,
@@ -114,81 +116,15 @@ export const experiencePlans = {
   }
 };
 
-// Legacy GO5G Plans (Still Available)
-export const go5gPlans = {
-  go5g: {
-    id: 'go5g',
-    name: 'GO5G',
-    category: 'standard',
-    pricing: {
-      individual: 75,
-      family4: 180, // 4 lines total
-      autopayDiscount: 5
-    },
-    features: {
-      unlimitedTalk: true,
-      unlimitedText: true,
-      unlimitedData: true,
-      hotspotData: '15GB high-speed',
-      priorityData: '50GB',
-      streaming: 'HD quality',
-      newInTwo: true // Guaranteed new customer promos
-    }
-  },
-
-  go5gPlus: {
-    id: 'go5g_plus', 
-    name: 'GO5G Plus',
-    category: 'premium',
-    pricing: {
-      individual: 90,
-      family4: 220, // 4 lines total
-      autopayDiscount: 5
-    },
-    features: {
-      unlimitedTalk: true,
-      unlimitedText: true,
-      unlimitedData: true,
-      priorityData: 'Unlimited premium',
-      hotspotData: '50GB high-speed',
-      streaming: '4K quality',
-      internationalRoaming: 'Canada/Mexico 15GB',
-      internationalData: '5GB',
-      newInTwo: true,
-      netflix: 'Standard included'
-    }
-  },
-
-  go5gNext: {
-    id: 'go5g_next',
-    name: 'GO5G Next', 
-    category: 'ultimate',
-    pricing: {
-      individual: 100,
-      family4: 250, // 4 lines total
-      autopayDiscount: 5
-    },
-    features: {
-      unlimitedTalk: true,
-      unlimitedText: true,
-      unlimitedData: true,
-      priorityData: 'Unlimited premium',
-      hotspotData: '50GB high-speed',
-      streaming: '4K quality',
-      internationalRoaming: 'Canada/Mexico 15GB',
-      internationalData: '5GB',
-      deviceUpgrade: 'Annual upgrades',
-      newInTwo: true,
-      netflix: 'Standard included'
-    }
-  }
-};
+// GO5G Plans - DISCONTINUED April 2025
+// These plans are no longer available for new customers
+export const go5gPlans = {};
 
 // Plan Categories for Organization
 export const planCategories = {
   experience: ['essentials', 'experience_more', 'experience_beyond'],
-  go5g: ['go5g', 'go5g_plus', 'go5g_next'],
-  legacy: ['magenta', 'magenta_max'] // Being migrated to GO5G Plus
+  go5g: [], // Discontinued April 2025
+  legacy: [] // All legacy plans discontinued
 };
 
 // Discount Programs

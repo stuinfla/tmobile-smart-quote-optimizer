@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './App.css';
 import './App.enhanced.css';
 import { DealOptimizer } from './utils/optimizer';
@@ -12,6 +12,7 @@ import { useLocalStorage } from './hooks/useLocalStorage';
 import { StoreManager, RepManager, sampleRepData } from './data/storeData';
 import adminStorage from './utils/adminStorage';
 import versionInfo from './version.json';
+import { isIOS, isPWA, hapticFeedback, createSwipeHandler, iosKeyboard } from './utils/iosFeatures';
 
 function AppComplete() {
   const [isConfigured, setIsConfigured] = useState(false);
@@ -29,7 +30,7 @@ function AppComplete() {
     carrier: '',
     lines: 0,
     devices: [],
-    selectedPlan: 'GO5G_Next',
+    selectedPlan: 'EXPERIENCE_BEYOND',
     accessories: {
       watch: false,
       tablet: false,
@@ -46,6 +47,20 @@ function AppComplete() {
   useEffect(() => {
     initializeApp();
     checkForUpdates();
+    
+    // iOS-specific optimizations
+    if (isIOS()) {
+      // Prevent zoom on input focus
+      iosKeyboard.preventZoom();
+      
+      // Add iOS class for conditional styling
+      document.body.classList.add('ios-device');
+      
+      // Check if running as PWA
+      if (isPWA()) {
+        document.body.classList.add('ios-pwa');
+      }
+    }
   }, []);
 
   const checkForUpdates = () => {
@@ -215,7 +230,8 @@ function AppComplete() {
   }, [customerData]);
 
   const handleAnswer = (answer, nextStep = null) => {
-    if (navigator.vibrate) navigator.vibrate(10);
+    // Use iOS haptic feedback instead of vibrate
+    hapticFeedback.light();
     
     if (answer === 'back' && nextStep) {
       setCurrentStep(nextStep);
@@ -259,7 +275,7 @@ function AppComplete() {
   };
 
   const handleCarrierSelection = (selectedCarrier) => {
-    const { scenario, eligibleCarriers, scenarios, data } = carrierModalData;
+    const { eligibleCarriers, scenarios, data } = carrierModalData;
     
     if (selectedCarrier && eligibleCarriers.some(c => selectedCarrier.toLowerCase().includes(c.toLowerCase()))) {
       data.carrier = selectedCarrier;
@@ -288,7 +304,7 @@ function AppComplete() {
       carrier: '',
       lines: 0,
       devices: [],
-      selectedPlan: 'GO5G_Next',
+      selectedPlan: 'EXPERIENCE_BEYOND',
       accessories: {
         watch: false,
         tablet: false,
@@ -340,6 +356,9 @@ function AppComplete() {
               🔐 Admin
             </button>
           </div>
+        </div>
+        <div className="pricing-validity">
+          📅 Pricing & Promotions Valid as of September 2025
         </div>
       </header>
 

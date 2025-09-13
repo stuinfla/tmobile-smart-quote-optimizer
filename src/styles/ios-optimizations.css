@@ -1,0 +1,276 @@
+/* iOS-Specific Optimizations for iPhone */
+
+/* Prevent iOS bounce scrolling on main container */
+.app {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.main-container {
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  height: 100%;
+}
+
+/* iOS Safe Areas */
+.header {
+  padding-top: max(env(safe-area-inset-top), 20px);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+.app-footer {
+  padding-bottom: max(env(safe-area-inset-bottom), 20px);
+}
+
+/* iOS Native Button Feel */
+.option-button,
+.btn,
+.action-button {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  cursor: pointer;
+  transition: all 0.1s ease;
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.option-button:active,
+.btn:active,
+.action-button:active {
+  transform: scale(0.97);
+  opacity: 0.9;
+}
+
+/* iOS Native Input Styling */
+input, select, textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font-size: 16px; /* Prevents zoom on focus in iOS */
+  border-radius: 10px;
+  padding: 12px;
+  border: 1px solid #e5e5e7;
+  background: #f2f2f7;
+  transition: all 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--tmobile-magenta);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(226, 0, 116, 0.1);
+}
+
+/* iOS Style Cards */
+.conversation-flow,
+.result-card,
+.plan-card {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.92);
+  border: 0.5px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+}
+
+/* iOS Modal Styling */
+.modal-overlay {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  border-radius: 16px;
+  overflow: hidden;
+  max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 40px);
+  margin: 20px;
+}
+
+/* iOS Swipe Indicators */
+.swipe-indicator {
+  width: 36px;
+  height: 5px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 2.5px;
+  margin: 8px auto 12px;
+}
+
+/* iOS Loading Spinner */
+@keyframes ios-spinner {
+  to { transform: rotate(360deg); }
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-top-color: var(--tmobile-magenta);
+  border-radius: 50%;
+  animation: ios-spinner 0.8s linear infinite;
+}
+
+/* iOS Switch Toggle */
+.toggle-switch {
+  position: relative;
+  width: 51px;
+  height: 31px;
+  background: #e5e5e7;
+  border-radius: 31px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.toggle-switch.active {
+  background: var(--tmobile-magenta);
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  width: 27px;
+  height: 27px;
+  border-radius: 27px;
+  background: white;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  top: 2px;
+  left: 2px;
+  transition: all 0.3s ease;
+}
+
+.toggle-switch.active::after {
+  transform: translateX(20px);
+}
+
+/* iOS Navigation Bar */
+.ios-nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+}
+
+/* iOS Haptic Feedback Classes */
+.haptic-light {
+  /* Triggers light haptic feedback via JS */
+}
+
+.haptic-medium {
+  /* Triggers medium haptic feedback via JS */
+}
+
+.haptic-heavy {
+  /* Triggers heavy haptic feedback via JS */
+}
+
+/* Smooth iOS Scrolling */
+.scroll-container {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: y proximity;
+}
+
+.scroll-item {
+  scroll-snap-align: start;
+}
+
+/* iOS Action Sheet Style */
+.action-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  padding-bottom: env(safe-area-inset-bottom);
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.action-sheet.active {
+  transform: translateY(0);
+}
+
+/* iOS Tab Bar */
+.tab-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(49px + env(safe-area-inset-bottom));
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 0.5px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding-top: 8px;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Optimize for iPhone Notch */
+@supports (padding: max(0px)) {
+  .header {
+    padding-top: max(env(safe-area-inset-top), 44px);
+  }
+}
+
+/* iPhone Landscape Optimizations */
+@media screen and (orientation: landscape) {
+  .header {
+    padding-left: max(env(safe-area-inset-left), 44px);
+    padding-right: max(env(safe-area-inset-right), 44px);
+  }
+}
+
+/* Force GPU Acceleration for Smooth Animations */
+.animated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Disable Selection on UI Elements */
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* iOS Pull-to-Refresh Style */
+.pull-to-refresh {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 30px;
+}
+
+/* Optimized Touch Targets (Apple's 44x44 minimum) */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

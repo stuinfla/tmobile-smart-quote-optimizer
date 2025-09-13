@@ -5,6 +5,15 @@ import BusinessCardScanner from './BusinessCardScanner';
 function RepSwitcher({ currentRep, onRepChange }) {
   const [showSwitcher, setShowSwitcher] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
+  const [showEditor, setShowEditor] = useState(false);
+  const [editingRep, setEditingRep] = useState(null);
+  const [editForm, setEditForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    role: '',
+    storeId: ''
+  });
   const [reps, setReps] = useState([]);
   const [selectedRepId, setSelectedRepId] = useState(currentRep?.id || '');
 
@@ -37,6 +46,44 @@ function RepSwitcher({ currentRep, onRepChange }) {
     setShowScanner(false);
   };
 
+  const handleEditRep = (rep) => {
+    setEditingRep(rep);
+    setEditForm({
+      name: rep.name,
+      email: rep.email || '',
+      phone: rep.phone || '',
+      role: rep.role || 'Mobile Expert',
+      storeId: rep.storeId || ''
+    });
+    setShowEditor(true);
+    setShowSwitcher(false);
+  };
+
+  const handleSaveEdit = () => {
+    if (editForm.name.trim()) {
+      const updatedRep = {
+        ...editingRep,
+        ...editForm,
+        name: editForm.name.trim(),
+        email: editForm.email.trim(),
+        phone: editForm.phone.trim(),
+        role: editForm.role.trim() || 'Mobile Expert',
+        storeId: editForm.storeId.trim()
+      };
+      
+      RepManager.updateRep(editingRep.id, updatedRep);
+      
+      // If we're editing the current rep, update it
+      if (currentRep && currentRep.id === editingRep.id && onRepChange) {
+        onRepChange(updatedRep);
+      }
+      
+      loadReps();
+      setShowEditor(false);
+      setEditingRep(null);
+    }
+  };
+
   const handleDeleteRep = (repId) => {
     if (confirm('Are you sure you want to remove this rep?')) {
       RepManager.deleteRep(repId);
@@ -58,20 +105,119 @@ function RepSwitcher({ currentRep, onRepChange }) {
     );
   }
 
+  if (showEditor) {
+    return (
+      <div className="modal-overlay" onClick={() => setShowEditor(false)}>
+        <div className="modal-content edit-rep-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-header">
+            <h2>Edit Sales Rep</h2>
+            <button className="close-btn" onClick={() => setShowEditor(false)}>×</button>
+          </div>
+
+          <div className="edit-form">
+            <div className="form-group">
+              <label>Name *</label>
+              <input
+                type="text"
+                value={editForm.name}
+                onChange={(e) => setEditForm({...editForm, name: e.target.value})}
+                placeholder="Full Name"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Role</label>
+              <select
+                value={editForm.role}
+                onChange={(e) => setEditForm({...editForm, role: e.target.value})}
+              >
+                <option value="Mobile Expert">Mobile Expert</option>
+                <option value="Sales Representative">Sales Representative</option>
+                <option value="Assistant Manager">Assistant Manager</option>
+                <option value="Manager">Manager</option>
+                <option value="Store Manager">Store Manager</option>
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Email</label>
+              <input
+                type="email"
+                value={editForm.email}
+                onChange={(e) => setEditForm({...editForm, email: e.target.value})}
+                placeholder="email@example.com"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Phone</label>
+              <input
+                type="tel"
+                value={editForm.phone}
+                onChange={(e) => setEditForm({...editForm, phone: e.target.value})}
+                placeholder="(555) 123-4567"
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Store ID</label>
+              <input
+                type="text"
+                value={editForm.storeId}
+                onChange={(e) => setEditForm({...editForm, storeId: e.target.value})}
+                placeholder="Store Number"
+              />
+            </div>
+          </div>
+
+          <div className="modal-actions">
+            <button 
+              className="btn btn-secondary"
+              onClick={() => setShowEditor(false)}
+            >
+              Cancel
+            </button>
+            <button 
+              className="btn btn-primary"
+              onClick={handleSaveEdit}
+              disabled={!editForm.name.trim()}
+            >
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
-      <div 
-        className="current-rep-display"
-        onClick={() => setShowSwitcher(true)}
-      >
-        <span className="rep-icon">👤</span>
-        <div className="rep-info">
-          <span className="rep-name">{currentRep?.name || 'Select Rep'}</span>
-          {currentRep?.role && (
-            <span className="rep-role">{currentRep.role}</span>
-          )}
+      <div className="current-rep-container">
+        <div 
+          className="current-rep-display"
+          onClick={() => setShowSwitcher(true)}
+        >
+          <span className="rep-icon">👤</span>
+          <div className="rep-info">
+            <span className="rep-name">{currentRep?.name || 'Select Rep'}</span>
+            {currentRep?.role && (
+              <span className="rep-role">{currentRep.role}</span>
+            )}
+          </div>
+          <span className="switch-icon">🔄</span>
         </div>
-        <span className="switch-icon">🔄</span>
+        {currentRep && (
+          <button
+            className="quick-edit-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleEditRep(currentRep);
+            }}
+            title="Edit Current Rep"
+          >
+            ✏️
+          </button>
+        )}
       </div>
 
       {showSwitcher && (
@@ -113,15 +259,28 @@ function RepSwitcher({ currentRep, onRepChange }) {
                         <div className="rep-contact">{rep.phone}</div>
                       )}
                     </div>
-                    <button
-                      className="delete-rep"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDeleteRep(rep.id);
-                      }}
-                    >
-                      🗑️
-                    </button>
+                    <div className="rep-actions">
+                      <button
+                        className="edit-rep"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleEditRep(rep);
+                        }}
+                        title="Edit Rep Details"
+                      >
+                        ✏️
+                      </button>
+                      <button
+                        className="delete-rep"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteRep(rep.id);
+                        }}
+                        title="Delete Rep"
+                      >
+                        🗑️
+                      </button>
+                    </div>
                   </div>
                 ))
               )}
@@ -150,6 +309,12 @@ function RepSwitcher({ currentRep, onRepChange }) {
       )}
 
       <style jsx>{`
+        .current-rep-container {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
         .current-rep-display {
           display: flex;
           align-items: center;
@@ -163,6 +328,25 @@ function RepSwitcher({ currentRep, onRepChange }) {
 
         .current-rep-display:hover {
           background: rgba(255,255,255,0.25);
+        }
+
+        .quick-edit-btn {
+          background: rgba(255,255,255,0.15);
+          border: none;
+          border-radius: 50%;
+          width: 32px;
+          height: 32px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          font-size: 1rem;
+          transition: all 0.2s;
+        }
+
+        .quick-edit-btn:hover {
+          background: rgba(255,255,255,0.25);
+          transform: scale(1.1);
         }
 
         .rep-icon {
@@ -303,6 +487,12 @@ function RepSwitcher({ currentRep, onRepChange }) {
           color: var(--tmobile-gray);
         }
 
+        .rep-actions {
+          display: flex;
+          gap: 0.5rem;
+        }
+
+        .edit-rep,
         .delete-rep {
           background: none;
           border: none;
@@ -310,10 +500,89 @@ function RepSwitcher({ currentRep, onRepChange }) {
           cursor: pointer;
           opacity: 0.5;
           transition: opacity 0.2s;
+          padding: 0.25rem;
+          border-radius: 4px;
+        }
+
+        .edit-rep:hover {
+          opacity: 1;
+          background: rgba(226, 0, 116, 0.1);
         }
 
         .delete-rep:hover {
           opacity: 1;
+          background: rgba(220, 53, 69, 0.1);
+        }
+
+        .edit-form {
+          padding: 1.5rem;
+        }
+
+        .form-group {
+          margin-bottom: 1rem;
+        }
+
+        .form-group label {
+          display: block;
+          margin-bottom: 0.5rem;
+          font-weight: 600;
+          color: var(--tmobile-black);
+        }
+
+        .form-group input,
+        .form-group select {
+          width: 100%;
+          padding: 0.75rem;
+          border: 2px solid var(--tmobile-light-gray);
+          border-radius: 6px;
+          font-size: 1rem;
+          transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+          outline: none;
+          border-color: var(--tmobile-magenta);
+        }
+
+        .modal-actions {
+          display: flex;
+          gap: 1rem;
+          padding: 1.5rem;
+          border-top: 1px solid var(--tmobile-light-gray);
+          justify-content: flex-end;
+        }
+
+        .btn {
+          padding: 0.75rem 1.5rem;
+          border: none;
+          border-radius: 6px;
+          font-size: 1rem;
+          cursor: pointer;
+          transition: background-color 0.2s;
+        }
+
+        .btn-primary {
+          background: var(--tmobile-magenta);
+          color: white;
+        }
+
+        .btn-primary:hover {
+          background: var(--tmobile-magenta-dark);
+        }
+
+        .btn-primary:disabled {
+          background: var(--tmobile-gray);
+          cursor: not-allowed;
+        }
+
+        .btn-secondary {
+          background: var(--tmobile-light-gray);
+          color: var(--tmobile-black);
+        }
+
+        .btn-secondary:hover {
+          background: var(--tmobile-gray);
         }
 
         .switcher-actions {

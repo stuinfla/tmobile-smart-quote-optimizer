@@ -1,6 +1,6 @@
 import { phoneData, tradeInValues } from '../data/phoneData';
 import { promotions } from '../data/promotions';
-import { plans } from '../data/plans';
+import { plans } from '../data/plans_sept_2025';
 
 export class DealOptimizer {
   constructor(customerData) {
@@ -67,12 +67,29 @@ export class DealOptimizer {
         const afterTradeIn = Math.max(0, phoneCost - tradeInValue);
         
         // Check for BOGO or other promotions
-        if (index === 1 && this.customer.newLine && 
+        if (index === 1 && lineCount >= 2 && 
             (planKey === 'GO5G_Next' || planKey === 'GO5G_Plus')) {
-          const bogoValue = Math.min(830, afterTradeIn);
-          scenario.promotionsApplied.push(`BOGO Line ${index + 1}: -$${bogoValue}`);
-          scenario.upfrontCost += afterTradeIn - bogoValue;
+          const bogoPromo = promotions.phone_deals[`${planKey}_BOGO`];
+          if (bogoPromo && bogoPromo.requirements.new_line) {
+            const bogoValue = Math.min(bogoPromo.value, afterTradeIn);
+            scenario.promotionsApplied.push(`${bogoPromo.name}: -$${bogoValue}`);
+            scenario.upfrontCost += afterTradeIn - bogoValue;
+            scenario.totalSavings += bogoValue;
+          } else {
+            scenario.upfrontCost += afterTradeIn;
+          }
         } else {
+          // Check for trade-in promotions
+          if (tradeInValue > 0 && device.currentPhone !== 'no_trade') {
+            const tradeInPromo = promotions.phone_deals.TRADEIN_ANY_CONDITION;
+            if (tradeInPromo && tradeInPromo.requirements.plan.includes(planKey)) {
+              const additionalCredit = Math.min(tradeInPromo.value - tradeInValue, phoneCost - tradeInValue);
+              if (additionalCredit > 0) {
+                scenario.promotionsApplied.push(`${tradeInPromo.name}: Additional -$${additionalCredit}`);
+                scenario.totalSavings += additionalCredit;
+              }
+            }
+          }
           scenario.upfrontCost += afterTradeIn;
         }
         
@@ -88,18 +105,23 @@ export class DealOptimizer {
 
     // Add accessories if selected
     if (this.customer.accessories?.watch) {
-      scenario.monthlyTotal += 10; // Watch line
-      if (planKey === 'GO5G_Next') {
-        scenario.promotionsApplied.push("Apple Watch Ultra 2: FREE (normally $799)");
-      } else {
-        scenario.promotionsApplied.push("Apple Watch SE: $99 (normally $299)");
-        scenario.upfrontCost += 99;
+      scenario.monthlyTotal += 10; // Watch line ($10/month for watch connectivity)
+      const watchPromo = promotions.accessory_promotions.WATCH_200_OFF;
+      
+      if (watchPromo && watchPromo.requirements.new_watch_line) {
+        scenario.promotionsApplied.push(`${watchPromo.name} with new watch line`);
+        scenario.totalSavings += watchPromo.discount_amount;
+        // Note: Actual device cost would be calculated separately
       }
     }
 
     if (this.customer.accessories?.tablet) {
       scenario.monthlyTotal += 10; // Tablet line
-      scenario.promotionsApplied.push("iPad discount: -$230");
+      const tabletPromo = promotions.accessory_promotions.IPAD_230_OFF;
+      if (tabletPromo) {
+        scenario.promotionsApplied.push(`${tabletPromo.name}: -$${tabletPromo.value}`);
+        scenario.totalSavings += tabletPromo.value;
+      }
     }
 
     // Calculate 24-month total
@@ -132,14 +154,23 @@ export class DealOptimizer {
 
     // Calculate Keep & Switch reimbursements
     const keepAndSwitch = promotions.switcher_benefits.KEEP_AND_SWITCH;
-    const eligibleLines = Math.min(lineCount, keepAndSwitch.max_lines);
-    scenario.reimbursements = eligibleLines * keepAndSwitch.max_per_line;
-    scenario.promotionsApplied.push(`Keep & Switch: $${scenario.reimbursements} in bill credits`);
+    if (keepAndSwitch && this.isEligibleForKeepAndSwitch()) {
+      const eligibleLines = Math.min(lineCount, keepAndSwitch.max_lines);
+      scenario.reimbursements = eligibleLines * keepAndSwitch.max_per_line;
+      scenario.promotionsApplied.push(`${keepAndSwitch.name}: $${scenario.reimbursements} via ${keepAndSwitch.payment_method}`);
+      scenario.promotionsApplied.push(`Processing time: ${keepAndSwitch.processing_time_days} days`);
+    } else {
+      scenario.reimbursements = 0;
+    }
 
     // Port-in credits
-    const portInCredits = Math.min(lineCount, 3) * 200;
-    scenario.reimbursements += portInCredits;
-    scenario.promotionsApplied.push(`Port-in Credits: $${portInCredits}`);
+    const portInCredit = promotions.switcher_benefits.PORT_IN_CREDIT;
+    if (portInCredit && !this.customer.isExisting) {
+      const eligibleLines = Math.min(lineCount, portInCredit.max_lines);
+      const portInCredits = eligibleLines * portInCredit.general;
+      scenario.reimbursements += portInCredits;
+      scenario.promotionsApplied.push(`Port-in Credits: $${portInCredits} (up to ${portInCredit.max_lines} lines)`);
+    }
 
     // Full price for new devices (no trade-in)
     this.customer.devices?.forEach((device) => {
@@ -307,5 +338,26 @@ export class DealOptimizer {
       this.calculateAllScenarios();
     }
     return this.scenarios;
+  }
+
+  // Helper method to check Keep & Switch eligibility
+  isEligibleForKeepAndSwitch() {
+    // Check if customer has current carrier information
+    const hasCarrierInfo = this.customer.carrier && this.customer.carrier.length > 0;
+    
+    // Check if switching from eligible carriers
+    const keepAndSwitch = promotions.switcher_benefits.KEEP_AND_SWITCH;
+    if (!keepAndSwitch) return false;
+    
+    const eligibleCarriers = keepAndSwitch.requirements.eligible_carriers;
+    const isEligibleCarrier = hasCarrierInfo && 
+      eligibleCarriers.some(carrier => 
+        this.customer.carrier.toLowerCase().includes(carrier.toLowerCase())
+      );
+    
+    // Must be switching (not existing T-Mobile customer)
+    const isSwitching = !this.customer.isExisting;
+    
+    return isSwitching && (isEligibleCarrier || !hasCarrierInfo); // Allow if no carrier specified yet
   }
 }

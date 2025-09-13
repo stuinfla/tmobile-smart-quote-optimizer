@@ -45,22 +45,14 @@ export const promotions = {
     }
   },
   accessory_promotions: {
-    WATCH_SE3_99: {
-      name: "Apple Watch SE3 for $99",
-      original_price: 299.99,
-      promo_price: 99,
+    WATCH_200_OFF: {
+      name: "$200 off any Apple Watch",
+      discount_amount: 200,
+      description: "Get $200 off any Apple Watch when adding a new watch line",
       requirements: {
         new_watch_line: true
-      }
-    },
-    WATCH_ULTRA2_FREE: {
-      name: "Apple Watch Ultra 2 Free",
-      original_price: 799.99,
-      promo_price: 0,
-      requirements: {
-        new_watch_line: true,
-        plan: "GO5G_Next"
-      }
+      },
+      applies_to: ["Apple_Watch_SE3", "Apple_Watch_Series_10", "Apple_Watch_Ultra_2"]
     },
     IPAD_230_OFF: {
       name: "$230 off iPad Pro/Air",

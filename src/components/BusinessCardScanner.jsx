@@ -42,18 +42,41 @@ function BusinessCardScanner({ onComplete }) {
       data.storeId = storeMatch[1];
     }
     
-    // Try to find name (usually one of the first lines that's not T-Mobile)
-    for (const line of lines) {
-      if (!line.includes('Mobile') && !line.includes('Store') && 
-          !line.includes('@') && !line.match(/\d{3}/) &&
-          line.length > 5 && line.length < 50) {
-        // Check if it looks like a name (contains letters and possibly spaces)
-        if (/^[A-Za-z\s]+$/.test(line.trim())) {
-          data.name = line.trim();
-          break;
+    // Improved name extraction - try multiple strategies
+    let foundName = '';
+    
+    // Strategy 1: Look for name patterns (Firstname Lastname)
+    const namePattern = /\b[A-Z][a-z]+ [A-Z][a-z]+\b/;
+    const nameMatch = text.match(namePattern);
+    if (nameMatch) {
+      foundName = nameMatch[0];
+    }
+    
+    // Strategy 2: Look in the first few lines that look like names
+    if (!foundName) {
+      const firstLines = lines.slice(0, 5); // Check first 5 lines
+      for (const line of firstLines) {
+        const cleanLine = line.trim();
+        if (cleanLine.length > 3 && cleanLine.length < 40 && 
+            !cleanLine.includes('T-Mobile') && 
+            !cleanLine.includes('Mobile') && 
+            !cleanLine.includes('Store') && 
+            !cleanLine.includes('@') && 
+            !cleanLine.match(/\d{3}/) &&
+            !cleanLine.includes('Expert') &&
+            !cleanLine.includes('Manager') &&
+            /^[A-Za-z\s\.''-]+$/.test(cleanLine)) {
+          // Check if it has multiple words (likely a name)
+          const words = cleanLine.split(/\s+/);
+          if (words.length >= 2 && words.length <= 4) {
+            foundName = cleanLine;
+            break;
+          }
         }
       }
     }
+    
+    data.name = foundName;
     
     // Look for role/title
     const rolePatterns = ['Mobile Expert', 'Manager', 'Assistant Manager', 'Sales Associate'];

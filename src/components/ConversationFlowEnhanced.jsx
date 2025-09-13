@@ -64,8 +64,8 @@ function ConversationFlowEnhanced({ currentStep, customerData, onAnswer, setCust
         return "💡 GO5G Next recommended - Upgrade every year for Pro phones";
       }
     }
-    if (currentStep === 'accessories' && customerData.selectedPlan === 'GO5G_Next') {
-      return "💡 Apple Watch Ultra 2 is FREE with your plan!";
+    if (currentStep === 'accessories') {
+      return "💡 Get $200 off any Apple Watch with a new watch line!";
     }
     return null;
   };
@@ -314,10 +314,8 @@ function ConversationFlowEnhanced({ currentStep, customerData, onAnswer, setCust
                 <div className="accessory-icon">⌚</div>
                 <h4>Apple Watch</h4>
                 <div className="accessory-deal">
-                  {customerData.selectedPlan === 'GO5G_Next' ? 
-                    <><span className="strike">$799</span> <span className="free">FREE</span></> : 
-                    <><span className="strike">$299</span> <span className="deal">$99</span></>
-                  }
+                  <span className="deal">$200 OFF</span>
+                  <div className="deal-subtitle">any Apple Watch</div>
                 </div>
                 <span className="monthly">+$10/mo line</span>
               </button>
