@@ -1,6 +1,8 @@
 import { phoneData, tradeInValues } from '../data/phoneData';
 import { promotions } from '../data/promotions';
 import { plans, southFloridaTaxes } from '../data/plans_sept_2025';
+import { insurancePricing, accessoryLinePricing } from '../data/insuranceData';
+import accessoryDevices from '../data/accessoryDevices.json';
 import taxConfig from '../data/taxConfig.json';
 
 export class DealOptimizer {
@@ -166,65 +168,90 @@ export class DealOptimizer {
     };
   }
 
+  calculateInsuranceCost() {
+    // Calculate insurance using device-specific pricing from insuranceData.js
+    let monthlyInsurance = 0;
+    const insuranceDetails = [];
+    
+    this.customer.devices.forEach((device, index) => {
+      if (device.insurance && device.newPhone) {
+        const insuranceInfo = insurancePricing.getInsurancePrice(device.newPhone);
+        monthlyInsurance += insuranceInfo.monthly;
+        
+        insuranceDetails.push({
+          line: index + 1,
+          device: device.newPhone,
+          monthly: insuranceInfo.monthly,
+          tier: insuranceInfo.tier || 'unknown',
+          deductibles: insuranceInfo.deductible
+        });
+      }
+    });
+    
+    return {
+      monthly: monthlyInsurance,
+      details: insuranceDetails
+    };
+  }
+  
   calculateAccessoryCosts() {
     let monthlyAccessoryCost = 0;
     let monthlyAccessoryFinancing = 0;
     let upfrontAccessoryTax = 0;
     const accessoryDetails = [];
     
-    // Handle iPads
-    if (this.customer.accessories?.ipad) {
-      const ipadConfig = this.customer.accessories.ipad;
+    // Check if customer has Experience Beyond plan for promotional pricing
+    const hasPromoPlan = this.customer.selectedPlan === 'EXPERIENCE_BEYOND';
+    
+    // Handle Tablets (iPads)
+    if (this.customer.accessories?.tablet || this.customer.accessoryLines?.tablet) {
+      // Use promotional or standard pricing based on plan
+      const tabletLineCost = hasPromoPlan ? accessoryLinePricing.tablet.promotional : accessoryLinePricing.tablet.standard;
+      monthlyAccessoryCost += tabletLineCost;
       
-      // Data plan cost
-      const dataPlanCost = ipadConfig.plan === 'unlimited' ? 20 : 5; // $20 unlimited or $5 for 5GB
-      monthlyAccessoryCost += dataPlanCost * (ipadConfig.quantity || 1);
-      
-      // If purchasing new iPads
-      if (ipadConfig.newDevice) {
-        const ipadPrice = 599; // Base iPad price (could be dynamic)
-        const quantity = ipadConfig.quantity || 1;
-        
-        for (let i = 0; i < quantity; i++) {
-          const financing = ipadPrice / 24;
-          const tax = ipadPrice * this.taxRates.deviceTaxRate;
+      // If purchasing new tablet
+      if (this.customer.tabletDevice === 'new' && this.customer.tabletModel) {
+        const tabletData = accessoryDevices.tablets[this.customer.tabletModel];
+        if (tabletData) {
+          // Use base price or first variant price
+          const tabletPrice = tabletData.price || Object.values(tabletData.variants)[0];
+          const financing = tabletPrice / 24;
+          const tax = tabletPrice * this.taxRates.deviceTaxRate;
           
           monthlyAccessoryFinancing += financing;
           upfrontAccessoryTax += tax;
           
           accessoryDetails.push({
-            type: 'iPad',
-            description: `iPad with ${ipadConfig.plan === 'unlimited' ? 'Unlimited' : '5GB'} data`,
-            price: ipadPrice,
+            type: 'Tablet',
+            description: `${tabletData.name} with ${accessoryLinePricing.tablet.description}`,
+            price: tabletPrice,
             monthlyFinancing: financing,
-            monthlyPlan: dataPlanCost,
+            monthlyPlan: tabletLineCost,
             tax: tax
           });
         }
-      } else {
-        // Existing iPad, just data plan
+      } else if (this.customer.tabletDevice === 'byod') {
+        // Existing tablet, just data plan
         accessoryDetails.push({
-          type: 'iPad Data',
-          description: `iPad ${ipadConfig.plan === 'unlimited' ? 'Unlimited' : '5GB'} data plan`,
-          monthlyPlan: dataPlanCost * (ipadConfig.quantity || 1),
-          quantity: ipadConfig.quantity || 1
+          type: 'Tablet Line',
+          description: accessoryLinePricing.tablet.description,
+          monthlyPlan: tabletLineCost
         });
       }
     }
     
-    // Handle Apple Watches
-    if (this.customer.accessories?.watch) {
-      const watchConfig = this.customer.accessories.watch;
-      const watchLineCost = 10; // $10/month for cellular
-      const quantity = watchConfig.quantity || 1;
+    // Handle Watches
+    if (this.customer.accessories?.watch || this.customer.accessoryLines?.watch) {
+      // Use promotional or standard pricing based on plan
+      const watchLineCost = hasPromoPlan ? accessoryLinePricing.watch.promotional : accessoryLinePricing.watch.standard;
+      monthlyAccessoryCost += watchLineCost;
       
-      monthlyAccessoryCost += watchLineCost * quantity;
-      
-      // If purchasing new watches
-      if (watchConfig.newDevice) {
-        const watchPrice = 399; // Apple Watch Series 9 base price
-        
-        for (let i = 0; i < quantity; i++) {
+      // If purchasing new watch
+      if (this.customer.watchDevice === 'new' && this.customer.watchModel) {
+        const watchData = accessoryDevices.watches[this.customer.watchModel];
+        if (watchData) {
+          // Use base price or first variant price
+          const watchPrice = watchData.price || Object.values(watchData.variants)[0];
           const financing = watchPrice / 24;
           const tax = watchPrice * this.taxRates.deviceTaxRate;
           
@@ -232,23 +259,39 @@ export class DealOptimizer {
           upfrontAccessoryTax += tax;
           
           accessoryDetails.push({
-            type: 'Apple Watch',
-            description: 'Apple Watch with cellular',
+            type: 'Watch',
+            description: `${watchData.name} with ${accessoryLinePricing.watch.description}`,
             price: watchPrice,
             monthlyFinancing: financing,
             monthlyPlan: watchLineCost,
             tax: tax
           });
         }
-      } else {
+      } else if (this.customer.watchDevice === 'byod') {
         // Existing watch, just cellular plan
         accessoryDetails.push({
-          type: 'Watch Cellular',
-          description: 'Apple Watch cellular plan',
-          monthlyPlan: watchLineCost * quantity,
-          quantity: quantity
+          type: 'Watch Line',
+          description: accessoryLinePricing.watch.description,
+          monthlyPlan: watchLineCost
         });
       }
+    }
+    
+    // Handle Home Internet
+    if (this.customer.accessories?.homeInternet || this.customer.accessoryLines?.homeInternet) {
+      // Home Internet is free with 2+ lines on Experience plans, otherwise $60
+      const homeInternetCost = (this.customer.lines >= 2 && hasPromoPlan) ? 
+        accessoryLinePricing.homeInternet.promotional : 
+        accessoryLinePricing.homeInternet.standard;
+      
+      monthlyAccessoryCost += homeInternetCost;
+      
+      accessoryDetails.push({
+        type: 'Home Internet',
+        description: accessoryLinePricing.homeInternet.description,
+        monthlyPlan: homeInternetCost,
+        promotional: homeInternetCost === 0
+      });
     }
     
     return {
@@ -272,13 +315,9 @@ export class DealOptimizer {
     // Calculate accessory costs
     const accessoryCosts = this.calculateAccessoryCosts();
     
-    // Calculate insurance if selected ($18/month per phone line)
-    let monthlyInsurance = 0;
-    if (this.customer.insurance) {
-      // Count how many phone lines have insurance
-      const insuredLines = this.customer.devices.filter(d => d.insurance).length || lineCount;
-      monthlyInsurance = insuredLines * 18; // $18 per insured line
-    }
+    // Calculate insurance costs
+    const insuranceCosts = this.calculateInsuranceCost();
+    const monthlyInsurance = insuranceCosts.monthly;
     
     // Calculate monthly service total (including accessory plans)
     const monthlyService = planCosts.withAutoPay + accessoryCosts.monthlyPlanCost;
@@ -357,21 +396,25 @@ export class DealOptimizer {
     // Get plan costs
     const planCosts = this.calculatePlanCost(planKey, lineCount);
     
-    // Calculate taxes and fees on monthly service
+    // Calculate accessory costs
+    const accessoryCosts = this.calculateAccessoryCosts();
+    
+    // Calculate insurance costs
+    const insuranceCosts = this.calculateInsuranceCost();
+    const monthlyInsurance = insuranceCosts.monthly;
+    
+    // Calculate monthly service total (including accessory plans)
+    const monthlyService = planCosts.withAutoPay + accessoryCosts.monthlyPlanCost;
     const monthlyTaxesAndFees = this.calculateServiceTaxesAndFees(
-      planCosts.withAutoPay, 
+      planCosts.withAutoPay, // Taxes only on phone service, not accessory plans
       lineCount
     );
     
-    // Total monthly cost including taxes
-    const totalMonthly = planCosts.withAutoPay + monthlyTaxesAndFees.total;
+    // Total monthly cost including all components
+    const totalMonthly = monthlyService + monthlyInsurance + monthlyTaxesAndFees.total;
     
-    // Calculate device costs (NO trade-ins)
-    const devicesNoTradeIn = this.customer.devices.map(d => ({
-      ...d,
-      currentPhone: 'no_trade' // Force no trade-in
-    }));
-    const deviceCosts = this.calculateDeviceCosts(devicesNoTradeIn);
+    // Calculate device costs (NO trade-ins, new customer promotion)
+    const deviceCosts = this.calculateDeviceCosts(this.customer.devices || [], 'new_customer');
     
     // Calculate Keep & Switch reimbursements
     let reimbursements = 0;
@@ -388,7 +431,7 @@ export class DealOptimizer {
     if (this.customer.accessoryLines?.tablet) totalDeviceCount += 2; // Assuming 2 tablets based on scenario
     const activationFees = totalDeviceCount * this.taxRates.deviceConnectionCharge;
     const firstMonth = totalMonthly;
-    const upfrontTotal = deviceCosts.total + activationFees + firstMonth;
+    const upfrontTotal = deviceCosts.upfrontTax + accessoryCosts.upfrontTax + activationFees + firstMonth;
     
     // Calculate 24-month total (subtract reimbursements)
     const total24Months = upfrontTotal + (totalMonthly * 23) - reimbursements;
@@ -401,15 +444,19 @@ export class DealOptimizer {
       
       // Monthly breakdown
       monthlyService: planCosts.withAutoPay,
+      monthlyAccessoryPlans: accessoryCosts.monthlyPlanCost,
+      monthlyDeviceFinancing: deviceCosts.monthlyFinancing,
+      monthlyAccessoryFinancing: accessoryCosts.monthlyFinancing,
+      monthlyInsurance: monthlyInsurance,
       monthlyTaxes: monthlyTaxesAndFees.serviceTaxes,
       monthlyFees: monthlyTaxesAndFees.regulatoryFees + monthlyTaxesAndFees.federalSurcharges,
       monthlyTotal: totalMonthly,
       
       // Upfront breakdown
-      deviceCost: deviceCosts.totalDeviceCost,
-      deviceTax: deviceCosts.totalDeviceTax,
+      deviceTaxes: deviceCosts.upfrontTax,
+      accessoryTaxes: accessoryCosts.upfrontTax,
       activationFees: activationFees,
-      firstMonthService: totalMonthly,
+      firstMonthPayment: totalMonthly,
       upfrontTotal: upfrontTotal,
       
       // Reimbursements
@@ -420,9 +467,14 @@ export class DealOptimizer {
       
       // Details
       devices: deviceCosts.devices,
+      accessories: accessoryCosts.accessories,
+      insurance: insuranceCosts.details,
       promotionsApplied: [
         ...(planCosts.autoPay > 0 ? [`AutoPay Discount: -$${planCosts.autoPay}/mo`] : []),
-        ...(reimbursements > 0 ? [`Keep & Switch Reimbursement: $${reimbursements} via Prepaid Card`] : [])
+        ...(reimbursements > 0 ? [`Keep & Switch Reimbursement: $${reimbursements} via Prepaid Card`] : []),
+        ...deviceCosts.devices.map(d => d.promotionCredit > 0 ? 
+          `${d.promotionName}: -$${d.promotionCredit} on ${d.phone}` : null
+        ).filter(Boolean)
       ],
       
       // For display

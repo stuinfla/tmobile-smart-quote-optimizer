@@ -1,0 +1,253 @@
+{
+  "watches": {
+    "Apple_Watch_Series_9": {
+      "name": "Apple Watch Series 9",
+      "brand": "Apple",
+      "price": 399,
+      "variants": {
+        "41mm_GPS": 399,
+        "45mm_GPS": 429,
+        "41mm_GPS_Cellular": 499,
+        "45mm_GPS_Cellular": 529
+      },
+      "financing": {
+        "24_months": true,
+        "down_payment": 0
+      },
+      "description": "Latest Apple Watch with health tracking",
+      "category": "smartwatch"
+    },
+    "Apple_Watch_SE": {
+      "name": "Apple Watch SE",
+      "brand": "Apple",
+      "price": 249,
+      "variants": {
+        "40mm_GPS": 249,
+        "44mm_GPS": 279,
+        "40mm_GPS_Cellular": 299,
+        "44mm_GPS_Cellular": 329
+      },
+      "financing": {
+        "24_months": true,
+        "down_payment": 0
+      },
+      "description": "Affordable Apple Watch",
+      "category": "smartwatch"
+    },
+    "Apple_Watch_Ultra_2": {
+      "name": "Apple Watch Ultra 2",
+      "brand": "Apple",
+      "price": 799,
+      "variants": {
+        "49mm_GPS_Cellular": 799
+      },
+      "financing": {
+        "24_months": true,
+        "down_payment": 0
+      },
+      "description": "Rugged Apple Watch for extreme conditions",
+      "category": "smartwatch"
+    },
+    "Galaxy_Watch_6": {
+      "name": "Galaxy Watch 6",
+      "brand": "Samsung",
+      "price": 299,
+      "variants": {
+        "40mm_Bluetooth": 299,
+        "44mm_Bluetooth": 329,
+        "40mm_LTE": 349,
+        "44mm_LTE": 379
+      },
+      "financing": {
+        "24_months": true,
+        "down_payment": 0
+      },
+      "description": "Samsung smartwatch with health features",
+      "category": "smartwatch"
+    },
+    "Galaxy_Watch_6_Classic": {
+      "name": "Galaxy Watch 6 Classic",
+      "brand": "Samsung",
+      "price": 399,
+      "variants": {
+        "43mm_LTE": 399,
+        "47mm_LTE": 429
+      },
+      "financing": {
+        "24_months": true,
+        "down_payment": 0
+      },
+      "description": "Premium Samsung watch with rotating bezel",
+      "category": "smartwatch"
+    }
+  },
+  "tablets": {
+    "iPad_10th_Gen": {
+      "name": "iPad (10th Generation)",
+      "brand": "Apple",
+      "price": 449,
+      "variants": {
+        "64GB_WiFi": 449,
+        "256GB_WiFi": 599,
+        "64GB_WiFi_Cellular": 599,
+        "256GB_WiFi_Cellular": 749
+      },
+      "financing": {
+        "24_months": true,
+        "down_payment": 0
+      },
+      "description": "Entry-level iPad with A14 Bionic chip",
+      "category": "tablet"
+    },
+    "iPad_Air": {
+      "name": "iPad Air",
+      "brand": "Apple",
+      "price": 599,
+      "variants": {
+        "64GB_WiFi": 599,
+        "256GB_WiFi": 749,
+        "64GB_WiFi_Cellular": 749,
+        "256GB_WiFi_Cellular": 899
+      },
+      "financing": {
+        "24_months": true,
+        "down_payment": 0
+      },
+      "description": "Powerful iPad with M1 chip",
+      "category": "tablet"
+    },
+    "iPad_Pro_11": {
+      "name": "iPad Pro 11-inch",
+      "brand": "Apple",
+      "price": 799,
+      "variants": {
+        "128GB_WiFi": 799,
+        "256GB_WiFi": 899,
+        "512GB_WiFi": 1099,
+        "1TB_WiFi": 1499,
+        "128GB_WiFi_Cellular": 999,
+        "256GB_WiFi_Cellular": 1099,
+        "512GB_WiFi_Cellular": 1299,
+        "1TB_WiFi_Cellular": 1699
+      },
+      "financing": {
+        "24_months": true,
+        "down_payment": 0
+      },
+      "description": "Pro iPad with M2 chip and ProMotion display",
+      "category": "tablet"
+    },
+    "iPad_Pro_13": {
+      "name": "iPad Pro 13-inch",
+      "brand": "Apple",
+      "price": 1299,
+      "variants": {
+        "256GB_WiFi": 1299,
+        "512GB_WiFi": 1499,
+        "1TB_WiFi": 1899,
+        "2TB_WiFi": 2299,
+        "256GB_WiFi_Cellular": 1499,
+        "512GB_WiFi_Cellular": 1699,
+        "1TB_WiFi_Cellular": 2099,
+        "2TB_WiFi_Cellular": 2499
+      },
+      "financing": {
+        "24_months": true,
+        "down_payment": 0
+      },
+      "description": "Largest Pro iPad with M2 chip",
+      "category": "tablet"
+    },
+    "iPad_mini": {
+      "name": "iPad mini",
+      "brand": "Apple",
+      "price": 499,
+      "variants": {
+        "64GB_WiFi": 499,
+        "256GB_WiFi": 649,
+        "64GB_WiFi_Cellular": 649,
+        "256GB_WiFi_Cellular": 799
+      },
+      "financing": {
+        "24_months": true,
+        "down_payment": 0
+      },
+      "description": "Compact iPad with A15 Bionic chip",
+      "category": "tablet"
+    },
+    "Galaxy_Tab_S9": {
+      "name": "Galaxy Tab S9",
+      "brand": "Samsung",
+      "price": 799,
+      "variants": {
+        "128GB_WiFi": 799,
+        "256GB_WiFi": 919,
+        "128GB_5G": 949,
+        "256GB_5G": 1069
+      },
+      "financing": {
+        "24_months": true,
+        "down_payment": 0
+      },
+      "description": "Premium Android tablet with S Pen",
+      "category": "tablet"
+    },
+    "Galaxy_Tab_S9_Plus": {
+      "name": "Galaxy Tab S9+",
+      "brand": "Samsung",
+      "price": 999,
+      "variants": {
+        "256GB_WiFi": 999,
+        "512GB_WiFi": 1119,
+        "256GB_5G": 1149,
+        "512GB_5G": 1269
+      },
+      "financing": {
+        "24_months": true,
+        "down_payment": 0
+      },
+      "description": "Large premium Android tablet",
+      "category": "tablet"
+    },
+    "Galaxy_Tab_S9_Ultra": {
+      "name": "Galaxy Tab S9 Ultra",
+      "brand": "Samsung",
+      "price": 1199,
+      "variants": {
+        "256GB_WiFi": 1199,
+        "512GB_WiFi": 1319,
+        "1TB_WiFi": 1619,
+        "256GB_5G": 1399,
+        "512GB_5G": 1519,
+        "1TB_5G": 1819
+      },
+      "financing": {
+        "24_months": true,
+        "down_payment": 0
+      },
+      "description": "Ultra-large premium Android tablet",
+      "category": "tablet"
+    }
+  },
+  "homeInternet": {
+    "T-Mobile_5G_Gateway": {
+      "name": "T-Mobile 5G Gateway",
+      "brand": "T-Mobile",
+      "price": 0,
+      "variants": {
+        "standard": 0
+      },
+      "financing": {
+        "24_months": false,
+        "down_payment": 0
+      },
+      "description": "5G Home Internet Gateway (free with service)",
+      "category": "internet",
+      "monthlyService": {
+        "standard": 60,
+        "withPhonePlan": 40,
+        "withExperiencePlans": 0
+      }
+    }
+  }
+}

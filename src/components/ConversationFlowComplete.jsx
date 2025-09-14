@@ -5,7 +5,7 @@ import { insurancePricing, accessoryLinePricing } from '../data/insuranceData';
 import { useSwipeGesture } from '../hooks/useSwipeGesture';
 
 function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCustomerData }) {
-  const steps = ['lines', 'newPhones', 'insurance', 'currentPhones', 'plan', 'accessoryLines', 'accessoryDevices', 'summary'];
+  const steps = ['lines', 'newPhones', 'currentPhones', 'plan', 'accessoryLines', 'accessoryDevices', 'insurance', 'summary'];
   const [isAnimating, setIsAnimating] = useState(false);
   const [direction, setDirection] = useState('forward');
   
@@ -420,9 +420,11 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
 
       case 'accessoryDevices':
         if (!customerData.accessoryLines || (!customerData.accessoryLines.watch && !customerData.accessoryLines.tablet)) {
-          setTimeout(() => onAnswer('continue', 'summary'), 100);
+          setTimeout(() => onAnswer('continue', 'insurance'), 100);
           return null;
         }
+        
+        const hasPromoPlan = customerData.selectedPlan === 'EXPERIENCE_BEYOND';
         
         return (
           <div className={`question-card ${isAnimating ? `slide-${direction}` : ''}`}>
@@ -435,19 +437,34 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
                   <div className="choice-buttons">
                     <button 
                       className={`choice-btn ${customerData.watchDevice === 'new' ? 'selected' : ''}`}
-                      onClick={() => setCustomerData({...customerData, watchDevice: 'new'})}
+                      onClick={() => setCustomerData({...customerData, watchDevice: 'new', watchModel: 'Apple_Watch_Series_9'})}
                     >
                       Buy New Watch
-                      <span className="sub-text">Starting at $15/mo</span>
+                      <span className="sub-text">Apple Watch from $15/mo</span>
                     </button>
                     <button 
                       className={`choice-btn ${customerData.watchDevice === 'byod' ? 'selected' : ''}`}
-                      onClick={() => setCustomerData({...customerData, watchDevice: 'byod'})}
+                      onClick={() => setCustomerData({...customerData, watchDevice: 'byod', watchModel: null})}
                     >
                       Bring My Own
-                      <span className="sub-text">Just add line</span>
+                      <span className="sub-text">Just add ${hasPromoPlan ? '5' : '12'}/mo line</span>
                     </button>
                   </div>
+                  {customerData.watchDevice === 'new' && (
+                    <div className="model-selector" style={{marginTop: '1rem'}}>
+                      <label style={{display: 'block', marginBottom: '0.5rem'}}>Select Watch Model:</label>
+                      <select 
+                        value={customerData.watchModel || 'Apple_Watch_Series_9'}
+                        onChange={(e) => setCustomerData({...customerData, watchModel: e.target.value})}
+                        className="input-field"
+                      >
+                        <option value="Apple_Watch_Series_9">Apple Watch Series 9 - $399</option>
+                        <option value="Apple_Watch_SE">Apple Watch SE - $249</option>
+                        <option value="Apple_Watch_Ultra_2">Apple Watch Ultra 2 - $799</option>
+                        <option value="Galaxy_Watch_6">Galaxy Watch 6 - $299</option>
+                      </select>
+                    </div>
+                  )}
                 </div>
               )}
               
@@ -457,19 +474,35 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
                   <div className="choice-buttons">
                     <button 
                       className={`choice-btn ${customerData.tabletDevice === 'new' ? 'selected' : ''}`}
-                      onClick={() => setCustomerData({...customerData, tabletDevice: 'new'})}
+                      onClick={() => setCustomerData({...customerData, tabletDevice: 'new', tabletModel: 'iPad_10th_Gen'})}
                     >
                       Buy New iPad/Tablet
-                      <span className="sub-text">Starting at $20/mo</span>
+                      <span className="sub-text">iPad from $20/mo</span>
                     </button>
                     <button 
                       className={`choice-btn ${customerData.tabletDevice === 'byod' ? 'selected' : ''}`}
-                      onClick={() => setCustomerData({...customerData, tabletDevice: 'byod'})}
+                      onClick={() => setCustomerData({...customerData, tabletDevice: 'byod', tabletModel: null})}
                     >
                       Bring My Own
-                      <span className="sub-text">Just add line</span>
+                      <span className="sub-text">Just add ${hasPromoPlan ? '5' : '20'}/mo line</span>
                     </button>
                   </div>
+                  {customerData.tabletDevice === 'new' && (
+                    <div className="model-selector" style={{marginTop: '1rem'}}>
+                      <label style={{display: 'block', marginBottom: '0.5rem'}}>Select Tablet Model:</label>
+                      <select 
+                        value={customerData.tabletModel || 'iPad_10th_Gen'}
+                        onChange={(e) => setCustomerData({...customerData, tabletModel: e.target.value})}
+                        className="input-field"
+                      >
+                        <option value="iPad_10th_Gen">iPad (10th Gen) - $449</option>
+                        <option value="iPad_Air">iPad Air - $599</option>
+                        <option value="iPad_Pro_11">iPad Pro 11" - $799</option>
+                        <option value="iPad_Pro_13">iPad Pro 13" - $1299</option>
+                        <option value="Galaxy_Tab_S9">Galaxy Tab S9 - $799</option>
+                      </select>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
