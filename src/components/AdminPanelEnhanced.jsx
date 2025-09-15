@@ -3,7 +3,8 @@ import { phoneData, tradeInValues } from '../data/phoneData';
 import { promotions } from '../data/promotions';
 import { monthlyPrograms, programCategories, defaultActivePrograms } from '../data/monthlyPrograms';
 import adminStorage from '../utils/adminStorage';
-import PDFUploadProcessor from './PDFUploadProcessor';
+// Temporarily disabled - PDF processing breaks browser due to fs module
+// import PDFUploadProcessor from './PDFUploadProcessor';
 
 function AdminPanelEnhanced({ onClose, onStoreSetup }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -1148,7 +1149,12 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
           {/* PDF Processor Tab */}
           {activeTab === 'pdfProcessor' && (
             <div className="pdf-processor-tab">
-              <PDFUploadProcessor onDataExtracted={handlePDFDataExtracted} />
+              {/* PDF Upload temporarily disabled - breaks browser due to fs module */}
+              <div className="info-message">
+                <p>⚠️ PDF Upload feature temporarily disabled</p>
+                <p>The PDF processing library uses Node.js modules that don't work in the browser.</p>
+              </div>
+              {/* <PDFUploadProcessor onDataExtracted={handlePDFDataExtracted} /> */}
             </div>
           )}
 

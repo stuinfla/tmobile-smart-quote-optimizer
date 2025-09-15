@@ -3,6 +3,8 @@ import { phoneData, tradeInValues } from '../data/phoneData';
 import { plans } from '../data/plans_sept_2025';
 import { insurancePricing, accessoryLinePricing } from '../data/insuranceData';
 import { useSwipeGesture } from '../hooks/useSwipeGesture';
+import EnhancedAccessorySelector from './EnhancedAccessorySelector';
+import '../styles/insurance-fixes.css';
 
 function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCustomerData }) {
   const steps = ['lines', 'newPhones', 'currentPhones', 'plan', 'accessoryLines', 'accessoryDevices', 'insurance', 'summary'];
@@ -338,82 +340,51 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
       case 'accessoryLines':
         return (
           <div className={`question-card ${isAnimating ? `slide-${direction}` : ''}`}>
-            <h2 className="question-text">Add connected devices?</h2>
-            <p className="sub-text">Save big on watch and tablet lines</p>
+            <EnhancedAccessorySelector 
+              customerData={customerData}
+              setCustomerData={setCustomerData}
+              hasPromoPlan={customerData.selectedPlan === 'EXPERIENCE_BEYOND'}
+            />
             
-            <div className="accessory-options">
+            <div style={{marginTop: '1rem', display: 'flex', gap: '1rem', justifyContent: 'space-between'}}>
               <button 
-                className={`accessory-line-btn ${customerData.accessoryLines?.watch ? 'selected' : ''}`}
-                onClick={() => {
-                  const newAccessoryLines = {
-                    ...customerData.accessoryLines,
-                    watch: !customerData.accessoryLines?.watch
-                  };
-                  setCustomerData({...customerData, accessoryLines: newAccessoryLines});
+                className="btn btn-primary"
+                onClick={() => onAnswer('continue', 'insurance')}
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  background: 'var(--tmobile-magenta)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  flex: 1
                 }}
               >
-                <div className="accessory-icon">⌚</div>
-                <h4>Apple Watch / Galaxy Watch</h4>
-                <div className="accessory-pricing">
-                  <span className="promo-price">$5/mo</span>
-                  <span className="regular-price strike">$12/mo</span>
-                </div>
-                <span className="promo-text">With Experience Beyond</span>
-              </button>
-
-              <button 
-                className={`accessory-line-btn ${customerData.accessoryLines?.tablet ? 'selected' : ''}`}
-                onClick={() => {
-                  const newAccessoryLines = {
-                    ...customerData.accessoryLines,
-                    tablet: !customerData.accessoryLines?.tablet
-                  };
-                  setCustomerData({...customerData, accessoryLines: newAccessoryLines});
-                }}
-              >
-                <div className="accessory-icon">📱</div>
-                <h4>iPad / Tablet</h4>
-                <div className="accessory-pricing">
-                  <span className="promo-price">$5/mo</span>
-                  <span className="regular-price strike">$20/mo</span>
-                </div>
-                <span className="promo-text">30GB high-speed data</span>
-              </button>
-
-              <button 
-                className={`accessory-line-btn ${customerData.accessoryLines?.homeInternet ? 'selected' : ''}`}
-                onClick={() => {
-                  const newAccessoryLines = {
-                    ...customerData.accessoryLines,
-                    homeInternet: !customerData.accessoryLines?.homeInternet
-                  };
-                  setCustomerData({...customerData, accessoryLines: newAccessoryLines});
-                }}
-              >
-                <div className="accessory-icon">🏠</div>
-                <h4>Home Internet</h4>
-                <div className="accessory-pricing">
-                  {customerData.lines >= 2 ? (
-                    <>
-                      <span className="promo-price">FREE</span>
-                      <span className="regular-price strike">$60/mo</span>
-                    </>
-                  ) : (
-                    <span className="regular-price">$60/mo</span>
-                  )}
-                </div>
-                <span className="promo-text">5G unlimited home broadband</span>
+                Continue →
               </button>
             </div>
             
+            {/* Skip button */}
             <button 
               className="skip-btn"
               onClick={() => {
                 setCustomerData({...customerData, accessoryLines: null});
-                setTimeout(() => onAnswer('continue', 'summary'), 400);
+                setTimeout(() => onAnswer('continue', 'insurance'), 400);
+              }}
+              style={{
+                marginTop: '0.5rem',
+                background: 'transparent',
+                border: 'none',
+                color: '#666',
+                textDecoration: 'underline',
+                cursor: 'pointer',
+                fontSize: '0.9rem',
+                display: 'block',
+                width: '100%',
+                textAlign: 'center'
               }}
             >
-              Skip connected devices →
+              Skip all accessories
             </button>
           </div>
         );
@@ -510,9 +481,48 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
         );
 
       case 'summary':
-        const totalLines = customerData.lines + 
-          (customerData.accessoryLines?.watch ? 1 : 0) + 
-          (customerData.accessoryLines?.tablet ? 1 : 0);
+        // Handle both old and new accessory data structures
+        let accessoryLineCount = 0;
+        let accessorySummary = [];
+        
+        if (customerData.accessoryLines) {
+          // New structure with arrays
+          if (Array.isArray(customerData.accessoryLines?.watches)) {
+            accessoryLineCount += customerData.accessoryLines.watches.length;
+            if (customerData.accessoryLines.watches.length > 0) {
+              accessorySummary.push(`${customerData.accessoryLines.watches.length} watch line${customerData.accessoryLines.watches.length > 1 ? 's' : ''}`);
+            }
+          }
+          if (Array.isArray(customerData.accessoryLines?.tablets)) {
+            accessoryLineCount += customerData.accessoryLines.tablets.length;
+            if (customerData.accessoryLines.tablets.length > 0) {
+              const unlimitedCount = customerData.accessoryLines.tablets.filter(t => t.dataType === 'unlimited').length;
+              const partialCount = customerData.accessoryLines.tablets.filter(t => t.dataType === 'partial').length;
+              let tabletText = `${customerData.accessoryLines.tablets.length} tablet line${customerData.accessoryLines.tablets.length > 1 ? 's' : ''}`;
+              if (unlimitedCount > 0 && partialCount > 0) {
+                tabletText += ` (${unlimitedCount} unlimited, ${partialCount} partial)`;
+              } else if (unlimitedCount > 1) {
+                tabletText += ' (2nd unlimited 50% off!)';
+              }
+              accessorySummary.push(tabletText);
+            }
+          }
+          // Old structure compatibility
+          if (customerData.accessoryLines?.watch && !Array.isArray(customerData.accessoryLines?.watches)) {
+            accessoryLineCount += 1;
+            accessorySummary.push('1 watch line');
+          }
+          if (customerData.accessoryLines?.tablet && !Array.isArray(customerData.accessoryLines?.tablets)) {
+            accessoryLineCount += 1;
+            accessorySummary.push('1 tablet line');
+          }
+          if (customerData.accessoryLines?.homeInternet) {
+            accessoryLineCount += 1;
+            accessorySummary.push(`Home Internet ${customerData.lines >= 2 ? '(FREE)' : ''}`);
+          }
+        }
+        
+        const totalLines = customerData.lines + accessoryLineCount;
         
         return (
           <div className={`question-card ${isAnimating ? `slide-${direction}` : ''}`}>
@@ -525,15 +535,9 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
                 {customerData.devices.filter(d => d.insurance).length > 0 && (
                   <li>Protection 360 on {customerData.devices.filter(d => d.insurance).length} device{customerData.devices.filter(d => d.insurance).length > 1 ? 's' : ''}</li>
                 )}
-                {customerData.accessoryLines?.watch && (
-                  <li>Apple Watch line ({customerData.watchDevice === 'new' ? 'buying new' : 'bringing own'})</li>
-                )}
-                {customerData.accessoryLines?.tablet && (
-                  <li>Tablet line ({customerData.tabletDevice === 'new' ? 'buying new' : 'bringing own'})</li>
-                )}
-                {customerData.accessoryLines?.homeInternet && (
-                  <li>Home Internet (5G unlimited)</li>
-                )}
+                {accessorySummary.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
               </ul>
               <div className="total-lines">
                 Total Lines: {totalLines}

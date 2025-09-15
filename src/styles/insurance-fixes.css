@@ -1,0 +1,157 @@
+/* Insurance Checkbox Fixes for Mobile */
+
+.insurance-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.insurance-card {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1rem;
+  transition: all 0.2s;
+}
+
+.insurance-card:active {
+  transform: scale(0.98);
+}
+
+.insurance-toggle {
+  margin-top: 0.75rem;
+}
+
+.insurance-toggle label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 0.5rem;
+  margin: -0.5rem;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.insurance-toggle label:hover {
+  background: rgba(226, 0, 116, 0.05);
+}
+
+.insurance-toggle label:active {
+  background: rgba(226, 0, 116, 0.1);
+}
+
+/* Make checkbox larger and easier to tap on mobile */
+.insurance-toggle input[type="checkbox"] {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  cursor: pointer;
+  position: relative;
+  -webkit-appearance: none;
+  appearance: none;
+  background: white;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.insurance-toggle input[type="checkbox"]:checked {
+  background: var(--tmobile-magenta);
+  border-color: var(--tmobile-magenta);
+}
+
+.insurance-toggle input[type="checkbox"]:checked::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.insurance-toggle input[type="checkbox"]:focus {
+  outline: 2px solid var(--tmobile-magenta);
+  outline-offset: 2px;
+}
+
+/* Touch-friendly tap target */
+@media (pointer: coarse) {
+  .insurance-toggle label {
+    min-height: 48px;
+    padding: 0.75rem;
+  }
+  
+  .insurance-toggle input[type="checkbox"] {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+  }
+}
+
+/* iOS-specific fixes */
+@supports (-webkit-touch-callout: none) {
+  .insurance-toggle input[type="checkbox"] {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  .insurance-toggle label {
+    -webkit-tap-highlight-color: rgba(226, 0, 116, 0.1);
+  }
+}
+
+.device-info {
+  margin-bottom: 0.75rem;
+}
+
+.device-info h4 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--tmobile-magenta);
+}
+
+.device-name {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.price {
+  font-weight: bold;
+  color: var(--tmobile-magenta);
+  font-size: 1.1rem;
+}
+
+.deductible {
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+.insurance-benefits {
+  background: rgba(226, 0, 116, 0.05);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.insurance-benefits h4 {
+  margin: 0 0 0.5rem 0;
+  color: var(--tmobile-magenta);
+  font-size: 1rem;
+}
+
+.insurance-benefits ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.insurance-benefits li {
+  padding: 0.25rem 0;
+  color: #333;
+  font-size: 0.9rem;
+}

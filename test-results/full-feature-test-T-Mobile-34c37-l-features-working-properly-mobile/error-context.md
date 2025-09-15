@@ -1,0 +1,135 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - img "T-Mobile" [ref=e7]
+        - generic [ref=e8]: Sales Edge
+      - button "New" [ref=e9] [cursor=pointer]
+  - main [ref=e10]:
+    - generic [ref=e11]: 📝 Building quote for 2 lines with 2 new phone(s)
+    - generic [ref=e12]:
+      - generic [ref=e13]:
+        - heading "Smart Quote Builder" [level=1] [ref=e14]
+        - generic [ref=e18]: Step 5 of 8
+      - generic [ref=e20]:
+        - heading "Add connected devices to your plan" [level=2] [ref=e21]
+        - paragraph [ref=e22]: Customize your connected ecosystem
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - heading "⌚ Smartwatches (1)" [level=3] [ref=e25]
+            - button "+ Add Watch" [ref=e26] [cursor=pointer]
+          - generic [ref=e27]:
+            - generic [ref=e28]:
+              - generic [ref=e29]: Watch 1
+              - button "Remove" [ref=e30] [cursor=pointer]
+            - generic [ref=e31]:
+              - generic [ref=e32] [cursor=pointer]:
+                - radio "Bring my own - $5/mo" [checked] [ref=e33]
+                - generic [ref=e34] [cursor=pointer]: Bring my own - $5/mo
+              - generic [ref=e35] [cursor=pointer]:
+                - radio "Buy new watch - $5/mo + device" [ref=e36]
+                - generic [ref=e37] [cursor=pointer]: Buy new watch - $5/mo + device
+        - generic [ref=e38]:
+          - generic [ref=e39]:
+            - heading "📱 Tablets (3)" [level=3] [ref=e40]
+            - button "+ Add Tablet" [ref=e41] [cursor=pointer]
+          - generic [ref=e42]: 🎉 2nd unlimited tablet line is 50% off!
+          - generic [ref=e43]:
+            - generic [ref=e44]:
+              - generic [ref=e45]: Tablet 1
+              - button "Remove" [ref=e46] [cursor=pointer]
+            - generic [ref=e47]:
+              - heading "Select Data Plan:" [level=4] [ref=e48]
+              - generic [ref=e49] [cursor=pointer]:
+                - radio "5GB Data - $5/mo 5GB high-speed, then 128Kbps" [ref=e50]
+                - generic [ref=e51] [cursor=pointer]:
+                  - text: 5GB Data - $5/mo
+                  - generic [ref=e52] [cursor=pointer]: 5GB high-speed, then 128Kbps
+              - generic [ref=e53] [cursor=pointer]:
+                - radio "Unlimited - $20/mo Unlimited high-speed data" [checked] [ref=e54]
+                - generic [ref=e55] [cursor=pointer]:
+                  - text: Unlimited - $20/mo
+                  - generic [ref=e56] [cursor=pointer]: Unlimited high-speed data
+            - generic [ref=e57]:
+              - generic [ref=e58] [cursor=pointer]:
+                - radio "Bring my own tablet" [checked] [ref=e59]
+                - generic [ref=e60] [cursor=pointer]: Bring my own tablet
+              - generic [ref=e61] [cursor=pointer]:
+                - radio "Buy new tablet" [ref=e62]
+                - generic [ref=e63] [cursor=pointer]: Buy new tablet
+          - generic [ref=e64]:
+            - generic [ref=e65]:
+              - generic [ref=e66]: Tablet 2
+              - button "Remove" [ref=e67] [cursor=pointer]
+            - generic [ref=e68]:
+              - heading "Select Data Plan:" [level=4] [ref=e69]
+              - generic [ref=e70] [cursor=pointer]:
+                - radio "5GB Data - $5/mo 5GB high-speed, then 128Kbps" [ref=e71]
+                - generic [ref=e72] [cursor=pointer]:
+                  - text: 5GB Data - $5/mo
+                  - generic [ref=e73] [cursor=pointer]: 5GB high-speed, then 128Kbps
+              - generic [ref=e74] [cursor=pointer]:
+                - radio "Unlimited - $10/mo 50% OFF! Unlimited high-speed data" [checked] [ref=e75]
+                - generic [ref=e76] [cursor=pointer]:
+                  - text: Unlimited - $10/mo
+                  - generic [ref=e77] [cursor=pointer]: 50% OFF!
+                  - generic [ref=e78] [cursor=pointer]: Unlimited high-speed data
+            - generic [ref=e79]:
+              - generic [ref=e80] [cursor=pointer]:
+                - radio "Bring my own tablet" [checked] [ref=e81]
+                - generic [ref=e82] [cursor=pointer]: Bring my own tablet
+              - generic [ref=e83] [cursor=pointer]:
+                - radio "Buy new tablet" [ref=e84]
+                - generic [ref=e85] [cursor=pointer]: Buy new tablet
+          - generic [ref=e86]:
+            - generic [ref=e87]:
+              - generic [ref=e88]: Tablet 3
+              - button "Remove" [ref=e89] [cursor=pointer]
+            - generic [ref=e90]:
+              - heading "Select Data Plan:" [level=4] [ref=e91]
+              - generic [ref=e92] [cursor=pointer]:
+                - radio "5GB Data - $5/mo 5GB high-speed, then 128Kbps" [ref=e93]
+                - generic [ref=e94] [cursor=pointer]:
+                  - text: 5GB Data - $5/mo
+                  - generic [ref=e95] [cursor=pointer]: 5GB high-speed, then 128Kbps
+              - generic [ref=e96] [cursor=pointer]:
+                - radio "Unlimited - $20/mo Unlimited high-speed data" [checked] [ref=e97]
+                - generic [ref=e98] [cursor=pointer]:
+                  - text: Unlimited - $20/mo
+                  - generic [ref=e99] [cursor=pointer]: Unlimited high-speed data
+            - generic [ref=e100]:
+              - generic [ref=e101] [cursor=pointer]:
+                - radio "Bring my own tablet" [checked] [ref=e102]
+                - generic [ref=e103] [cursor=pointer]: Bring my own tablet
+              - generic [ref=e104] [cursor=pointer]:
+                - radio "Buy new tablet" [ref=e105]
+                - generic [ref=e106] [cursor=pointer]: Buy new tablet
+        - generic [ref=e107]:
+          - heading "🏠 Home Internet" [level=3] [ref=e109]
+          - button "T-Mobile 5G Home Internet FREE$60/mo Unlimited 5G home broadband ✓ Selected" [ref=e110] [cursor=pointer]:
+            - generic [ref=e111] [cursor=pointer]:
+              - heading "T-Mobile 5G Home Internet" [level=4] [ref=e112] [cursor=pointer]
+              - generic [ref=e113] [cursor=pointer]:
+                - generic [ref=e114] [cursor=pointer]: FREE
+                - generic [ref=e115] [cursor=pointer]: $60/mo
+              - generic [ref=e116] [cursor=pointer]: Unlimited 5G home broadband
+            - generic [ref=e117] [cursor=pointer]: ✓ Selected
+        - generic [ref=e118]:
+          - heading "Accessory Lines Summary" [level=4] [ref=e119]
+          - list [ref=e120]:
+            - listitem [ref=e121]: 1 watch line
+            - listitem [ref=e122]: 3 tablet lines (with 2nd unlimited 50% off!)
+            - listitem [ref=e123]: Home Internet (FREE)
+          - generic [ref=e124]:
+            - text: "Additional monthly cost:"
+            - strong [ref=e125]: $55/mo
+      - generic [ref=e126]:
+        - button "← Back" [ref=e127] [cursor=pointer]
+        - button "Continue →" [ref=e128] [cursor=pointer]
+  - button "⚙️" [ref=e129] [cursor=pointer]
+  - contentinfo [ref=e130]:
+    - generic [ref=e131]: v2.4 • Released 2025-09-15
+```
