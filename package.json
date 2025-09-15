@@ -14,11 +14,15 @@
     "deploy:major": "node scripts/deploy.js --major"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.62.0",
+    "openai": "^5.20.2",
+    "pdf-parse": "^1.1.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
+    "@playwright/test": "^1.55.0",
     "@types/react": "^19.1.10",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^5.0.0",

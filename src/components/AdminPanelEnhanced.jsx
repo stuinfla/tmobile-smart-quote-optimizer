@@ -3,6 +3,7 @@ import { phoneData, tradeInValues } from '../data/phoneData';
 import { promotions } from '../data/promotions';
 import { monthlyPrograms, programCategories, defaultActivePrograms } from '../data/monthlyPrograms';
 import adminStorage from '../utils/adminStorage';
+import PDFUploadProcessor from './PDFUploadProcessor';
 
 function AdminPanelEnhanced({ onClose, onStoreSetup }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -53,6 +54,8 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
   const [backCardData, setBackCardData] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [scanProgress, setScanProgress] = useState('');
+  const [pendingUpdates, setPendingUpdates] = useState(null);
+  const [isApplyingUpdates, setIsApplyingUpdates] = useState(false);
 
   const frontCameraRef = useRef(null);
   const backCameraRef = useRef(null);
@@ -370,6 +373,65 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
     }
   };
 
+  // PDF processor data handler
+  const handlePDFDataExtracted = (result) => {
+    console.log('📄 PDF data extracted:', result);
+    
+    // Store the pending updates for later application
+    if (result.updateSummary && result.updateSummary.proposedUpdates.length > 0) {
+      setPendingUpdates(result.updateSummary);
+      console.log('💾 Stored pending pricing updates:', result.updateSummary);
+      alert(`PDF processing completed! Found ${result.updateSummary.proposedUpdates.length} pricing updates. Use the "Apply Pricing Updates" button to review and apply changes.`);
+    } else {
+      alert(`PDF processing completed! Check console for extracted data from ${result.filename}. No pricing updates detected.`);
+    }
+  };
+
+  // Apply pricing updates function
+  const applyPricingUpdates = async () => {
+    if (!pendingUpdates || pendingUpdates.proposedUpdates.length === 0) {
+      alert('No pending updates to apply.');
+      return;
+    }
+
+    setIsApplyingUpdates(true);
+    
+    try {
+      console.log('🚀 Applying pricing updates...', pendingUpdates);
+      
+      // Show summary before applying
+      const confirmation = window.confirm(
+        `Apply ${pendingUpdates.proposedUpdates.length} pricing updates?\n\n` +
+        `Plans: ${pendingUpdates.plansFound}\n` +
+        `Devices: ${pendingUpdates.devicesFound}\n` +
+        `Promotions: ${pendingUpdates.promotionsFound}\n\n` +
+        'This will update your pricing data files. Continue?'
+      );
+
+      if (!confirmation) {
+        setIsApplyingUpdates(false);
+        return;
+      }
+
+      // For now, this is a simulation - in a real implementation,
+      // you would update the actual data files here
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate processing time
+
+      // Clear pending updates
+      setPendingUpdates(null);
+      
+      alert(`✅ Successfully applied ${pendingUpdates.proposedUpdates.length} pricing updates!\n\nNote: This is currently a simulation. In production, this would update your data files.`);
+      
+      console.log('✅ Pricing updates applied successfully');
+      
+    } catch (error) {
+      console.error('❌ Error applying pricing updates:', error);
+      alert('Error applying pricing updates: ' + error.message);
+    } finally {
+      setIsApplyingUpdates(false);
+    }
+  };
+
   // Data Export/Import Functions
   const handleExportData = () => {
     adminStorage.exportData();
@@ -438,6 +500,15 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
             <button onClick={() => fileInputRef.current?.click()} className="btn-secondary">
               📥 Import Data
             </button>
+            {pendingUpdates && (
+              <button 
+                onClick={applyPricingUpdates} 
+                className="btn-primary pricing-update-btn"
+                disabled={isApplyingUpdates}
+              >
+                {isApplyingUpdates ? '⏳ Applying...' : `🚀 Apply ${pendingUpdates.proposedUpdates.length} Pricing Updates`}
+              </button>
+            )}
             <button className="close-btn" onClick={onClose}>×</button>
           </div>
         </div>
@@ -472,6 +543,12 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
             onClick={() => setActiveTab('promotions')}
           >
             💰 Promotions
+          </button>
+          <button 
+            className={activeTab === 'pdfProcessor' ? 'active' : ''}
+            onClick={() => setActiveTab('pdfProcessor')}
+          >
+            📄 PDF Processor
           </button>
           <button 
             className={activeTab === 'phones' ? 'active' : ''}
@@ -1068,6 +1145,13 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
             </div>
           )}
 
+          {/* PDF Processor Tab */}
+          {activeTab === 'pdfProcessor' && (
+            <div className="pdf-processor-tab">
+              <PDFUploadProcessor onDataExtracted={handlePDFDataExtracted} />
+            </div>
+          )}
+
           {/* Rest of existing tabs (promotions, phones, tradein) remain the same */}
         </div>
 
@@ -1645,6 +1729,37 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
 
           .btn-secondary:hover {
             background: #5a6268;
+          }
+
+          .admin-actions {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            flex-wrap: wrap;
+          }
+
+          .pricing-update-btn {
+            background: var(--tmobile-magenta, #E20074);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+          }
+
+          .pricing-update-btn:hover:not(:disabled) {
+            background: #c20066;
+            transform: translateY(-1px);
+          }
+
+          .pricing-update-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
           }
 
           .btn-danger {

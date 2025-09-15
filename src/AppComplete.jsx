@@ -243,7 +243,8 @@ function AppComplete() {
       return;
     }
 
-    if (currentStep === 'accessories') {
+    // Handle calculate button from summary page
+    if (answer === 'calculate' || currentStep === 'summary') {
       calculateResults(customerData);
     }
   };
