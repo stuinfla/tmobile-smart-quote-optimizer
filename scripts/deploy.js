@@ -99,7 +99,7 @@ function updateVersionJson(newVersion, features = []) {
   const today = new Date().toISOString().split('T')[0];
   
   const versionData = {
-    version: newVersion.replace(/\.\d+$/, ''), // Remove patch number for display (2.2.0 -> 2.2)
+    version: newVersion, // Keep FULL version number for display
     releaseDate: today,
     features: features.length > 0 ? features : [
       `Version ${newVersion} Release`,
@@ -109,6 +109,24 @@ function updateVersionJson(newVersion, features = []) {
   };
   
   writeFileSync(versionPath, JSON.stringify(versionData, null, 2) + '\n');
+}
+
+function updateServiceWorker(newVersion) {
+  const swPath = join(rootDir, 'public', 'sw.js');
+  
+  try {
+    let swContent = readFileSync(swPath, 'utf-8');
+    // Update the cache name with new version
+    swContent = swContent.replace(
+      /const CACHE_NAME = 'tmobile-sales-edge-v[\d.]+';/,
+      `const CACHE_NAME = 'tmobile-sales-edge-v${newVersion}';`
+    );
+    
+    writeFileSync(swPath, swContent);
+    log(`✅ Service worker updated to v${newVersion}`, 'green');
+  } catch (error) {
+    log(`⚠️  Warning: Could not update service worker: ${error.message}`, 'yellow');
+  }
 }
 
 function getGitStatus() {
@@ -194,10 +212,11 @@ async function main() {
   log('\n📝 Updating version files...', 'blue');
   updatePackageJson(newVersion);
   updateVersionJson(newVersion, features);
+  updateServiceWorker(newVersion);
   
   // Git operations
   log('\n🔄 Committing version changes...', 'blue');
-  execCommand('git add package.json src/version.json');
+  execCommand('git add package.json src/version.json public/sw.js');
   execCommand(`git commit -m "Release v${newVersion}
 
 ${features.join('\n')}

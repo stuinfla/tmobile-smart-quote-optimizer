@@ -508,7 +508,7 @@ body {
 }
 
 /* Mobile Floating Action Button */
-.fab, .admin-fab {
+.fab {
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -528,13 +528,29 @@ body {
   transition: all 0.2s ease;
 }
 
-.admin-fab:active {
-  transform: scale(0.95);
+/* Admin gear button - positioned ABOVE footer to prevent overlap */
+.admin-fab {
+  position: fixed;
+  bottom: 100px; /* Moved up to avoid footer overlap */
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--tmobile-gray);
+  color: white;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  cursor: pointer;
+  z-index: 80;
+  transition: all 0.2s ease;
 }
 
-.admin-fab {
-  background: var(--tmobile-gray);
-  font-size: 1.3rem;
+.admin-fab:active {
+  transform: scale(0.95);
 }
 
 /* Loading State */

@@ -8,10 +8,11 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "node scripts/deploy.js",
-    "deploy:patch": "node scripts/deploy.js --patch",
-    "deploy:minor": "node scripts/deploy.js --minor",
-    "deploy:major": "node scripts/deploy.js --major"
+    "deploy": "node scripts/deploy.js && node scripts/verify-deployment.js",
+    "deploy:patch": "node scripts/deploy.js --patch && node scripts/verify-deployment.js",
+    "deploy:minor": "node scripts/deploy.js --minor && node scripts/verify-deployment.js",
+    "deploy:major": "node scripts/deploy.js --major && node scripts/verify-deployment.js",
+    "verify": "node scripts/verify-deployment.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.62.0",
