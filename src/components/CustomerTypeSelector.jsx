@@ -20,13 +20,11 @@ const CustomerTypeSelector = ({ onSelect }) => {
     
     if (customerStatus && discountCategory) {
       if (typeof onSelect === 'function') {
-        // Use setTimeout to ensure Safari handles this properly
-        setTimeout(() => {
-          onSelect({
-            type: customerStatus,
-            category: discountCategory
-          });
-        }, 0);
+        // Call onSelect directly without setTimeout for better Safari compatibility
+        onSelect({
+          type: customerStatus,
+          category: discountCategory
+        });
       }
     }
   };
