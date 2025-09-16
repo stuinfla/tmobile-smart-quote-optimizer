@@ -5,6 +5,7 @@ import { insurancePricing, accessoryLinePricing } from '../data/insuranceData';
 import { useSwipeGesture } from '../hooks/useSwipeGesture';
 import EnhancedAccessorySelector from './EnhancedAccessorySelector';
 import CustomerQualification from './CustomerQualification';
+import CustomerTypeSelector from './CustomerTypeSelector';
 import CompactCustomerQualification from './CompactCustomerQualification';
 import CompactLinesSelector from './CompactLinesSelector';
 import CompactCarrierSelector from './CompactCarrierSelector';
@@ -17,7 +18,7 @@ import '../styles/insurance-fixes.css';
 import '../styles/compact-ui.css';
 
 function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCustomerData }) {
-  const steps = ['qualification', 'lines', 'carrier', 'newPhones', 'currentPhones', 'plan', 'insurance', 'summary'];
+  const steps = ['customerType', 'lines', 'currentPhones', 'carrier', 'newPhones', 'plan', 'insurance', 'accessories', 'summary'];
   const [isAnimating, setIsAnimating] = useState(false);
   const [direction, setDirection] = useState('forward');
   
@@ -56,6 +57,8 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
 
   const canContinue = () => {
     switch(currentStep) {
+      case 'customerType':
+        return customerData.isExisting !== undefined;
       case 'qualification':
         return customerData.qualification !== undefined;
       case 'newPhones':
@@ -73,6 +76,21 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
 
   const renderQuestion = () => {
     switch(currentStep) {
+      case 'customerType':
+        return (
+          <CustomerTypeSelector
+            onSelect={(type) => {
+              setCustomerData({
+                ...customerData,
+                isExisting: type === 'existing',
+                newCustomer: type === 'new'
+              });
+              handleContinue();
+            }}
+            onNext={handleContinue}
+          />
+        );
+      
       case 'qualification':
         return (
           <CompactCustomerQualification 

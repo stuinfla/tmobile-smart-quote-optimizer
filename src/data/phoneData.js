@@ -10,6 +10,24 @@ export const phoneData = {
         carrier_discount: 30,
         colors: ["Mist Blue", "Lavender", "Black", "White", "Sage"]
       },
+      iPhone_17_Plus: {
+        name: "iPhone 17 Plus",
+        variants: {
+          "256GB": 929.99,
+          "512GB": 1129.99
+        },
+        carrier_discount: 30,
+        colors: ["Mist Blue", "Lavender", "Black", "White", "Sage"]
+      },
+      iPhone_17_Air: {
+        name: "iPhone 17 Air",
+        variants: {
+          "256GB": 999.99,
+          "512GB": 1199.99
+        },
+        carrier_discount: 30,
+        colors: ["Space Black", "Starlight", "Purple", "Blue"]
+      },
       iPhone_17_Pro: {
         name: "iPhone 17 Pro",
         variants: {
@@ -146,6 +164,7 @@ export const tradeInValues = {
   // iPhone 17 Series
   iPhone_17_Pro_Max: 1000,
   iPhone_17_Pro: 1000,
+  iPhone_17_Air: 900,
   iPhone_17_Plus: 830,
   iPhone_17: 830,
   

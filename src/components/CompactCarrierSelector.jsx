@@ -34,13 +34,33 @@ function CompactCarrierSelector({ onCarrierUpdate, initialCarrier, onContinue })
   return (
     <div className="compact-qualification-container">
       {/* Compact header */}
-      <div className="compact-header">
+      <div className="compact-header" style={{ position: 'relative' }}>
         <div className="progress-bar-compact">
           <div className="progress-fill-compact" style={{ width: '30%' }} />
         </div>
         <div style={{ fontSize: '0.75rem', color: '#666', textAlign: 'center', marginTop: '2px' }}>
           Step 3 of 9
         </div>
+        <button
+          onClick={() => onContinue && onContinue()}
+          disabled={!selected}
+          style={{
+            position: 'absolute',
+            top: '0.5rem',
+            right: '0.5rem',
+            padding: '0.5rem 1rem',
+            backgroundColor: selected ? '#e20074' : '#ccc',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '0.875rem',
+            fontWeight: '600',
+            cursor: selected ? 'pointer' : 'not-allowed',
+            transition: 'background-color 0.2s'
+          }}
+        >
+          Next →
+        </button>
       </div>
 
       {/* Main content - no scroll */}
@@ -49,28 +69,45 @@ function CompactCarrierSelector({ onCarrierUpdate, initialCarrier, onContinue })
           <h2 className="question-title-compact">Current Carrier</h2>
           <p className="question-subtitle-compact">Where are you switching from?</p>
           
-          <div style={{ marginBottom: '1rem' }}>
-            <select
-              value={selected}
-              onChange={(e) => handleSelect(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '1rem',
-                border: '2px solid #e0e0e0',
-                borderRadius: '8px',
-                fontSize: '1rem',
-                background: 'white',
-                fontWeight: 500,
-                cursor: 'pointer'
-              }}
-            >
-              <option value="">Select your current carrier...</option>
-              {carriers.map(carrier => (
-                <option key={carrier.id} value={carrier.id}>
-                  {carrier.name} {carrier.note ? `(${carrier.note})` : ''}
-                </option>
-              ))}
-            </select>
+          <div className="carrier-grid" style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(2, 1fr)', 
+            gap: '0.75rem',
+            marginTop: '1rem'
+          }}>
+            {carriers.map(carrier => (
+              <button
+                key={carrier.id}
+                onClick={() => handleSelect(carrier.id)}
+                style={{
+                  padding: '1rem',
+                  border: `2px solid ${selected === carrier.id ? carrier.color : '#e0e0e0'}`,
+                  borderRadius: '12px',
+                  background: selected === carrier.id ? `${carrier.color}10` : 'white',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}
+                className="carrier-button"
+              >
+                <div style={{ fontSize: '1.5rem' }}>{carrier.icon}</div>
+                <div style={{ 
+                  fontWeight: selected === carrier.id ? '600' : '500',
+                  color: selected === carrier.id ? carrier.color : '#333',
+                  fontSize: '0.95rem'
+                }}>
+                  {carrier.name}
+                </div>
+                {carrier.note && (
+                  <div style={{ fontSize: '0.75rem', color: '#666' }}>
+                    {carrier.note}
+                  </div>
+                )}
+              </button>
+            ))}
           </div>
 
           {selected && selected !== 'tmobile' && (

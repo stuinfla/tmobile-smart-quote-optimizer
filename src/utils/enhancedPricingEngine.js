@@ -4,6 +4,7 @@
 import { completePricingDatabase } from '../data/complete_pricing_database';
 import { phoneData, tradeInValues } from '../data/phoneData';
 import { promotions } from '../data/promotions';
+import { insurancePricing } from '../data/insuranceData';
 
 export class EnhancedPricingEngine {
   constructor(customerData) {
@@ -421,19 +422,13 @@ export class EnhancedPricingEngine {
     
     return devices.reduce((total, device) => {
       if (device.insurance) {
-        // Determine tier based on device value
-        const retailPrice = device.retailPrice || 0;
-        let insurancePrice = 0;
+        // Use tier-based pricing from insuranceData.js
+        const deviceModel = device.newPhone || device.model;
+        const insuranceInfo = deviceModel ? 
+          insurancePricing.getInsurancePrice(deviceModel) : 
+          insurancePricing.tiers.tier3; // Default to tier3 if model unknown
         
-        if (retailPrice >= 600) {
-          insurancePrice = 18; // Tier 3
-        } else if (retailPrice >= 200) {
-          insurancePrice = 12; // Tier 2
-        } else {
-          insurancePrice = 7; // Tier 1
-        }
-        
-        return total + insurancePrice;
+        return total + insuranceInfo.monthly;
       }
       return total;
     }, 0);

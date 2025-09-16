@@ -45,13 +45,33 @@ function CompactLinesSelector({ onLinesUpdate, initialLines, onContinue }) {
   return (
     <div className="compact-qualification-container">
       {/* Compact header */}
-      <div className="compact-header">
+      <div className="compact-header" style={{ position: 'relative' }}>
         <div className="progress-bar-compact">
           <div className="progress-fill-compact" style={{ width: '20%' }} />
         </div>
         <div style={{ fontSize: '0.75rem', color: '#666', textAlign: 'center', marginTop: '2px' }}>
           Step 2 of 10
         </div>
+        <button
+          onClick={() => onContinue && onContinue()}
+          disabled={!selected}
+          style={{
+            position: 'absolute',
+            top: '0.5rem',
+            right: '0.5rem',
+            padding: '0.5rem 1rem',
+            backgroundColor: selected ? '#e20074' : '#ccc',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '0.875rem',
+            fontWeight: '600',
+            cursor: selected ? 'pointer' : 'not-allowed',
+            transition: 'background-color 0.2s'
+          }}
+        >
+          Next →
+        </button>
       </div>
 
       {/* Main content - no scroll */}

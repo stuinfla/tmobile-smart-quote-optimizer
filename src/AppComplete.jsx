@@ -39,7 +39,7 @@ function AppComplete() {
     }
   });
   
-  const [currentStep, setCurrentStep] = useLocalStorage('tmobile-current-step', 'qualification');
+  const [currentStep, setCurrentStep] = useLocalStorage('tmobile-current-step', 'customerType');
   const [results, setResults] = useState(null);
   const [showResults, setShowResults] = useState(false);
   const [showProposal, setShowProposal] = useState(false);
@@ -300,7 +300,7 @@ function AppComplete() {
   };
 
   const resetFlow = () => {
-    setCurrentStep('qualification');
+    setCurrentStep('customerType');
     setCustomerData({
       isExisting: false,
       newCustomer: true,

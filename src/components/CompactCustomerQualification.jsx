@@ -96,7 +96,8 @@ function CompactCustomerQualification({ onQualificationUpdate, initialQualificat
         background: 'white',
         boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
         padding: '0.5rem',
-        zIndex: 1000
+        zIndex: 1000,
+        position: 'relative'
       }}>
         <div style={{
           height: '3px',
@@ -113,6 +114,26 @@ function CompactCustomerQualification({ onQualificationUpdate, initialQualificat
         <div style={{ fontSize: '0.75rem', color: '#666', textAlign: 'center', marginTop: '2px' }}>
           Step 1 of 10
         </div>
+        <button
+          onClick={() => onContinue && onContinue()}
+          disabled={!selected}
+          style={{
+            position: 'absolute',
+            top: '0.5rem',
+            right: '0.5rem',
+            padding: '0.5rem 1rem',
+            backgroundColor: selected ? '#e20074' : '#ccc',
+            color: 'white',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '0.875rem',
+            fontWeight: '600',
+            cursor: selected ? 'pointer' : 'not-allowed',
+            transition: 'background-color 0.2s'
+          }}
+        >
+          Next →
+        </button>
       </div>
 
       {/* Main content - properly sized */}

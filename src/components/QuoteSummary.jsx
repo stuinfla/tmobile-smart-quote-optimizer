@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import taxConfig from '../data/taxConfig.json';
 import accessoryPricing from '../data/accessoryPricing.json';
+import { insurancePricing } from '../data/insuranceData';
 import '../styles/QuoteSummary.css';
 
 function QuoteSummary({ customerData, planData, repInfo, storeInfo }) {
@@ -64,9 +65,20 @@ function QuoteSummary({ customerData, planData, repInfo, storeInfo }) {
         monthlyTotal += customerData.lines >= 2 ? 0 : 60;
       }
       
-      // Insurance
-      const insuredLines = customerData.accessories.insurance?.filter(Boolean).length || 0;
-      monthlyTotal += insuredLines * 18;
+      // Insurance - calculate tier-based pricing
+      let insuranceTotal = 0;
+      if (customerData.devices) {
+        customerData.devices.forEach((device, index) => {
+          if (customerData.accessories.insurance?.[index]) {
+            const deviceModel = device.newPhone || device.model;
+            const insuranceInfo = deviceModel ? 
+              insurancePricing.getInsurancePrice(deviceModel) : 
+              insurancePricing.tiers.tier3;
+            insuranceTotal += insuranceInfo.monthly;
+          }
+        });
+      }
+      monthlyTotal += insuranceTotal;
     }
     
     // 5. Monthly Taxes & Fees
@@ -205,7 +217,19 @@ Valid: September 2025`;
           {summary.accessories.insurance?.filter(Boolean).length > 0 && (
             <div className="line-item">
               <span>Protection 360 ({summary.accessories.insurance.filter(Boolean).length} devices)</span>
-              <span>${summary.accessories.insurance.filter(Boolean).length * 18}</span>
+              <span>${(() => {
+                let total = 0;
+                customerData.devices?.forEach((device, index) => {
+                  if (summary.accessories.insurance?.[index]) {
+                    const deviceModel = device.newPhone || device.model;
+                    const insuranceInfo = deviceModel ? 
+                      insurancePricing.getInsurancePrice(deviceModel) : 
+                      insurancePricing.tiers.tier3;
+                    total += insuranceInfo.monthly;
+                  }
+                });
+                return total;
+              })()}</span>
             </div>
           )}
           
