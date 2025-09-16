@@ -1,31 +1,38 @@
 import { useState, useEffect } from 'react';
 import '../styles/compact-ui.css';
 
-const brands = [
-  { id: 'iPhone', name: 'iPhone', icon: '📱' },
-  { id: 'Galaxy', name: 'Galaxy', icon: '📱' },
-  { id: 'Pixel', name: 'Pixel', icon: '📱' }
+// Phones ordered by popularity at T-Mobile
+const phoneOptions = [
+  // iPhone 17 Series (Most Popular)
+  { id: 'iPhone_17', name: 'iPhone 17', price: 829.99, brand: 'Apple' },
+  { id: 'iPhone_17_Pro', name: 'iPhone 17 Pro', price: 1099.99, brand: 'Apple' },
+  { id: 'iPhone_17_Pro_Max', name: 'iPhone 17 Pro Max', price: 1199.99, brand: 'Apple' },
+  { id: 'iPhone_17_Plus', name: 'iPhone 17 Plus', price: 929.99, brand: 'Apple' },
+  { id: 'iPhone_17_Air', name: 'iPhone 17 Air', price: 999.99, brand: 'Apple' },
+  
+  // Samsung Galaxy S25 Series (Second Most Popular)
+  { id: 'Galaxy_S25', name: 'Samsung Galaxy S25', price: 799.99, brand: 'Samsung' },
+  { id: 'S25_Ultra', name: 'Samsung Galaxy S25 Ultra', price: 1199.99, brand: 'Samsung' },
+  { id: 'Galaxy_S25_Plus', name: 'Samsung Galaxy S25+', price: 999.99, brand: 'Samsung' },
+  
+  // Google Pixel Series
+  { id: 'Pixel_10', name: 'Google Pixel 10', price: 699.99, brand: 'Google' },
+  { id: 'Pixel_10_Pro', name: 'Google Pixel 10 Pro', price: 999.99, brand: 'Google' },
+  
+  // OnePlus
+  { id: 'OnePlus_13', name: 'OnePlus 13', price: 729.99, brand: 'OnePlus' },
+  { id: 'OnePlus_13_Pro', name: 'OnePlus 13 Pro', price: 899.99, brand: 'OnePlus' },
 ];
 
-const models = {
-  iPhone: [
-    { id: 'iPhone_17', name: 'iPhone 17', price: '$829.99', storageOptions: ['128GB', '256GB', '512GB'] },
-    { id: 'iPhone_17_Plus', name: 'iPhone 17 Plus', price: '$929.99', storageOptions: ['128GB', '256GB', '512GB'] },
-    { id: 'iPhone_17_Air', name: 'iPhone 17 Air', price: '$999.99', storageOptions: ['128GB', '256GB', '512GB'] },
-    { id: 'iPhone_17_Pro', name: 'iPhone 17 Pro', price: '$1099.99', storageOptions: ['128GB', '256GB', '512GB', '1TB'] },
-    { id: 'iPhone_17_Pro_Max', name: 'iPhone 17 Pro Max', price: '$1199.99', storageOptions: ['256GB', '512GB', '1TB'] }
-  ],
-  Galaxy: [
-    { id: 'Galaxy_S25', name: 'Galaxy S25', price: '$799.99', storageOptions: ['128GB', '256GB'] },
-    { id: 'S25_Ultra', name: 'S25 Ultra', price: '$1199.99', storageOptions: ['256GB', '512GB', '1TB'] }
-  ],
-  Pixel: [
-    { id: 'Pixel_10', name: 'Pixel 10', price: '$699.99', storageOptions: ['128GB', '256GB'] },
-    { id: 'Pixel_10_Pro', name: 'Pixel 10 Pro', price: '$999.99', storageOptions: ['128GB', '256GB', '512GB'] }
-  ]
+const storageOptions = {
+  Apple: ['128GB', '256GB', '512GB', '1TB'],
+  Samsung: ['256GB', '512GB', '1TB'],
+  Google: ['128GB', '256GB', '512GB'],
+  OnePlus: ['256GB', '512GB'],
+  default: ['128GB', '256GB']
 };
 
-function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, step }) {
+function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, onBack, step }) {
   const [selections, setSelections] = useState(
     devices.map(d => ({
       model: d.newPhone || 'iPhone_17',
@@ -34,16 +41,18 @@ function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, st
   );
 
   const isNewPhones = step === 'newPhones';
-  const title = isNewPhones ? 'Select New Phones' : 'Current Phones for Trade-in';
-  const subtitle = isNewPhones 
-    ? 'Choose phones for all lines' 
-    : 'Select phones to trade in or keep';
+  const title = isNewPhones ? 'Select New Phones' : 'Current Phones';
 
   const handleModelSelect = (lineIndex, modelId) => {
     const newSelections = [...selections];
-    const model = Object.values(models).flat().find(m => m.id === modelId);
+    const phone = phoneOptions.find(p => p.id === modelId);
+    const brand = phone?.brand || 'default';
+    const availableStorage = storageOptions[brand] || storageOptions.default;
+    
     newSelections[lineIndex].model = modelId;
-    newSelections[lineIndex].storage = model.storageOptions[0]; // Reset to first storage option
+    // Reset to default storage for this brand
+    newSelections[lineIndex].storage = availableStorage.includes('256GB') ? '256GB' : availableStorage[0];
+    
     setSelections(newSelections);
     updateDevices(newSelections);
   };
@@ -65,18 +74,20 @@ function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, st
   };
 
   const handleQuickSelect = (modelId) => {
-    const model = Object.values(models).flat().find(m => m.id === modelId);
+    const phone = phoneOptions.find(p => p.id === modelId);
+    const brand = phone?.brand || 'default';
+    const availableStorage = storageOptions[brand] || storageOptions.default;
+    const defaultStorage = availableStorage.includes('256GB') ? '256GB' : availableStorage[0];
     
     const newSelections = devices.map(() => ({
       model: modelId,
-      storage: model.storageOptions[0]
+      storage: defaultStorage
     }));
     setSelections(newSelections);
     updateDevices(newSelections);
   };
 
   const allSelected = selections.every(s => s.model && s.storage);
-  const progressPercent = isNewPhones ? 40 : 50;
 
   return (
     <div style={{
@@ -87,20 +98,14 @@ function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, st
       bottom: 0,
       display: 'flex',
       flexDirection: 'column',
-      background: '#f5f5f5',
-      overflow: 'hidden',
-      zIndex: 1
+      background: '#f5f5f5'
     }}>
-      {/* Header with Continue button */}
+      {/* Header */}
       <div style={{
         background: 'white',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-        padding: '0.5rem',
-        zIndex: 101,
-        position: 'fixed',
-        top: '60px',
-        left: 0,
-        right: 0
+        padding: '0.75rem 1rem',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+        position: 'relative'
       }}>
         <div style={{
           display: 'flex',
@@ -108,27 +113,42 @@ function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, st
           alignItems: 'center',
           marginBottom: '0.5rem'
         }}>
-          <div style={{ fontSize: '0.75rem', color: '#666' }}>
-            Step {isNewPhones ? 4 : 5} of 10
+          {onBack && (
+            <button
+              onClick={onBack}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                fontSize: '1rem',
+                cursor: 'pointer',
+                padding: '0.25rem',
+                color: '#333'
+              }}
+            >
+              ← Back
+            </button>
+          )}
+          <div style={{ 
+            fontSize: '0.85rem', 
+            color: '#666',
+            position: 'absolute',
+            left: '50%',
+            transform: 'translateX(-50%)'
+          }}>
+            Step 4 of 10
           </div>
-          <button 
+          <button
             onClick={() => onContinue && onContinue()}
-            disabled={false}
+            disabled={!allSelected}
             style={{
-              padding: '0.5rem 1.5rem',
-              background: '#e20074',
+              padding: '0.4rem 1rem',
+              background: allSelected ? '#e20074' : '#ccc',
               color: 'white',
               border: 'none',
               borderRadius: '20px',
               fontSize: '0.85rem',
               fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'all 0.2s ease',
-              zIndex: 102,
-              position: 'relative',
-              pointerEvents: 'auto',
-              display: 'block',
-              visibility: 'visible'
+              cursor: allSelected ? 'pointer' : 'not-allowed'
             }}
           >
             Continue →
@@ -136,13 +156,14 @@ function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, st
         </div>
         <div style={{
           height: '3px',
-          background: '#e0e0e0'
+          background: '#e0e0e0',
+          borderRadius: '3px'
         }}>
           <div style={{
             height: '100%',
             background: '#e20074',
-            width: `${progressPercent}%`,
-            transition: 'width 0.3s ease'
+            width: '40%',
+            borderRadius: '3px'
           }} />
         </div>
       </div>
@@ -150,12 +171,10 @@ function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, st
       {/* Main content */}
       <div style={{
         flex: 1,
-        padding: '1rem',
-        paddingTop: '8rem',
         overflow: 'auto',
-        display: 'flex',
-        flexDirection: 'column'
+        padding: '1rem'
       }}>
+        {/* Title and Quick Select */}
         <div style={{
           background: 'white',
           borderRadius: '12px',
@@ -163,179 +182,169 @@ function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, st
           marginBottom: '1rem'
         }}>
           <h2 style={{
-            fontSize: '1.2rem',
-            fontWeight: 600,
+            fontSize: '1.25rem',
+            fontWeight: 'bold',
             marginBottom: '0.5rem',
             color: '#333'
           }}>{title}</h2>
-          <p style={{
-            fontSize: '0.85rem',
-            color: '#666',
-            marginBottom: '1rem'
-          }}>{subtitle}</p>
-
+          
           {/* Quick select buttons */}
           <div style={{
             display: 'flex',
             gap: '0.5rem',
-            marginBottom: '1rem',
             flexWrap: 'wrap'
           }}>
             <button
-              onClick={() => handleQuickSelect('iPhone_17_Pro')}
+              onClick={() => handleQuickSelect('iPhone_17')}
               style={{
-                padding: '0.5rem 1rem',
+                padding: '0.4rem 0.8rem',
                 background: '#e20074',
                 color: 'white',
                 border: 'none',
-                borderRadius: '20px',
-                fontSize: '0.85rem',
+                borderRadius: '16px',
+                fontSize: '0.8rem',
                 fontWeight: 600,
                 cursor: 'pointer'
               }}
             >
-              📱 All iPhone 17 Pro
+              All iPhone 17
             </button>
             <button
-              onClick={() => handleQuickSelect('iPhone_17')}
+              onClick={() => handleQuickSelect('iPhone_17_Pro')}
               style={{
-                padding: '0.5rem 1rem',
+                padding: '0.4rem 0.8rem',
                 background: 'white',
                 color: '#e20074',
                 border: '2px solid #e20074',
-                borderRadius: '20px',
-                fontSize: '0.85rem',
+                borderRadius: '16px',
+                fontSize: '0.8rem',
                 fontWeight: 600,
                 cursor: 'pointer'
               }}
             >
-              📱 All iPhone 17
+              All iPhone 17 Pro
             </button>
             <button
-              onClick={() => handleQuickSelect('S25_Ultra')}
+              onClick={() => handleQuickSelect('Galaxy_S25')}
               style={{
-                padding: '0.5rem 1rem',
+                padding: '0.4rem 0.8rem',
                 background: 'white',
-                color: '#e20074',
-                border: '2px solid #e20074',
-                borderRadius: '20px',
-                fontSize: '0.85rem',
+                color: '#666',
+                border: '2px solid #e0e0e0',
+                borderRadius: '16px',
+                fontSize: '0.8rem',
                 fontWeight: 600,
                 cursor: 'pointer'
               }}
             >
-              📱 All S25 Ultra
+              All Galaxy S25
             </button>
           </div>
         </div>
 
-        {/* Lines with selections */}
+        {/* Lines with dropdowns - All 4 visible */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: '1fr',
-          gap: '0.5rem',
-          flex: 1
+          gap: '0.75rem'
         }}>
           {devices.map((device, index) => {
             const selection = selections[index];
-            const selectedModel = Object.values(models).flat().find(m => m.id === selection.model);
+            const selectedPhone = phoneOptions.find(p => p.id === selection.model);
+            const brand = selectedPhone?.brand || 'default';
+            const availableStorage = storageOptions[brand] || storageOptions.default;
             
             return (
               <div key={index} style={{
                 background: 'white',
                 borderRadius: '8px',
                 padding: '0.75rem',
-                border: allSelected ? '2px solid #e20074' : '2px solid transparent'
+                border: '1px solid #e0e0e0'
               }}>
-                <h3 style={{
+                {/* Line header */}
+                <div style={{
                   fontSize: '0.9rem',
                   fontWeight: 600,
                   color: '#333',
                   marginBottom: '0.5rem'
-                }}>Line {index + 1}</h3>
-
-                {/* Model selection with dropdown */}
-                <div style={{ marginBottom: '0.5rem' }}>
-                  <div style={{
-                    fontSize: '0.75rem',
-                    color: '#666',
-                    marginBottom: '0.25rem',
-                    fontWeight: 600
-                  }}>Phone Model</div>
-                  <select
-                    value={selection.model}
-                    onChange={(e) => handleModelSelect(index, e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '0.5rem',
-                      border: '2px solid #e0e0e0',
-                      borderRadius: '6px',
-                      fontSize: '0.85rem',
-                      background: 'white',
-                      fontWeight: 500
-                    }}
-                  >
-                    {Object.entries(models).map(([brand, phoneModels]) => (
-                      <optgroup key={brand} label={`${brand} Phones`}>
-                        {phoneModels.map(model => (
-                          <option key={model.id} value={model.id}>
-                            {model.name} - {model.price}
-                          </option>
-                        ))}
-                      </optgroup>
-                    ))}
-                  </select>
+                }}>
+                  Line {index + 1}
                 </div>
 
-                {/* Storage selection */}
-                {selectedModel && (
-                  <div>
-                    <div style={{
-                      fontSize: '0.75rem',
-                      color: '#666',
-                      marginBottom: '0.25rem',
-                      fontWeight: 600
-                    }}>Storage</div>
-                    <div style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(auto-fit, minmax(60px, 1fr))',
-                      gap: '0.35rem'
-                    }}>
-                      {selectedModel.storageOptions.map(storage => (
-                        <button
-                          key={storage}
-                          onClick={() => handleStorageSelect(index, storage)}
-                          style={{
-                            padding: '0.4rem',
-                            background: selection.storage === storage ? 'rgba(226, 0, 116, 0.1)' : 'white',
-                            border: selection.storage === storage ? '2px solid #e20074' : '2px solid #e0e0e0',
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                            fontSize: '0.75rem',
-                            fontWeight: 600,
-                            textAlign: 'center'
-                          }}
-                        >
-                          {storage}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                {/* Phone dropdown */}
+                <select
+                  value={selection.model}
+                  onChange={(e) => handleModelSelect(index, e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '0.5rem',
+                    border: '1px solid #e0e0e0',
+                    borderRadius: '6px',
+                    fontSize: '0.85rem',
+                    background: 'white',
+                    marginBottom: '0.5rem',
+                    fontWeight: 500
+                  }}
+                >
+                  <optgroup label="iPhone (Most Popular)">
+                    {phoneOptions.filter(p => p.brand === 'Apple').map(phone => (
+                      <option key={phone.id} value={phone.id}>
+                        {phone.name} - ${phone.price}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Samsung Galaxy">
+                    {phoneOptions.filter(p => p.brand === 'Samsung').map(phone => (
+                      <option key={phone.id} value={phone.id}>
+                        {phone.name} - ${phone.price}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="Google Pixel">
+                    {phoneOptions.filter(p => p.brand === 'Google').map(phone => (
+                      <option key={phone.id} value={phone.id}>
+                        {phone.name} - ${phone.price}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="OnePlus">
+                    {phoneOptions.filter(p => p.brand === 'OnePlus').map(phone => (
+                      <option key={phone.id} value={phone.id}>
+                        {phone.name} - ${phone.price}
+                      </option>
+                    ))}
+                  </optgroup>
+                </select>
+
+                {/* Storage options */}
+                <div style={{
+                  display: 'flex',
+                  gap: '0.35rem'
+                }}>
+                  {availableStorage.map(storage => (
+                    <button
+                      key={storage}
+                      onClick={() => handleStorageSelect(index, storage)}
+                      style={{
+                        flex: 1,
+                        padding: '0.35rem',
+                        background: selection.storage === storage ? '#e20074' : 'white',
+                        color: selection.storage === storage ? 'white' : '#666',
+                        border: selection.storage === storage ? '1px solid #e20074' : '1px solid #e0e0e0',
+                        borderRadius: '4px',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {storage}
+                    </button>
+                  ))}
+                </div>
               </div>
             );
           })}
         </div>
-      </div>
-
-      {/* Version info at bottom */}
-      <div style={{
-        fontSize: '0.55rem',
-        color: '#ccc',
-        textAlign: 'center',
-        padding: '0.5rem'
-      }}>
-        v2.6.5
       </div>
     </div>
   );

@@ -169,6 +169,7 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
               setCustomerData({...customerData, devices: newDevices});
             }}
             onContinue={handleContinue}
+            onBack={handleBack}
             step="newPhones"
           />
         );
