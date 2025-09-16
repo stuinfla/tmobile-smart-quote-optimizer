@@ -355,6 +355,41 @@ function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, on
           })}
         </div>
       </div>
+
+      {/* Continue button */}
+      <div style={{
+        background: 'white',
+        borderTop: '1px solid #e0e0e0',
+        padding: '1rem',
+        zIndex: 1000,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}>
+        <button 
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (onContinue) onContinue();
+          }}
+          disabled={!allSelected}
+          style={{
+            width: '100%',
+            maxWidth: '400px',
+            padding: '0.875rem',
+            background: allSelected ? '#e20074' : '#ccc',
+            color: 'white',
+            border: 'none',
+            borderRadius: '25px',
+            fontSize: '1rem',
+            fontWeight: 600,
+            cursor: allSelected ? 'pointer' : 'not-allowed',
+            transition: 'all 0.2s ease'
+          }}
+        >
+          Continue →
+        </button>
+      </div>
     </div>
   );
 }
