@@ -1,0 +1,425 @@
+/* Compact UI - Zero Scroll Experience */
+
+/* Global viewport settings */
+.app-container {
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Fixed header with progress */
+.compact-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
+}
+
+.progress-bar-compact {
+  height: 3px;
+  background: #e0e0e0;
+  margin-bottom: 0.5rem;
+}
+
+.progress-fill-compact {
+  height: 100%;
+  background: var(--tmobile-magenta);
+  transition: width 0.3s ease;
+}
+
+/* Main content area - no scroll */
+.compact-content {
+  position: fixed;
+  top: 60px; /* Below header */
+  left: 0;
+  right: 0;
+  bottom: 80px; /* Above footer/continue */
+  padding: 1rem;
+  overflow: hidden;
+}
+
+/* Question card - compact */
+.question-card-compact {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.question-title-compact {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.question-subtitle-compact {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+/* Compact option buttons */
+.options-grid-compact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  flex: 1;
+  align-content: start;
+}
+
+.option-btn-compact {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+}
+
+.option-btn-compact:active {
+  transform: scale(0.98);
+}
+
+.option-btn-compact.selected {
+  border-color: var(--tmobile-magenta);
+  background: rgba(226, 0, 116, 0.05);
+}
+
+.option-btn-compact.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  width: 20px;
+  height: 20px;
+  background: var(--tmobile-magenta);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.option-icon-compact {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.option-title-compact {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.125rem;
+}
+
+.option-desc-compact {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.option-badge-compact {
+  background: var(--tmobile-magenta);
+  color: white;
+  padding: 0.125rem 0.375rem;
+  border-radius: 10px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  margin-top: 0.25rem;
+}
+
+/* Fixed continue button area */
+.continue-area-compact {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid #e0e0e0;
+  padding: 0.75rem;
+  z-index: 1000;
+}
+
+.continue-btn-compact {
+  width: 100%;
+  padding: 0.875rem;
+  background: var(--tmobile-magenta);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.continue-btn-compact:active {
+  transform: scale(0.98);
+}
+
+.continue-btn-compact:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.back-btn-compact {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--tmobile-magenta);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+/* Auto-advance button state */
+.option-btn-compact.auto-advancing {
+  background: var(--tmobile-magenta);
+  color: white;
+  animation: pulse 0.5s ease;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Horizontal option layout for simple choices */
+.options-row-compact {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+  align-items: start;
+}
+
+.options-row-compact .option-btn-compact {
+  flex: 1;
+}
+
+/* Special layout for customer qualification */
+.qualification-grid-compact {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  flex: 1;
+  align-content: start;
+}
+
+.qualification-btn-compact {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  position: relative;
+}
+
+.qualification-btn-compact:active {
+  transform: scale(0.98);
+}
+
+.qualification-btn-compact.selected {
+  border-color: var(--tmobile-magenta);
+  background: rgba(226, 0, 116, 0.05);
+}
+
+.qualification-btn-compact.selected::after {
+  content: '✓';
+  position: absolute;
+  right: 0.75rem;
+  width: 20px;
+  height: 20px;
+  background: var(--tmobile-magenta);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.qual-icon-compact {
+  font-size: 1.25rem;
+  width: 30px;
+  text-align: center;
+}
+
+.qual-content-compact {
+  flex: 1;
+}
+
+.qual-title-compact {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.125rem;
+}
+
+.qual-desc-compact {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.qual-badge-compact {
+  background: var(--tmobile-magenta);
+  color: white;
+  padding: 0.125rem 0.375rem;
+  border-radius: 10px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Number selector for lines */
+.lines-selector-compact {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.line-number-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #e0e0e0;
+  background: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.line-number-btn:active {
+  transform: scale(0.95);
+}
+
+.line-number-btn.selected {
+  background: var(--tmobile-magenta);
+  color: white;
+  border-color: var(--tmobile-magenta);
+}
+
+/* Quick picks for common selections */
+.quick-picks-compact {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.quick-pick-btn {
+  flex: 1;
+  padding: 0.625rem;
+  background: white;
+  border: 2px solid var(--tmobile-magenta);
+  color: var(--tmobile-magenta);
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.quick-pick-btn:active {
+  transform: scale(0.98);
+}
+
+.quick-pick-btn.selected {
+  background: var(--tmobile-magenta);
+  color: white;
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+  .compact-content {
+    padding: 0.5rem;
+  }
+  
+  .question-card-compact {
+    padding: 0.75rem;
+  }
+  
+  .question-title-compact {
+    font-size: 1.1rem;
+  }
+  
+  .options-grid-compact {
+    gap: 0.375rem;
+  }
+  
+  .option-btn-compact {
+    padding: 0.625rem;
+  }
+  
+  .qualification-btn-compact {
+    padding: 0.5rem;
+  }
+  
+  .continue-area-compact {
+    padding: 0.5rem;
+  }
+}
+
+/* iPhone-specific safe areas */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .continue-area-compact {
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+  }
+}
+
+/* Prevent any scrolling */
+body.compact-ui {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+}
+
+/* Hide default components when in compact mode */
+.compact-ui .conversation-container,
+.compact-ui .floating-continue-container {
+  display: none;
+}
+
+/* Version footer - minimal */
+.version-footer-compact {
+  position: fixed;
+  bottom: 65px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.65rem;
+  color: #999;
+  padding: 0.25rem;
+  background: white;
+}

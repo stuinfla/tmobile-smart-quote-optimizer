@@ -320,6 +320,14 @@ function AppComplete() {
     localStorage.removeItem('tmobile-current-step');
   };
 
+  // Add compact UI class to body
+  useEffect(() => {
+    document.body.classList.add('compact-ui');
+    return () => {
+      document.body.classList.remove('compact-ui');
+    };
+  }, []);
+
   // Remove the initial store setup screen - only show it when accessed through admin
   // App always starts ready to sell
 

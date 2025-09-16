@@ -5,9 +5,11 @@ import { insurancePricing, accessoryLinePricing } from '../data/insuranceData';
 import { useSwipeGesture } from '../hooks/useSwipeGesture';
 import EnhancedAccessorySelector from './EnhancedAccessorySelector';
 import CustomerQualification from './CustomerQualification';
+import CompactCustomerQualification from './CompactCustomerQualification';
 import FinancingSelector from './FinancingSelector';
 import FloatingContinueButton from './FloatingContinueButton';
 import '../styles/insurance-fixes.css';
+import '../styles/compact-ui.css';
 
 function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCustomerData }) {
   const steps = ['qualification', 'lines', 'newPhones', 'financing', 'currentPhones', 'plan', 'accessoryLines', 'accessoryDevices', 'insurance', 'summary'];
@@ -70,18 +72,17 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
     switch(currentStep) {
       case 'qualification':
         return (
-          <div className={`question-card ${isAnimating ? `slide-${direction}` : ''}`}>
-            <CustomerQualification 
-              onQualificationUpdate={(qual) => {
-                setCustomerData({
-                  ...customerData,
-                  qualification: qual.type,
-                  qualificationDetails: qual
-                });
-              }}
-              initialQualification={customerData.qualification || 'standard'}
-            />
-          </div>
+          <CompactCustomerQualification 
+            onQualificationUpdate={(qual) => {
+              setCustomerData({
+                ...customerData,
+                qualification: qual.type,
+                qualificationDetails: qual
+              });
+            }}
+            initialQualification={customerData.qualification || 'standard'}
+            onContinue={handleContinue}
+          />
         );
       
       case 'lines':
