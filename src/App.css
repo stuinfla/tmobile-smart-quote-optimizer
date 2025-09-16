@@ -531,7 +531,7 @@ body {
 /* Admin gear button - positioned ABOVE footer to prevent overlap */
 .admin-fab {
   position: fixed;
-  bottom: 175px; /* Properly positioned above footer */
+  bottom: 220px; /* Increased clearance to prevent overlap with content */
   right: 20px;
   width: 56px;
   height: 56px;
