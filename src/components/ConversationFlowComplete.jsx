@@ -6,7 +6,6 @@ import { useSwipeGesture } from '../hooks/useSwipeGesture';
 import EnhancedAccessorySelector from './EnhancedAccessorySelector';
 import CustomerQualification from './CustomerQualification';
 import CustomerTypeSelector from './CustomerTypeSelector';
-import CompactCustomerQualification from './CompactCustomerQualification';
 import CompactLinesSelector from './CompactLinesSelector';
 import CompactCarrierSelector from './CompactCarrierSelector';
 import CompactAllLinesPhoneSelector from './CompactAllLinesPhoneSelector';
@@ -59,8 +58,6 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
     switch(currentStep) {
       case 'customerType':
         return customerData.isExisting !== undefined;
-      case 'qualification':
-        return customerData.qualification !== undefined;
       case 'newPhones':
         return customerData.devices.every(d => d.newPhone && d.storage);
       case 'currentPhones':
@@ -90,22 +87,6 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
             onNext={handleContinue}
           />
         );
-      
-      case 'qualification':
-        return (
-          <CompactCustomerQualification 
-            onQualificationUpdate={(qual) => {
-              setCustomerData({
-                ...customerData,
-                qualification: qual.type,
-                qualificationDetails: qual
-              });
-            }}
-            initialQualification={customerData.qualification || 'standard'}
-            onContinue={handleContinue}
-          />
-        );
-      
       case 'lines':
         return (
           <CompactLinesSelector
@@ -570,7 +551,7 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
   };
 
   // For compact components, return them directly without wrapper
-  if (['qualification', 'lines', 'carrier', 'newPhones', 'currentPhones'].includes(currentStep)) {
+  if (['customerType', 'lines', 'carrier', 'newPhones', 'currentPhones'].includes(currentStep)) {
     return renderQuestion();
   }
 

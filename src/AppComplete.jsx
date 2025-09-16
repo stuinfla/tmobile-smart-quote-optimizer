@@ -24,8 +24,8 @@ function AppComplete() {
   const [showCarrierModal, setShowCarrierModal] = useState(false);
   const [carrierModalData, setCarrierModalData] = useState(null);
   
-  // Use localStorage to persist customer data
-  const [customerData, setCustomerData] = useLocalStorage('tmobile-customer-data', {
+  // Customer data - do NOT persist between sessions for better UX
+  const [customerData, setCustomerData] = useState({
     isExisting: false,
     newCustomer: true,
     carrier: '',
@@ -39,7 +39,7 @@ function AppComplete() {
     }
   });
   
-  const [currentStep, setCurrentStep] = useLocalStorage('tmobile-current-step', 'customerType');
+  const [currentStep, setCurrentStep] = useState('customerType');
   const [results, setResults] = useState(null);
   const [showResults, setShowResults] = useState(false);
   const [showProposal, setShowProposal] = useState(false);
@@ -327,11 +327,11 @@ function AppComplete() {
     
     // Clear stale localStorage if app version changed
     const lastVersion = localStorage.getItem('tmobile-app-version');
-    if (lastVersion !== '2.6.2') {
+    if (lastVersion !== '2.6.8') {
       localStorage.removeItem('tmobile-current-step');
       localStorage.removeItem('tmobile-customer-data');
-      localStorage.setItem('tmobile-app-version', '2.6.2');
-      setCurrentStep('qualification');
+      localStorage.setItem('tmobile-app-version', '2.6.8');
+      setCurrentStep('customerType');
     }
     
     return () => {
