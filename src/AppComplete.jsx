@@ -320,9 +320,19 @@ function AppComplete() {
     localStorage.removeItem('tmobile-current-step');
   };
 
-  // Add compact UI class to body
+  // Add compact UI class to body and clear any stale state
   useEffect(() => {
     document.body.classList.add('compact-ui');
+    
+    // Clear stale localStorage if app version changed
+    const lastVersion = localStorage.getItem('tmobile-app-version');
+    if (lastVersion !== '2.6.1') {
+      localStorage.removeItem('tmobile-current-step');
+      localStorage.removeItem('tmobile-customer-data');
+      localStorage.setItem('tmobile-app-version', '2.6.1');
+      setCurrentStep('qualification');
+    }
+    
     return () => {
       document.body.classList.remove('compact-ui');
     };

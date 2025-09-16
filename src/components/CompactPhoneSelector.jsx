@@ -43,8 +43,8 @@ function CompactPhoneSelector({ devices, onDevicesUpdate, onContinue, step }) {
     return brand ? phoneData.phones[brand][phoneId] : null;
   };
 
-  const currentDevice = devices.find(d => !d.newPhone || !d.storage);
-  const currentIndex = devices.findIndex(d => !d.newPhone || !d.storage);
+  const currentDevice = devices.find(d => !d.newPhone || !d.storage) || devices[0];
+  const currentIndex = Math.max(0, devices.findIndex(d => !d.newPhone || !d.storage));
 
   return (
     <div className="compact-qualification-container">
