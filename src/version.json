@@ -1,9 +1,12 @@
 {
-  "version": "2.6",
+  "version": "2.6.8",
   "releaseDate": "2025-09-16",
   "features": [
-    "Version 2.6.8 Release",
-    "Bug fixes and performance improvements",
-    "Updated dependencies"
+    "Fixed application flow - starts with customer type",
+    "Added iPhone 17 Air and iPhone 17 Plus models",
+    "Converted carrier selection to button grid",
+    "Fixed insurance tier-based pricing",
+    "Added Next buttons on all screens",
+    "Mobile optimization for 375px viewport"
   ]
 }
