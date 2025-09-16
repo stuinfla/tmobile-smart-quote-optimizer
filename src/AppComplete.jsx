@@ -308,6 +308,7 @@ function AppComplete() {
       lines: 0,
       devices: [],
       selectedPlan: 'EXPERIENCE_BEYOND',
+      financingTerm: 24, // Default to 24 months (90% of customers)
       accessories: {
         watch: false,
         tablet: false,

@@ -336,6 +336,64 @@
   font-size: 0.9rem;
 }
 
+/* Carrier selector styles */
+.carrier-grid-compact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.carrier-btn-compact {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.carrier-btn-compact.selected {
+  background: rgba(226, 0, 116, 0.05);
+}
+
+.carrier-icon-compact {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.carrier-content-compact {
+  flex: 1;
+}
+
+.carrier-name-compact {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.carrier-note-compact {
+  font-size: 0.7rem;
+  color: #666;
+  margin-top: 0.125rem;
+}
+
+.carrier-tip-compact {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: #fff3cd;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  color: #856404;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 /* Fixed continue button area */
 .continue-area-compact {
   position: fixed;

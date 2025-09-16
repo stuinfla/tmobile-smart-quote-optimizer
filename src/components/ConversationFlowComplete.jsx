@@ -7,6 +7,7 @@ import EnhancedAccessorySelector from './EnhancedAccessorySelector';
 import CustomerQualification from './CustomerQualification';
 import CompactCustomerQualification from './CompactCustomerQualification';
 import CompactLinesSelector from './CompactLinesSelector';
+import CompactCarrierSelector from './CompactCarrierSelector';
 import CompactPhoneSelector from './CompactPhoneSelector';
 import CompactFinancingSelector from './CompactFinancingSelector';
 import FinancingSelector from './FinancingSelector';
@@ -15,7 +16,7 @@ import '../styles/insurance-fixes.css';
 import '../styles/compact-ui.css';
 
 function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCustomerData }) {
-  const steps = ['qualification', 'lines', 'newPhones', 'financing', 'currentPhones', 'plan', 'accessoryLines', 'accessoryDevices', 'insurance', 'summary'];
+  const steps = ['qualification', 'lines', 'carrier', 'newPhones', 'currentPhones', 'plan', 'insurance', 'summary'];
   const [isAnimating, setIsAnimating] = useState(false);
   const [direction, setDirection] = useState('forward');
   
@@ -58,8 +59,6 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
         return customerData.qualification !== undefined;
       case 'newPhones':
         return customerData.devices.every(d => d.newPhone && d.storage);
-      case 'financing':
-        return customerData.financingTerm !== undefined;
       case 'currentPhones':
         return customerData.devices.every(d => d.currentPhone && d.currentPhone !== '');
       case 'accessoryDevices':
@@ -103,6 +102,22 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
           />
         );
 
+      case 'carrier':
+        return (
+          <CompactCarrierSelector
+            onCarrierUpdate={(data) => {
+              setCustomerData({
+                ...customerData,
+                carrier: data.carrier,
+                isCompetitor: data.isCompetitor,
+                defaultTradeIn: data.defaultTradeIn
+              });
+            }}
+            initialCarrier={customerData.carrier}
+            onContinue={handleContinue}
+          />
+        );
+
       case 'newPhones':
         return (
           <CompactPhoneSelector
@@ -115,19 +130,6 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
           />
         );
 
-      case 'financing':
-        return (
-          <CompactFinancingSelector
-            onFinancingUpdate={(term) => {
-              setCustomerData({
-                ...customerData,
-                financingTerm: term
-              });
-            }}
-            initialTerm={customerData.financingTerm}
-            onContinue={handleContinue}
-          />
-        );
 
       case 'insurance':
         const allLinesInsured = customerData.devices.every(d => d.insurance);
