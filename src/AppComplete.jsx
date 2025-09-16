@@ -613,6 +613,7 @@ function AppComplete() {
           padding: 0.5rem;
           text-align: center;
           z-index: 10;
+          pointer-events: none;
         }
         
         .copyright-info {

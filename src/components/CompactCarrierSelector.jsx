@@ -49,25 +49,28 @@ function CompactCarrierSelector({ onCarrierUpdate, initialCarrier, onContinue })
           <h2 className="question-title-compact">Current Carrier</h2>
           <p className="question-subtitle-compact">Where are you switching from?</p>
           
-          <div className="carrier-grid-compact">
-            {carriers.map(carrier => (
-              <button
-                key={carrier.id}
-                className={`carrier-btn-compact ${selected === carrier.id ? 'selected' : ''}`}
-                onClick={() => handleSelect(carrier.id)}
-                style={{ borderColor: selected === carrier.id ? carrier.color : '#e0e0e0' }}
-              >
-                <span className="carrier-icon-compact" style={{ color: carrier.color }}>
-                  {carrier.icon}
-                </span>
-                <div className="carrier-content-compact">
-                  <div className="carrier-name-compact">{carrier.name}</div>
-                  {carrier.note && (
-                    <div className="carrier-note-compact">{carrier.note}</div>
-                  )}
-                </div>
-              </button>
-            ))}
+          <div style={{ marginBottom: '1rem' }}>
+            <select
+              value={selected}
+              onChange={(e) => handleSelect(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '1rem',
+                border: '2px solid #e0e0e0',
+                borderRadius: '8px',
+                fontSize: '1rem',
+                background: 'white',
+                fontWeight: 500,
+                cursor: 'pointer'
+              }}
+            >
+              <option value="">Select your current carrier...</option>
+              {carriers.map(carrier => (
+                <option key={carrier.id} value={carrier.id}>
+                  {carrier.name} {carrier.note ? `(${carrier.note})` : ''}
+                </option>
+              ))}
+            </select>
           </div>
 
           {selected && selected !== 'tmobile' && (

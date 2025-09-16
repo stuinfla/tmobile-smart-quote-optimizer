@@ -8,7 +8,8 @@ import CustomerQualification from './CustomerQualification';
 import CompactCustomerQualification from './CompactCustomerQualification';
 import CompactLinesSelector from './CompactLinesSelector';
 import CompactCarrierSelector from './CompactCarrierSelector';
-import CompactPhoneSelector from './CompactPhoneSelector';
+import CompactAllLinesPhoneSelector from './CompactAllLinesPhoneSelector';
+import CompactTradeInSelector from './CompactTradeInSelector';
 import CompactFinancingSelector from './CompactFinancingSelector';
 import FinancingSelector from './FinancingSelector';
 import FloatingContinueButton from './FloatingContinueButton';
@@ -120,7 +121,7 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
 
       case 'newPhones':
         return (
-          <CompactPhoneSelector
+          <CompactAllLinesPhoneSelector
             devices={customerData.devices}
             onDevicesUpdate={(newDevices) => {
               setCustomerData({...customerData, devices: newDevices});
@@ -211,6 +212,18 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
         );
 
       case 'currentPhones':
+        return (
+          <CompactTradeInSelector
+            devices={customerData.devices}
+            onDevicesUpdate={(newDevices) => {
+              setCustomerData({...customerData, devices: newDevices});
+            }}
+            onContinue={handleContinue}
+            isCompetitor={customerData.isCompetitor}
+          />
+        );
+        
+      case 'currentPhones_old':
         return (
           <div className={`question-card ${isAnimating ? `slide-${direction}` : ''}`}>
             <h2 className="question-text">Trade-in or Keep & Switch?</h2>
@@ -537,6 +550,11 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
         return null;
     }
   };
+
+  // For compact components, return them directly without wrapper
+  if (['qualification', 'lines', 'carrier', 'newPhones', 'currentPhones'].includes(currentStep)) {
+    return renderQuestion();
+  }
 
   return (
     <div className="conversation-flow complete" {...swipeHandlers}>

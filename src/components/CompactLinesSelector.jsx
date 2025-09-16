@@ -89,7 +89,7 @@ function CompactLinesSelector({ onLinesUpdate, initialLines, onContinue }) {
               Or select specific number:
             </p>
             <div className="lines-selector-compact">
-              {[5, 6, 7, 8, 9, 10].map(num => (
+              {[1, 2, 3, 4, 5, 6, 7].map(num => (
                 <button
                   key={num}
                   className={`line-number-btn ${selected === num ? 'selected' : ''}`}
