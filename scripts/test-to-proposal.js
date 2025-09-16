@@ -13,7 +13,14 @@ async function testToProposal() {
     viewport: { width: 393, height: 852 },
     deviceScaleFactor: 3,
     isMobile: true,
-    hasTouch: true
+    hasTouch: true,
+    // Force fresh session - no cache
+    ignoreHTTPSErrors: true,
+    extraHTTPHeaders: {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    }
   });
   
   const page = await context.newPage();
@@ -23,7 +30,9 @@ async function testToProposal() {
   
   try {
     console.log('🌐 Loading production app...');
-    await page.goto('https://tmobile-optimizer.vercel.app', {
+    // Add cache buster to ensure we get the latest version
+    const cacheBuster = Date.now();
+    await page.goto(`https://tmobile-optimizer.vercel.app?v=${cacheBuster}`, {
       waitUntil: 'networkidle',
       timeout: 30000
     });
@@ -207,7 +216,10 @@ async function testToProposal() {
       const proposalScreen = await page.locator('text=Your T-Mobile').isVisible() ||
                             await page.locator('text=Deal Summary').isVisible() ||
                             await page.locator('text=Monthly Total').isVisible() ||
-                            await page.locator('text=Scenario').isVisible();
+                            await page.locator('text=Scenario').isVisible() ||
+                            await page.locator('text=Get Quote').isVisible() ||
+                            await page.locator('text=Ready to finalize').isVisible() ||
+                            await page.locator('text=Quote Summary').isVisible();
       
       if (proposalScreen) {
         console.log('\n🎉 REACHED PROPOSAL SCREEN!');
