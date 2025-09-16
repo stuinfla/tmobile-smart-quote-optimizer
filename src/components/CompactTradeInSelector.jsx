@@ -3,15 +3,15 @@ import '../styles/compact-ui.css';
 
 const tradeInOptions = [
   { id: 'keep', name: 'Keep & Switch', desc: 'Up to $800 credit', icon: '💰' },
-  { id: 'iPhone_15_Pro', name: 'iPhone 15 Pro', desc: 'Up to $1000 trade', icon: '📱' },
-  { id: 'iPhone_14', name: 'iPhone 14', desc: 'Up to $800 trade', icon: '📱' },
-  { id: 'Galaxy_S23', name: 'Galaxy S23', desc: 'Up to $800 trade', icon: '📱' },
+  { id: 'iPhone_16_Pro', name: 'iPhone 16 Pro', desc: 'Up to $1000 trade', icon: '📱' },
+  { id: 'iPhone_16', name: 'iPhone 16', desc: 'Up to $800 trade', icon: '📱' },
+  { id: 'Galaxy_S25', name: 'Galaxy S25', desc: 'Up to $800 trade', icon: '📱' },
   { id: 'broken', name: 'Broken Phone', desc: '$200 trade credit', icon: '📵' },
   { id: 'no_trade', name: 'No Trade-in', desc: 'Full price', icon: '❌' }
 ];
 
 function CompactTradeInSelector({ devices, onDevicesUpdate, onContinue, isCompetitor }) {
-  const defaultOption = isCompetitor ? 'keep' : 'iPhone_14';
+  const defaultOption = isCompetitor ? 'keep' : 'iPhone_16';
   const [selections, setSelections] = useState(
     devices.map(d => d.currentPhone || defaultOption)
   );

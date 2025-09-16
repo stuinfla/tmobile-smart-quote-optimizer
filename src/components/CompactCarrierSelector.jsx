@@ -5,8 +5,8 @@ function CompactCarrierSelector({ onCarrierUpdate, initialCarrier, onContinue })
   const [selected, setSelected] = useState(initialCarrier || '');
 
   const carriers = [
-    { id: 'att', name: 'AT&T', icon: '📶', color: '#00a8e0' },
-    { id: 'verizon', name: 'Verizon', icon: '✓', color: '#ee0000' },
+    { id: 'Verizon', name: 'Verizon', icon: '✓', color: '#ee0000', bonus: '$800/line' },
+    { id: 'AT&T', name: 'AT&T', icon: '📶', color: '#00a8e0', bonus: '$800/line' },
     { id: 'tmobile', name: 'T-Mobile', icon: '📱', color: '#e20074', note: 'Upgrading' },
     { id: 'other', name: 'Other Carrier', icon: '📡', color: '#666' }
   ];
@@ -101,6 +101,19 @@ function CompactCarrierSelector({ onCarrierUpdate, initialCarrier, onContinue })
                 }}>
                   {carrier.name}
                 </div>
+                {carrier.bonus && (
+                  <div style={{ 
+                    fontSize: '0.85rem', 
+                    color: '#00c853', 
+                    fontWeight: '600',
+                    backgroundColor: '#e8f5e9',
+                    padding: '2px 6px',
+                    borderRadius: '4px',
+                    marginTop: '4px'
+                  }}>
+                    Keep & Switch: {carrier.bonus}
+                  </div>
+                )}
                 {carrier.note && (
                   <div style={{ fontSize: '0.75rem', color: '#666' }}>
                     {carrier.note}
@@ -110,9 +123,15 @@ function CompactCarrierSelector({ onCarrierUpdate, initialCarrier, onContinue })
             ))}
           </div>
 
-          {selected && selected !== 'tmobile' && (
-            <div className="carrier-tip-compact">
-              💡 <strong>Pro Tip:</strong> Keep & Switch usually saves more than trading in!
+          {selected && ['Verizon', 'AT&T'].includes(selected) && (
+            <div className="carrier-tip-compact" style={{
+              backgroundColor: '#e8f5e9',
+              padding: '12px',
+              borderRadius: '8px',
+              marginTop: '1rem',
+              border: '1px solid #4caf50'
+            }}>
+              ✅ <strong>Great news!</strong> You qualify for Keep & Switch - get $800 per line when you switch. No trade-in needed - keep your current phones!
             </div>
           )}
         </div>

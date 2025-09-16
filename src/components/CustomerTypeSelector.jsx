@@ -1,41 +1,34 @@
 import React from 'react';
+import './CustomerTypeSelector.css';
 
-const CustomerTypeSelector = ({ onSelect, onNext }) => {
+const CustomerTypeSelector = ({ onSelect }) => {
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-start">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">Welcome to T-Mobile!</h2>
-          <p className="text-lg text-gray-600 mt-2">Are you a current T-Mobile customer?</p>
-        </div>
-        <button
-          onClick={onNext}
-          className="px-4 py-2 bg-tmobile-magenta text-white rounded-lg hover:bg-tmobile-dark-magenta transition-colors font-medium"
-        >
-          Next →
-        </button>
+    <div className="customer-type-container">
+      <div className="customer-type-header">
+        <h2 className="welcome-title">Welcome to T-Mobile!</h2>
+        <p className="welcome-subtitle">Are you a current T-Mobile customer?</p>
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
+      
+      <div className="customer-type-buttons">
         <button
           onClick={() => onSelect('existing')}
-          className="p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-tmobile-magenta hover:shadow-lg transition-all group"
+          className="customer-type-button existing-customer"
         >
-          <div className="text-center">
-            <div className="text-3xl mb-3">✅</div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">Yes, I'm a Customer</h3>
-            <p className="text-sm text-gray-600">I currently have T-Mobile service</p>
+          <div className="button-icon">✅</div>
+          <div className="button-text">
+            <div className="button-title">Yes, I'm a Customer</div>
+            <div className="button-subtitle">I currently have T-Mobile service</div>
           </div>
         </button>
-
+        
         <button
           onClick={() => onSelect('new')}
-          className="p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-tmobile-magenta hover:shadow-lg transition-all group"
+          className="customer-type-button new-customer"
         >
-          <div className="text-center">
-            <div className="text-3xl mb-3">🆕</div>
-            <h3 className="text-xl font-bold text-gray-900 mb-2">No, I'm New</h3>
-            <p className="text-sm text-gray-600">I want to switch to T-Mobile</p>
+          <div className="button-icon">🆕</div>
+          <div className="button-text">
+            <div className="button-title">No, I'm New</div>
+            <div className="button-subtitle">I want to switch to T-Mobile</div>
           </div>
         </button>
       </div>

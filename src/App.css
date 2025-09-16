@@ -143,6 +143,8 @@ body {
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
+  position: relative;
+  z-index: 100;
 }
 
 .new-button:hover {

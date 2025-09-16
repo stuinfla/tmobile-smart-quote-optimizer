@@ -17,7 +17,30 @@ import '../styles/insurance-fixes.css';
 import '../styles/compact-ui.css';
 
 function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCustomerData }) {
-  const steps = ['customerType', 'lines', 'currentPhones', 'carrier', 'newPhones', 'plan', 'insurance', 'accessories', 'summary'];
+  // Smart flow: Adapt based on customer type
+  const getSteps = () => {
+    // Base flow for existing customers
+    if (customerData.isExisting) {
+      return ['customerType', 'lines', 'currentPhones', 'newPhones', 'plan', 'insurance', 'accessories', 'summary'];
+    }
+    
+    // Smart flow for new customers: carrier first, then decide on trade-in
+    if (customerData.newCustomer) {
+      // If coming from Verizon/AT&T with Keep & Switch, skip trade-in
+      const isKeepAndSwitchEligible = ['Verizon', 'AT&T'].includes(customerData.carrier);
+      if (isKeepAndSwitchEligible && customerData.carrier) {
+        // Fast path: Skip trade-in for Keep & Switch customers
+        return ['customerType', 'lines', 'carrier', 'newPhones', 'plan', 'insurance', 'accessories', 'summary'];
+      }
+      // Standard new customer flow
+      return ['customerType', 'lines', 'carrier', 'currentPhones', 'newPhones', 'plan', 'insurance', 'accessories', 'summary'];
+    }
+    
+    // Default flow
+    return ['customerType', 'lines', 'carrier', 'currentPhones', 'newPhones', 'plan', 'insurance', 'accessories', 'summary'];
+  };
+  
+  const steps = getSteps();
   const [isAnimating, setIsAnimating] = useState(false);
   const [direction, setDirection] = useState('forward');
   
@@ -45,7 +68,15 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
       setDirection('forward');
       setIsAnimating(true);
       setTimeout(() => {
-        onAnswer('continue', steps[currentIndex + 1]);
+        // Special handling: After carrier selection, determine next step
+        let nextStep = steps[currentIndex + 1];
+        if (currentStep === 'carrier' && ['Verizon', 'AT&T'].includes(customerData.carrier)) {
+          // Skip currentPhones for Keep & Switch eligible customers
+          const newSteps = getSteps();
+          const nextIndex = newSteps.indexOf(currentStep) + 1;
+          nextStep = newSteps[nextIndex];
+        }
+        onAnswer('continue', nextStep);
         setIsAnimating(false);
       }, 200);
       if (navigator.vibrate) navigator.vibrate(10);

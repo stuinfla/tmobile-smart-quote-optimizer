@@ -1,0 +1,75 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner:
+    - generic:
+      - generic:
+        - generic:
+          - img "T-Mobile"
+          - generic: Sales Edge
+        - button "New"
+  - main [ref=e3]:
+    - generic [ref=e4]: 📝 Building quote for 2 lines
+    - generic [ref=e5]:
+      - generic [ref=e7]:
+        - generic [ref=e8]: Step 5 of 10
+        - button "Continue →" [ref=e9] [cursor=pointer]
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - heading "Trade-in or Keep & Switch?" [level=2] [ref=e14]
+          - paragraph [ref=e15]: Select your current phones for trade-in value
+          - generic [ref=e16]:
+            - button "All iPhone 15 Pro" [ref=e17] [cursor=pointer]
+            - button "No Trade-ins" [ref=e18] [cursor=pointer]
+        - generic [ref=e19]:
+          - generic [ref=e20]:
+            - generic [ref=e21]:
+              - heading "Line 1" [level=3] [ref=e22]: Line 1
+              - generic [ref=e23]: iPhone 14
+            - generic [ref=e24]:
+              - button "📱 iPhone 15 Pro Up to $1000 trade" [ref=e25] [cursor=pointer]:
+                - generic [ref=e26] [cursor=pointer]: 📱
+                - generic [ref=e27] [cursor=pointer]: iPhone 15 Pro
+                - generic [ref=e28] [cursor=pointer]: Up to $1000 trade
+              - button "📱 iPhone 14 Up to $800 trade" [ref=e29] [cursor=pointer]:
+                - generic [ref=e30] [cursor=pointer]: 📱
+                - generic [ref=e31] [cursor=pointer]: iPhone 14
+                - generic [ref=e32] [cursor=pointer]: Up to $800 trade
+              - button "📱 Galaxy S23 Up to $800 trade" [ref=e33] [cursor=pointer]:
+                - generic [ref=e34] [cursor=pointer]: 📱
+                - generic [ref=e35] [cursor=pointer]: Galaxy S23
+                - generic [ref=e36] [cursor=pointer]: Up to $800 trade
+              - button "📵 Broken Phone $200 trade credit" [ref=e37] [cursor=pointer]:
+                - generic [ref=e38] [cursor=pointer]: 📵
+                - generic [ref=e39] [cursor=pointer]: Broken Phone
+                - generic [ref=e40] [cursor=pointer]: $200 trade credit
+          - generic [ref=e41]:
+            - generic [ref=e42]:
+              - heading "Line 2" [level=3] [ref=e43]: Line 2
+              - generic [ref=e44]: iPhone 14
+            - generic [ref=e45]:
+              - button "📱 iPhone 15 Pro Up to $1000 trade" [ref=e46] [cursor=pointer]:
+                - generic [ref=e47] [cursor=pointer]: 📱
+                - generic [ref=e48] [cursor=pointer]: iPhone 15 Pro
+                - generic [ref=e49] [cursor=pointer]: Up to $1000 trade
+              - button "📱 iPhone 14 Up to $800 trade" [ref=e50] [cursor=pointer]:
+                - generic [ref=e51] [cursor=pointer]: 📱
+                - generic [ref=e52] [cursor=pointer]: iPhone 14
+                - generic [ref=e53] [cursor=pointer]: Up to $800 trade
+              - button "📱 Galaxy S23 Up to $800 trade" [ref=e54] [cursor=pointer]:
+                - generic [ref=e55] [cursor=pointer]: 📱
+                - generic [ref=e56] [cursor=pointer]: Galaxy S23
+                - generic [ref=e57] [cursor=pointer]: Up to $800 trade
+              - button "📵 Broken Phone $200 trade credit" [ref=e58] [cursor=pointer]:
+                - generic [ref=e59] [cursor=pointer]: 📵
+                - generic [ref=e60] [cursor=pointer]: Broken Phone
+                - generic [ref=e61] [cursor=pointer]: $200 trade credit
+      - generic [ref=e62]:
+        - button "Continue →" [ref=e63] [cursor=pointer]
+        - generic [ref=e64]: v2.6.5
+  - button "⚙️" [ref=e65] [cursor=pointer]
+  - contentinfo:
+    - generic: v2.6.9 • Released 2025-09-16
+    - generic: © 2025 Created by ISOVision.ai for T-Mobile Corporate • Stuart Kerr • sikerr@gmail.com • (312) 953-9668
+```

@@ -50,6 +50,13 @@ function AppComplete() {
     initializeApp();
     checkForUpdates();
     
+    // Check for updates immediately on every app launch/focus
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        checkForUpdates();
+      }
+    });
+    
     // iOS-specific optimizations
     if (isIOS()) {
       // Prevent zoom on input focus
@@ -317,6 +324,8 @@ function AppComplete() {
     });
     setResults(null);
     setShowResults(false);
+    setShowProposal(false);
+    setSaved(false);
     localStorage.removeItem('tmobile-customer-data');
     localStorage.removeItem('tmobile-current-step');
   };
