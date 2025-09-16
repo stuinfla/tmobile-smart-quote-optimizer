@@ -1,9 +1,11 @@
 {
-  "version": "2.6",
+  "version": "2.6.0",
   "releaseDate": "2025-09-16",
   "features": [
-    "Version 2.6.0 Release",
-    "Bug fixes and performance improvements",
-    "Updated dependencies"
+    "COMPACT UI - Zero scroll experience",
+    "Fixed Continue button at bottom",
+    "All options visible on one screen",
+    "Auto-advance on selection",
+    "Optimized for speed and efficiency"
   ]
 }
