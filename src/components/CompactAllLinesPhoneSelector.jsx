@@ -43,6 +43,25 @@ function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, on
   const isNewPhones = step === 'newPhones';
   const title = isNewPhones ? 'Select New Phones' : 'Current Phones';
 
+  const updateDevices = (newSelections) => {
+    const newDevices = devices.map((d, index) => ({
+      ...d,
+      [isNewPhones ? 'newPhone' : 'currentPhone']: newSelections[index].model,
+      storage: newSelections[index].storage
+    }));
+    onDevicesUpdate(newDevices);
+  };
+
+  // Initialize devices on first load
+  useEffect(() => {
+    const initialSelections = devices.map(d => ({
+      model: d.newPhone || 'iPhone_17',
+      storage: d.storage || '256GB'
+    }));
+    setSelections(initialSelections);
+    updateDevices(initialSelections);
+  }, []);
+
   const handleModelSelect = (lineIndex, modelId) => {
     const newSelections = [...selections];
     const phone = phoneOptions.find(p => p.id === modelId);
@@ -64,15 +83,6 @@ function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, on
     updateDevices(newSelections);
   };
 
-  const updateDevices = (newSelections) => {
-    const newDevices = devices.map((d, index) => ({
-      ...d,
-      [isNewPhones ? 'newPhone' : 'currentPhone']: newSelections[index].model,
-      storage: newSelections[index].storage
-    }));
-    onDevicesUpdate(newDevices);
-  };
-
   const handleQuickSelect = (modelId) => {
     const phone = phoneOptions.find(p => p.id === modelId);
     const brand = phone?.brand || 'default';
@@ -88,6 +98,15 @@ function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, on
   };
 
   const allSelected = selections.every(s => s.model && s.storage);
+
+  // Auto-advance when all selections are complete
+  useEffect(() => {
+    if (allSelected && onContinue) {
+      setTimeout(() => {
+        onContinue();
+      }, 800); // Brief delay to let user see their selection
+    }
+  }, [allSelected, onContinue]);
 
   return (
     <div style={{
@@ -137,22 +156,19 @@ function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, on
           }}>
             Step 4 of 10
           </div>
-          <button
-            onClick={() => onContinue && onContinue()}
-            disabled={!allSelected}
-            style={{
+          {allSelected && (
+            <div style={{
               padding: '0.4rem 1rem',
-              background: allSelected ? '#e20074' : '#ccc',
+              background: '#22c55e',
               color: 'white',
               border: 'none',
               borderRadius: '20px',
               fontSize: '0.85rem',
-              fontWeight: 600,
-              cursor: allSelected ? 'pointer' : 'not-allowed'
-            }}
-          >
-            Continue →
-          </button>
+              fontWeight: 600
+            }}>
+              ✓ Complete
+            </div>
+          )}
         </div>
         <div style={{
           height: '3px',

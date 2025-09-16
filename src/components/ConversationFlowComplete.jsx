@@ -13,6 +13,7 @@ import CompactTradeInSelector from './CompactTradeInSelector';
 import CompactFinancingSelector from './CompactFinancingSelector';
 import FinancingSelector from './FinancingSelector';
 import FloatingContinueButton from './FloatingContinueButton';
+import ProgressDots from './ProgressDots';
 import '../styles/insurance-fixes.css';
 import '../styles/compact-ui.css';
 
@@ -938,6 +939,19 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
           }
         }
       `}</style>
+      
+      {/* Progress dots at bottom */}
+      <ProgressDots 
+        currentStep={currentStep}
+        onStepClick={(stepId) => {
+          // Allow navigation to completed steps
+          const targetIndex = steps.indexOf(stepId);
+          const currentIndex = steps.indexOf(currentStep);
+          if (targetIndex <= currentIndex) {
+            onAnswer('navigate', stepId);
+          }
+        }}
+      />
     </div>
   );
 }
