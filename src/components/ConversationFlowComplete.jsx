@@ -107,11 +107,12 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
       case 'customerType':
         return (
           <CustomerTypeSelector
-            onSelect={(type) => {
+            onSelect={(data) => {
               setCustomerData({
                 ...customerData,
-                isExisting: type === 'existing',
-                newCustomer: type === 'new'
+                isExisting: data.type === 'existing',
+                newCustomer: data.type === 'new',
+                discountCategory: data.category
               });
               handleContinue();
             }}

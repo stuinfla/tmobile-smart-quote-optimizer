@@ -4,37 +4,45 @@ export const phoneData = {
       iPhone_17: {
         name: "iPhone 17",
         variants: {
+          "128GB": 729.99,
           "256GB": 829.99,
           "512GB": 1029.99
         },
+        defaultStorage: "256GB",
         carrier_discount: 30,
         colors: ["Mist Blue", "Lavender", "Black", "White", "Sage"]
       },
       iPhone_17_Plus: {
         name: "iPhone 17 Plus",
         variants: {
+          "128GB": 829.99,
           "256GB": 929.99,
           "512GB": 1129.99
         },
+        defaultStorage: "256GB",
         carrier_discount: 30,
         colors: ["Mist Blue", "Lavender", "Black", "White", "Sage"]
       },
       iPhone_17_Air: {
         name: "iPhone 17 Air",
         variants: {
+          "128GB": 899.99,
           "256GB": 999.99,
           "512GB": 1199.99
         },
+        defaultStorage: "256GB",
         carrier_discount: 30,
         colors: ["Space Black", "Starlight", "Purple", "Blue"]
       },
       iPhone_17_Pro: {
         name: "iPhone 17 Pro",
         variants: {
+          "128GB": 999.99,
           "256GB": 1099.99,
           "512GB": 1299.99,
           "1TB": 1499.99
         },
+        defaultStorage: "256GB",
         colors: ["Natural Titanium", "Desert Titanium", "Crystal Blue", "Obsidian"]
       },
       iPhone_17_Pro_Max: {
@@ -44,6 +52,7 @@ export const phoneData = {
           "512GB": 1399.99,
           "1TB": 1599.99
         },
+        defaultStorage: "256GB",
         colors: ["Natural Titanium", "Desert Titanium", "Crystal Blue", "Obsidian"]
       },
       iPhone_16: {
@@ -161,47 +170,40 @@ export const phoneData = {
 };
 
 export const tradeInValues = {
-  // iPhone 17 Series
-  iPhone_17_Pro_Max: 1000,
-  iPhone_17_Pro: 1000,
-  iPhone_17_Air: 900,
-  iPhone_17_Plus: 830,
-  iPhone_17: 830,
+  // iPhone 16 Series (1 year old - RARE to trade)
+  iPhone_16_Pro_Max: 1000,
+  iPhone_16_Pro: 1000,
+  iPhone_16_Plus: 830,
+  iPhone_16: 830,
   
-  // iPhone 16 Series
-  iPhone_16_Pro_Max: 830,
-  iPhone_16_Pro: 830,
-  iPhone_16_Plus: 650,
-  iPhone_16: 650,
+  // iPhone 15 Series (2 years old)
+  iPhone_15_Pro_Max: 1000,
+  iPhone_15_Pro: 1000,
+  iPhone_15_Plus: 830,
+  iPhone_15: 830,
   
-  // iPhone 15 Series
-  iPhone_15_Pro_Max: 830,
-  iPhone_15_Pro: 830,
-  iPhone_15_Plus: 650,
-  iPhone_15: 650,
+  // iPhone 14 Series (3 years old - COMMON)
+  iPhone_14_Pro_Max: 800,
+  iPhone_14_Pro: 800,
+  iPhone_14_Plus: 650,
+  iPhone_14: 650,
   
-  // iPhone 14 Series
-  iPhone_14_Pro_Max: 650,
-  iPhone_14_Pro: 650,
-  iPhone_14_Plus: 500,
-  iPhone_14: 500,
+  // iPhone 13 Series (4 years old - COMMON)
+  iPhone_13_Pro_Max: 800,
+  iPhone_13_Pro: 800,
+  iPhone_13_mini: 600,
+  iPhone_13: 600,
   
-  // iPhone 13 Series
-  iPhone_13_Pro_Max: 500,
-  iPhone_13_Pro: 500,
-  iPhone_13_mini: 350,
-  iPhone_13: 400,
+  // iPhone 12 Series (5 years old - COMMON)
+  iPhone_12_Pro_Max: 600,
+  iPhone_12_Pro: 600,
+  iPhone_12_mini: 400,
+  iPhone_12: 400,
   
-  // iPhone 12 Series
-  iPhone_12_Pro_Max: 400,
-  iPhone_12_Pro: 400,
-  iPhone_12_mini: 250,
-  iPhone_12: 300,
-  
-  // iPhone 11 Series
-  iPhone_11_Pro_Max: 300,
-  iPhone_11_Pro: 300,
-  iPhone_11: 200,
+  // iPhone 11 Series (6 years old - COMMON)
+  iPhone_11_Pro_Max: 400,
+  iPhone_11_Pro: 400,
+  iPhone_11: 400,
   
   // iPhone XS/XR Series
   iPhone_XS_Max: 200,

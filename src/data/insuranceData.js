@@ -101,17 +101,49 @@ export const insurancePricing = {
 // Accessory line pricing
 export const accessoryLinePricing = {
   watch: {
-    promotional: 5, // With Experience Beyond plan
-    standard: 12, // Without promotional plan
+    // Bring Your Own Watch (BYOD)
+    byod: {
+      promotional: 5, // With Experience Beyond plan
+      standard: 10, // Without promotional plan
+      description: 'Bring your own Apple Watch or Galaxy Watch'
+    },
+    // New Watch from T-Mobile
+    new: {
+      promotional: 10, // With Experience Beyond plan
+      standard: 15, // Without promotional plan
+      description: 'New Apple Watch or Galaxy Watch from T-Mobile'
+    },
     connectionFee: 35,
-    description: 'Apple Watch or Galaxy Watch line'
+    maxDevices: 5 // Can have up to 5 watches
   },
   tablet: {
-    promotional: 5, // With Experience Beyond plan
-    standard: 20, // Without promotional plan
+    // Bring Your Own iPad/Tablet (BYOD)
+    byod: {
+      unlimited: {
+        first: 15, // First unlimited data line
+        second: 7.50, // Second is 50% off
+        additional: 15 // 3rd+ at full price
+      },
+      limited: {
+        price: 10, // 10GB data plan
+        dataLimit: '10GB high-speed, then 128Kbps'
+      }
+    },
+    // New iPad/Tablet from T-Mobile
+    new: {
+      unlimited: {
+        first: 20, // First unlimited data line
+        second: 10, // Second is 50% off
+        additional: 20 // 3rd+ at full price
+      },
+      limited: {
+        price: 15, // 10GB data plan
+        dataLimit: '10GB high-speed, then 128Kbps'
+      }
+    },
     connectionFee: 35,
-    dataLimit: '30GB high-speed, then 600Kbps',
-    description: 'iPad or tablet line'
+    maxDevices: 5, // Can have up to 5 tablets
+    description: 'iPad or Android tablet data line'
   },
   homeInternet: {
     promotional: 0, // Free with 2+ lines
