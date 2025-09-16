@@ -50,10 +50,10 @@ body {
   box-shadow: var(--shadow-md);
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 10002; /* Higher than all content including New button */
   max-height: 75px;
   overflow: hidden;
-  pointer-events: none;
+  /* REMOVED pointer-events: none - this was blocking all header clicks! */
 }
 
 .header-content {

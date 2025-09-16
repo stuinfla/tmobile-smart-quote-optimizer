@@ -19,6 +19,8 @@
   flex-direction: column;
   background: #f5f5f5;
   overflow: hidden;
+  z-index: 1; /* Lower than New button (10001) */
+  pointer-events: auto; /* Ensure it receives events for its content */
 }
 
 /* Fixed header with progress */
