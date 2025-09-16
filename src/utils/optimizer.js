@@ -2,6 +2,7 @@ import { phoneData, tradeInValues } from '../data/phoneData';
 import { promotions } from '../data/promotions';
 import { plans, southFloridaTaxes } from '../data/plans_sept_2025';
 import taxConfig from '../data/taxConfig.json';
+import { completePricingDatabase, getPlanPricing, calculateTotalWithDiscounts } from '../data/complete_pricing_database';
 
 export class DealOptimizer {
   constructor(customerData) {
@@ -47,6 +48,25 @@ export class DealOptimizer {
   }
 
   calculatePlanCost(planKey, lineCount) {
+    // First try new pricing structure with qualification
+    if (this.customer.qualification && this.customer.qualification !== 'standard') {
+      const planMapping = {
+        'EXPERIENCE_BEYOND': 'experienceBeyond',
+        'EXPERIENCE_MORE': 'experienceMore',
+        'ESSENTIALS_SAVER': 'essentialsSaver'
+      };
+      
+      const mappedPlan = planMapping[planKey];
+      if (mappedPlan && completePricingDatabase.postpaidPlans[mappedPlan]) {
+        const basePrice = getPlanPricing(mappedPlan, this.customer.qualification, lineCount);
+        if (basePrice !== null) {
+          const hasAutopay = this.customer.autopay !== false; // Default to true
+          return calculateTotalWithDiscounts(mappedPlan, lineCount, this.customer.qualification, hasAutopay);
+        }
+      }
+    }
+    
+    // Fallback to existing pricing structure
     const plan = plans.postpaid[planKey];
     if (!plan) {
       console.error(`Plan ${planKey} not found`);

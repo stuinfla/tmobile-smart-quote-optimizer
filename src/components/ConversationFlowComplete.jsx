@@ -4,10 +4,12 @@ import { plans } from '../data/plans_sept_2025';
 import { insurancePricing, accessoryLinePricing } from '../data/insuranceData';
 import { useSwipeGesture } from '../hooks/useSwipeGesture';
 import EnhancedAccessorySelector from './EnhancedAccessorySelector';
+import CustomerQualification from './CustomerQualification';
+import FinancingSelector from './FinancingSelector';
 import '../styles/insurance-fixes.css';
 
 function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCustomerData }) {
-  const steps = ['lines', 'newPhones', 'currentPhones', 'plan', 'accessoryLines', 'accessoryDevices', 'insurance', 'summary'];
+  const steps = ['qualification', 'lines', 'newPhones', 'financing', 'currentPhones', 'plan', 'accessoryLines', 'accessoryDevices', 'insurance', 'summary'];
   const [isAnimating, setIsAnimating] = useState(false);
   const [direction, setDirection] = useState('forward');
   
@@ -46,8 +48,12 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
 
   const canContinue = () => {
     switch(currentStep) {
+      case 'qualification':
+        return customerData.qualification !== undefined;
       case 'newPhones':
         return customerData.devices.every(d => d.newPhone && d.storage);
+      case 'financing':
+        return customerData.financingTerm !== undefined;
       case 'currentPhones':
         return customerData.devices.every(d => d.currentPhone && d.currentPhone !== '');
       case 'accessoryDevices':
@@ -61,6 +67,22 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
 
   const renderQuestion = () => {
     switch(currentStep) {
+      case 'qualification':
+        return (
+          <div className={`question-card ${isAnimating ? `slide-${direction}` : ''}`}>
+            <CustomerQualification 
+              onQualificationUpdate={(qual) => {
+                setCustomerData({
+                  ...customerData,
+                  qualification: qual.type,
+                  qualificationDetails: qual
+                });
+              }}
+              initialQualification={customerData.qualification || 'standard'}
+            />
+          </div>
+        );
+      
       case 'lines':
         return (
           <div className={`question-card ${isAnimating ? `slide-${direction}` : ''}`}>
@@ -183,6 +205,37 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
                 </div>
               ))}
             </div>
+          </div>
+        );
+
+      case 'financing':
+        // Calculate device retail prices for financing options
+        const devicesWithPrices = customerData.devices.map(device => {
+          if (!device.newPhone) return device;
+          
+          const brand = Object.keys(phoneData.phones).find(b => phoneData.phones[b][device.newPhone]);
+          const phoneInfo = brand ? phoneData.phones[brand][device.newPhone] : null;
+          const storagePrice = phoneInfo?.variants?.[device.storage] || 0;
+          
+          return {
+            ...device,
+            retailPrice: storagePrice
+          };
+        });
+        
+        return (
+          <div className={`question-card ${isAnimating ? `slide-${direction}` : ''}`}>
+            <FinancingSelector 
+              devices={devicesWithPrices}
+              onFinancingUpdate={(financing) => {
+                setCustomerData({
+                  ...customerData,
+                  financingTerm: financing.term,
+                  financingDetails: financing
+                });
+              }}
+              initialFinancing={customerData.financingTerm || '24'}
+            />
           </div>
         );
 
@@ -531,7 +584,18 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
             <div className="summary-card">
               <h3>Your Quote Summary</h3>
               <ul className="summary-list">
+                {customerData.qualification && customerData.qualification !== 'standard' && (
+                  <li style={{color: '#E20074', fontWeight: 'bold'}}>
+                    {customerData.qualification === 'military' && '🎖️ Military Discount'}
+                    {customerData.qualification === 'firstResponder' && '🚑 First Responder Discount'}
+                    {customerData.qualification === 'seniorPlus55' && '👴 55+ Senior Discount'}
+                    {customerData.qualification === 'business' && '💼 Business Account'}
+                  </li>
+                )}
                 <li>{customerData.lines} phone line{customerData.lines > 1 ? 's' : ''}</li>
+                {customerData.financingTerm && (
+                  <li>📆 {customerData.financingTerm}-month device financing (0% APR)</li>
+                )}
                 {customerData.devices.filter(d => d.insurance).length > 0 && (
                   <li>Protection 360 on {customerData.devices.filter(d => d.insurance).length} device{customerData.devices.filter(d => d.insurance).length > 1 ? 's' : ''}</li>
                 )}

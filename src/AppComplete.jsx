@@ -38,7 +38,7 @@ function AppComplete() {
     }
   });
   
-  const [currentStep, setCurrentStep] = useLocalStorage('tmobile-current-step', 'lines');
+  const [currentStep, setCurrentStep] = useLocalStorage('tmobile-current-step', 'qualification');
   const [results, setResults] = useState(null);
   const [showResults, setShowResults] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -298,7 +298,7 @@ function AppComplete() {
   };
 
   const resetFlow = () => {
-    setCurrentStep('lines');
+    setCurrentStep('qualification');
     setCustomerData({
       isExisting: false,
       newCustomer: true,
