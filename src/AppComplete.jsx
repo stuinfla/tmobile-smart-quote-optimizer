@@ -8,7 +8,7 @@ import QuoteGenerator from './components/QuoteGenerator';
 import ProfessionalProposal from './components/ProfessionalProposal';
 import StoreSetup from './components/StoreSetup';
 import RepSwitcher from './components/RepSwitcher';
-import AdminPanelEnhanced from './components/AdminPanelEnhanced';
+import AdminDashboard from './components/AdminDashboard';
 import { useLocalStorage } from './hooks/useLocalStorage';
 import { StoreManager, RepManager, sampleRepData } from './data/storeData';
 import adminStorage from './utils/adminStorage';
@@ -448,7 +448,7 @@ function AppComplete() {
       </footer>
       
       {showAdminPanel && (
-        <AdminPanelEnhanced 
+        <AdminDashboard 
           onClose={() => setShowAdminPanel(false)}
           onStoreSetup={() => setShowStoreSetup(true)}
         />
