@@ -1,0 +1,481 @@
+/* Enhanced Results Display Styles */
+
+.results-section {
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.results-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.results-title {
+  font-size: 1.75rem;
+  color: var(--tmobile-magenta);
+  margin-bottom: 0.5rem;
+}
+
+.results-subtitle {
+  color: var(--tmobile-gray);
+  margin-bottom: 1rem;
+}
+
+.tax-notice {
+  background: rgba(226, 0, 116, 0.05);
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+  color: var(--tmobile-dark-gray);
+}
+
+/* View Toggle Buttons */
+.view-toggle {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.toggle-btn {
+  padding: 0.5rem 1rem;
+  border: 2px solid var(--tmobile-magenta);
+  background: white;
+  color: var(--tmobile-magenta);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.toggle-btn.active {
+  background: var(--tmobile-magenta);
+  color: white;
+}
+
+.toggle-btn:hover:not(.active) {
+  background: rgba(226, 0, 116, 0.05);
+}
+
+/* Scenarios Grid */
+.scenarios-grid {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.scenario-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.scenario-card.best-deal {
+  border: 2px solid var(--tmobile-magenta);
+  box-shadow: 0 4px 16px rgba(226, 0, 116, 0.2);
+}
+
+.scenario-card.expanded {
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.best-badge {
+  position: absolute;
+  top: -10px;
+  right: 20px;
+  background: var(--tmobile-magenta);
+  color: white;
+  padding: 0.25rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.scenario-name {
+  font-size: 1.25rem;
+  color: var(--tmobile-dark-gray);
+  margin-bottom: 1rem;
+}
+
+/* Metrics */
+.scenario-metrics {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .scenario-metrics {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.metric-section {
+  background: rgba(248, 248, 248, 0.5);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.metric-section h4 {
+  color: var(--tmobile-magenta);
+  margin: 0 0 0.75rem 0;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metric-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.metric-row:last-child {
+  border-bottom: none;
+}
+
+.metric-row.total {
+  border-top: 2px solid var(--tmobile-magenta);
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  font-weight: bold;
+}
+
+.metric-row.savings {
+  background: linear-gradient(135deg, #4caf50, #45a049);
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.metric-label {
+  color: var(--tmobile-gray);
+  font-size: 0.9rem;
+}
+
+.metric-value {
+  font-weight: 600;
+  color: var(--tmobile-dark-gray);
+}
+
+.metric-value.large {
+  font-size: 1.25rem;
+  color: var(--tmobile-magenta);
+}
+
+.metric-value.highlight {
+  font-size: 1.1rem;
+}
+
+/* Per-Line Breakdown */
+.per-line-breakdown {
+  padding: 1rem 0;
+}
+
+.per-line-breakdown h4 {
+  color: var(--tmobile-magenta);
+  margin-bottom: 1rem;
+}
+
+.line-breakdown-table {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.table-header {
+  display: grid;
+  grid-template-columns: 60px 2fr 1fr 1fr 1fr 1fr;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--tmobile-magenta);
+  color: white;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.table-row {
+  display: grid;
+  grid-template-columns: 60px 2fr 1fr 1fr 1fr 1fr;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.table-row:hover {
+  background: rgba(226, 0, 116, 0.02);
+}
+
+.line-number {
+  font-weight: 600;
+  color: var(--tmobile-magenta);
+}
+
+.device-name {
+  color: var(--tmobile-dark-gray);
+  font-size: 0.85rem;
+}
+
+.line-total {
+  font-weight: 600;
+  color: var(--tmobile-dark-gray);
+}
+
+.total-row {
+  background: rgba(226, 0, 116, 0.05);
+  font-weight: bold;
+  border-top: 2px solid var(--tmobile-magenta);
+}
+
+.grand-total {
+  color: var(--tmobile-magenta);
+  font-size: 1.1rem;
+}
+
+.simple-breakdown {
+  background: rgba(248, 248, 248, 0.8);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.simple-breakdown p {
+  margin: 0.5rem 0;
+  color: var(--tmobile-gray);
+}
+
+.simple-breakdown .total {
+  font-weight: bold;
+  color: var(--tmobile-dark-gray);
+  font-size: 1.1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* Expand/Collapse Button */
+.expand-toggle {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  background: transparent;
+  border: 1px solid var(--tmobile-magenta);
+  color: var(--tmobile-magenta);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.expand-toggle:hover {
+  background: var(--tmobile-magenta);
+  color: white;
+}
+
+/* Expanded Details */
+.expanded-details {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+  }
+}
+
+.expanded-details > div {
+  margin-bottom: 1.5rem;
+}
+
+.expanded-details h4 {
+  color: var(--tmobile-magenta);
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.expanded-details ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.expanded-details li {
+  padding: 0.5rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  color: var(--tmobile-gray);
+}
+
+.expanded-details li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.promotions-applied {
+  background: rgba(76, 175, 80, 0.05);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.promotion-item {
+  color: #2e7d32;
+}
+
+.device-details {
+  background: rgba(33, 150, 243, 0.05);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.scenario-requirements {
+  background: rgba(255, 152, 0, 0.05);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.tax-breakdown {
+  background: rgba(158, 158, 158, 0.05);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-primary {
+  background: var(--tmobile-magenta);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #c0005c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(226, 0, 116, 0.3);
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--tmobile-magenta);
+  border: 2px solid var(--tmobile-magenta);
+}
+
+.btn-secondary:hover {
+  background: rgba(226, 0, 116, 0.05);
+}
+
+/* Tax Disclaimer */
+.tax-disclaimer {
+  background: rgba(248, 248, 248, 0.8);
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  font-size: 0.85rem;
+}
+
+.tax-disclaimer p {
+  margin: 0 0 0.75rem 0;
+  font-weight: 600;
+  color: var(--tmobile-dark-gray);
+}
+
+.tax-disclaimer ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tax-disclaimer li {
+  padding: 0.25rem 0;
+  padding-left: 1.5rem;
+  position: relative;
+  color: var(--tmobile-gray);
+}
+
+.tax-disclaimer li:before {
+  content: "•";
+  position: absolute;
+  left: 0.5rem;
+  color: var(--tmobile-magenta);
+}
+
+/* Loading State */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(226, 0, 116, 0.2);
+  border-top-color: var(--tmobile-magenta);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading p {
+  margin-top: 1rem;
+  color: var(--tmobile-gray);
+  font-size: 1.1rem;
+}
+
+/* Print Styles */
+@media print {
+  .action-buttons,
+  .view-toggle,
+  .expand-toggle {
+    display: none;
+  }
+  
+  .scenario-card {
+    page-break-inside: avoid;
+  }
+  
+  .expanded-details {
+    display: block !important;
+  }
+}

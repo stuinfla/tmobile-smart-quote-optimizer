@@ -1,0 +1,120 @@
+/* Global Input Fixes - Ensure text is always visible */
+
+/* Fix for ALL input types across the entire app */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+input[type="url"],
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input:not([type]),
+textarea,
+select {
+  color: #333 !important;
+  background-color: white !important;
+  -webkit-text-fill-color: #333 !important; /* Safari fix */
+}
+
+/* Ensure placeholder text is visible */
+input::placeholder,
+textarea::placeholder {
+  color: #999 !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #999 !important;
+}
+
+/* Fix for autofill styles */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #333 !important;
+  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+  box-shadow: 0 0 0px 1000px white inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Ensure focused inputs maintain visibility */
+input:focus,
+textarea:focus,
+select:focus {
+  color: #333 !important;
+  background-color: white !important;
+  outline-color: var(--tmobile-magenta, #E20074) !important;
+}
+
+/* Fix for disabled inputs */
+input:disabled,
+textarea:disabled,
+select:disabled {
+  color: #666 !important;
+  background-color: #f5f5f5 !important;
+  opacity: 0.7 !important;
+}
+
+/* Specific fixes for form controls */
+.input-field,
+.input-control,
+.form-control,
+.form-input,
+.password-input,
+.customer-input {
+  color: #333 !important;
+  background-color: white !important;
+}
+
+/* Select dropdown fixes */
+select option {
+  color: #333 !important;
+  background-color: white !important;
+}
+
+select optgroup {
+  color: #666 !important;
+  font-weight: bold;
+}
+
+/* Checkbox and Radio button label text */
+label {
+  color: #333 !important;
+}
+
+/* Fix for any custom styled inputs */
+.MuiInputBase-input,
+.ant-input,
+.form-control,
+[class*="input"],
+[class*="Input"] {
+  color: #333 !important;
+  background-color: white !important;
+}
+
+/* Dark mode override - ensure inputs stay light */
+@media (prefers-color-scheme: dark) {
+  input,
+  textarea,
+  select {
+    color: #333 !important;
+    background-color: white !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  input,
+  textarea,
+  select {
+    color: black !important;
+    background-color: white !important;
+    border: 2px solid black !important;
+  }
+}

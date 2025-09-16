@@ -1,0 +1,196 @@
+/* Floating Continue Button Styles */
+
+.floating-continue-container {
+  position: fixed;
+  bottom: 60px; /* Above the footer */
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1rem;
+  background: linear-gradient(to top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 70%, transparent 100%);
+  pointer-events: none;
+}
+
+.floating-continue-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+  pointer-events: all;
+}
+
+.floating-continue-btn {
+  width: 100%;
+  padding: 1rem 2rem;
+  background: var(--tmobile-magenta);
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(226, 0, 116, 0.3);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.floating-continue-btn:hover {
+  background: #c0005c;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(226, 0, 116, 0.4);
+}
+
+.floating-continue-btn:active {
+  transform: translateY(0);
+}
+
+.floating-continue-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Back button when available */
+.floating-buttons-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.floating-back-btn {
+  flex: 0 0 auto;
+  padding: 1rem;
+  background: white;
+  color: var(--tmobile-magenta);
+  border: 2px solid var(--tmobile-magenta);
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  min-width: 100px;
+}
+
+.floating-back-btn:hover {
+  background: rgba(226, 0, 116, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.floating-continue-btn-with-back {
+  flex: 1;
+}
+
+/* Skip button styling */
+.floating-skip-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: transparent;
+  color: #666;
+  border: none;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-top: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.floating-skip-btn:hover {
+  color: var(--tmobile-magenta);
+}
+
+/* Animation for button appearance */
+@keyframes slideUp {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.floating-continue-container {
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Adjust main content to account for floating button */
+.question-card {
+  padding-bottom: 120px !important; /* Give space for floating button */
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .floating-continue-container {
+    padding: 0.75rem;
+    bottom: 50px; /* Adjust for mobile footer */
+  }
+  
+  .floating-continue-btn {
+    padding: 0.9rem 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .floating-back-btn {
+    min-width: 80px;
+    padding: 0.9rem 1rem;
+  }
+  
+  .question-card {
+    padding-bottom: 100px !important;
+  }
+}
+
+/* For iOS Safari - handle safe areas */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .floating-continue-container {
+    padding-bottom: calc(1rem + env(safe-area-inset-bottom));
+    bottom: calc(60px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Ensure content doesn't get hidden behind button */
+.conversation-container {
+  padding-bottom: 150px;
+}
+
+/* Special handling for steps with multiple buttons */
+.floating-multi-action {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.floating-primary-action {
+  width: 100%;
+}
+
+.floating-secondary-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.floating-secondary-btn {
+  padding: 0.5rem 1rem;
+  background: white;
+  color: var(--tmobile-gray);
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.floating-secondary-btn:hover {
+  border-color: var(--tmobile-magenta);
+  color: var(--tmobile-magenta);
+}
+
+/* Hide original continue buttons when floating is active */
+.hide-when-floating {
+  display: none !important;
+}

@@ -63,7 +63,7 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
   const fileInputRef = useRef(null);
   const photoInputRef = useRef(null);
 
-  const ADMIN_PASSWORD = 'YF2015';
+  const ADMIN_PASSWORD = 'admin185';
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -1246,6 +1246,8 @@ function AdminPanelEnhanced({ onClose, onStoreSetup }) {
             border-radius: 10px !important;
             box-sizing: border-box !important;
             transition: all 0.2s ease;
+            color: #333 !important;
+            background: white !important;
           }
 
           .password-input:focus {

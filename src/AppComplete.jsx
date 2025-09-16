@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import './App.css';
 import './App.enhanced.css';
-import { DealOptimizer } from './utils/optimizerFixed';
+import { DealOptimizer } from './utils/optimizerEnhanced';
 import ConversationFlowComplete from './components/ConversationFlowComplete';
-import ResultsDisplayEnhanced from './components/ResultsDisplayEnhanced';
+import ResultsDisplayComplete from './components/ResultsDisplayComplete';
 import QuoteGenerator from './components/QuoteGenerator';
+import ProfessionalProposal from './components/ProfessionalProposal';
 import StoreSetup from './components/StoreSetup';
 import RepSwitcher from './components/RepSwitcher';
 import AdminPanelEnhanced from './components/AdminPanelEnhanced';
@@ -41,6 +42,7 @@ function AppComplete() {
   const [currentStep, setCurrentStep] = useLocalStorage('tmobile-current-step', 'qualification');
   const [results, setResults] = useState(null);
   const [showResults, setShowResults] = useState(false);
+  const [showProposal, setShowProposal] = useState(false);
   const [saved, setSaved] = useState(false);
   const [updateAvailable, setUpdateAvailable] = useState(false);
 
@@ -368,41 +370,41 @@ function AppComplete() {
           </>
         ) : (
           <>
-            <ResultsDisplayEnhanced 
-              results={results}
-              customerData={customerData}
-            />
-            <QuoteGenerator
-              results={results}
-              customerData={customerData}
-              repInfo={{
-                name: currentRep?.name,
-                storeId: storeInfo?.storeId,
-                email: currentRep?.email,
-                phone: currentRep?.phone || storeInfo?.phone
-              }}
-            />
-            
-            <div className="action-buttons">
-              <button className="btn btn-secondary" onClick={resetFlow}>
-                New Quote
-              </button>
-              <button 
-                className="btn btn-primary" 
-                onClick={() => {
-                  window.print();
-                  if (navigator.share) {
-                    navigator.share({
-                      title: 'T-Mobile Quote',
-                      text: `Your T-Mobile quote saves you $${results[0].totalSavings}!`,
-                      url: window.location.href
-                    });
-                  }
+            {!showProposal ? (
+              <>
+                <ResultsDisplayComplete 
+                  results={results}
+                  customerData={customerData}
+                />
+                
+                <div className="action-buttons" style={{display: 'flex', gap: '1rem', justifyContent: 'center', margin: '2rem 0'}}>
+                  <button className="btn btn-secondary" onClick={resetFlow}>
+                    New Quote
+                  </button>
+                  <button 
+                    className="btn btn-primary" 
+                    onClick={() => setShowProposal(true)}
+                  >
+                    Create Professional Proposal
+                  </button>
+                </div>
+              </>
+            ) : (
+              <ProfessionalProposal
+                results={results}
+                customerData={customerData}
+                repInfo={{
+                  name: currentRep?.name || 'T-Mobile Representative',
+                  email: currentRep?.email || 'sales@t-mobile.com',
+                  phone: currentRep?.phone || storeInfo?.phone || '1-800-T-MOBILE'
                 }}
-              >
-                Print/Share Quote
-              </button>
-            </div>
+                storeInfo={{
+                  name: storeInfo?.storeName || 'T-Mobile Store',
+                  address: storeInfo?.address || ''
+                }}
+                onClose={() => setShowProposal(false)}
+              />
+            )}
           </>
         )}
       </main>
@@ -420,6 +422,9 @@ function AppComplete() {
         <div className="version-info">
           v{versionInfo.version} • Released {versionInfo.releaseDate}
           {updateAvailable && <span className="update-notice"> • Update available!</span>}
+        </div>
+        <div className="copyright-info">
+          © 2025 Created by ISOVision.ai for T-Mobile Corporate • Stuart Kerr • sikerr@gmail.com • (312) 953-9668
         </div>
       </footer>
       
@@ -589,6 +594,12 @@ function AppComplete() {
           padding: 0.5rem;
           text-align: center;
           z-index: 10;
+        }
+        
+        .copyright-info {
+          font-size: 0.75rem;
+          color: #999;
+          margin-top: 0.25rem;
         }
         
         .version-info {

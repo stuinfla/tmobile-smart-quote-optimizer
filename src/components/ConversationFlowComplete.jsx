@@ -6,6 +6,7 @@ import { useSwipeGesture } from '../hooks/useSwipeGesture';
 import EnhancedAccessorySelector from './EnhancedAccessorySelector';
 import CustomerQualification from './CustomerQualification';
 import FinancingSelector from './FinancingSelector';
+import FloatingContinueButton from './FloatingContinueButton';
 import '../styles/insurance-fixes.css';
 
 function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCustomerData }) {
@@ -240,10 +241,35 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
         );
 
       case 'insurance':
+        const allLinesInsured = customerData.devices.every(d => d.insurance);
+        const noLinesInsured = customerData.devices.every(d => !d.insurance);
+        
         return (
           <div className={`question-card ${isAnimating ? `slide-${direction}` : ''}`}>
             <h2 className="question-text">Protect your devices with Protection 360?</h2>
             <p className="sub-text">Covers damage, loss, theft + McAfee Security</p>
+            
+            {/* All Lines Toggle */}
+            <div className="all-lines-toggle">
+              <button
+                className={`toggle-all-btn ${allLinesInsured ? 'active' : ''}`}
+                onClick={() => {
+                  const newDevices = customerData.devices.map(d => ({...d, insurance: true}));
+                  setCustomerData({...customerData, devices: newDevices});
+                }}
+              >
+                Protect All Lines
+              </button>
+              <button
+                className={`toggle-all-btn ${noLinesInsured ? 'active' : ''}`}
+                onClick={() => {
+                  const newDevices = customerData.devices.map(d => ({...d, insurance: false}));
+                  setCustomerData({...customerData, devices: newDevices});
+                }}
+              >
+                Skip Insurance
+              </button>
+            </div>
             
             <div className="insurance-selector">
               {customerData.devices.map((device, index) => {
@@ -261,22 +287,20 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
                     </div>
                     
                     <div className="insurance-toggle">
-                      <label style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-                        <input
-                          type="checkbox"
-                          checked={device.insurance || false}
-                          onChange={(e) => {
-                            const newDevices = [...customerData.devices];
-                            newDevices[index].insurance = e.target.checked;
-                            setCustomerData({...customerData, devices: newDevices});
-                          }}
-                          style={{width: '20px', height: '20px'}}
-                        />
-                        <div>
+                      <button
+                        className={`insurance-btn ${device.insurance ? 'active' : ''}`}
+                        onClick={() => {
+                          const newDevices = [...customerData.devices];
+                          newDevices[index].insurance = !newDevices[index].insurance;
+                          setCustomerData({...customerData, devices: newDevices});
+                        }}
+                      >
+                        <span className="checkbox-icon">{device.insurance ? '✓' : ''}</span>
+                        <div className="insurance-details">
                           <span className="price">${insuranceInfo.monthly}/mo</span>
-                          <span className="deductible" style={{display: 'block', fontSize: '0.9em'}}>$0 screen repair</span>
+                          <span className="deductible">$0 screen repair</span>
                         </div>
-                      </label>
+                      </button>
                     </div>
                   </div>
                 );
