@@ -1,6 +1,6 @@
 {
-  "timestamp": "2025-09-16T18:34:29.162Z",
-  "version": "v2.6.12 • Released 2025-09-16",
+  "timestamp": "2025-09-16T18:51:19.946Z",
+  "version": "v2.6.13 • Released 2025-09-16",
   "gearPosition": {
     "x": 325,
     "y": 784,
@@ -14,7 +14,7 @@
     "height": 75
   },
   "recommendations": [
-    "✅ Version display is correct (shows full 2.6.12)",
+    "⚠️ Version might still be truncated - shows 2.6 instead of 2.6.12",
     "🔧 Gear button STILL overlaps footer - needs to be moved up by at least 75px",
     "   Suggested CSS: bottom: 175px",
     "\n🎨 UI IMPROVEMENT SUGGESTIONS:",
