@@ -192,6 +192,8 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
                 onClick={() => {
                   const newDevices = customerData.devices.map(d => ({...d, insurance: true}));
                   setCustomerData({...customerData, devices: newDevices});
+                  // Advance to next step after updating state
+                  setTimeout(() => onAnswer('continue', 'insurance'), 400);
                 }}
               >
                 Protect All Lines
@@ -201,6 +203,8 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
                 onClick={() => {
                   const newDevices = customerData.devices.map(d => ({...d, insurance: false}));
                   setCustomerData({...customerData, devices: newDevices});
+                  // Advance to next step after updating state
+                  setTimeout(() => onAnswer('continue', 'insurance'), 400);
                 }}
               >
                 Skip Insurance
