@@ -3,6 +3,7 @@ import '../styles/compact-ui.css';
 
 const tradeInOptions = [
   { id: 'keep', name: 'Keep & Switch', desc: 'Up to $800 credit', icon: '💰' },
+  { id: 'iPhone_17_Pro', name: 'iPhone 17 Pro', desc: 'Up to $1000 trade', icon: '📱' },
   { id: 'iPhone_16_Pro', name: 'iPhone 16 Pro', desc: 'Up to $1000 trade', icon: '📱' },
   { id: 'iPhone_16', name: 'iPhone 16', desc: 'Up to $800 trade', icon: '📱' },
   { id: 'Galaxy_S25', name: 'Galaxy S25', desc: 'Up to $800 trade', icon: '📱' },
@@ -165,7 +166,7 @@ function CompactTradeInSelector({ devices, onDevicesUpdate, onContinue, isCompet
               </button>
             )}
             <button
-              onClick={() => handleQuickSelect('iPhone_15_Pro')}
+              onClick={() => handleQuickSelect('iPhone_17_Pro')}
               style={{
                 padding: '0.5rem 1rem',
                 background: isCompetitor ? 'white' : '#e20074',
@@ -177,7 +178,7 @@ function CompactTradeInSelector({ devices, onDevicesUpdate, onContinue, isCompet
                 cursor: 'pointer'
               }}
             >
-              All iPhone 15 Pro
+              All iPhone 17 Pro
             </button>
             <button
               onClick={() => handleQuickSelect('no_trade')}

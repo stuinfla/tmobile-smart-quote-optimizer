@@ -10,7 +10,10 @@ const brands = [
 const models = {
   iPhone: [
     { id: 'iPhone_17', name: 'iPhone 17', price: '$829.99', storageOptions: ['128GB', '256GB', '512GB'] },
-    { id: 'iPhone_17_Pro', name: 'iPhone 17 Pro', price: '$1099.99', storageOptions: ['128GB', '256GB', '512GB', '1TB'] }
+    { id: 'iPhone_17_Plus', name: 'iPhone 17 Plus', price: '$929.99', storageOptions: ['128GB', '256GB', '512GB'] },
+    { id: 'iPhone_17_Air', name: 'iPhone 17 Air', price: '$999.99', storageOptions: ['128GB', '256GB', '512GB'] },
+    { id: 'iPhone_17_Pro', name: 'iPhone 17 Pro', price: '$1099.99', storageOptions: ['128GB', '256GB', '512GB', '1TB'] },
+    { id: 'iPhone_17_Pro_Max', name: 'iPhone 17 Pro Max', price: '$1199.99', storageOptions: ['256GB', '512GB', '1TB'] }
   ],
   Galaxy: [
     { id: 'Galaxy_S25', name: 'Galaxy S25', price: '$799.99', storageOptions: ['128GB', '256GB'] },
@@ -25,8 +28,8 @@ const models = {
 function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, step }) {
   const [selections, setSelections] = useState(
     devices.map(d => ({
-      model: d.newPhone || 'iPhone_17_Pro',
-      storage: d.storage || '128GB'
+      model: d.newPhone || 'iPhone_17',
+      storage: d.storage || '256GB'
     }))
   );
 

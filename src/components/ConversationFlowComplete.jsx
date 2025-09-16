@@ -108,13 +108,22 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
         return (
           <CustomerTypeSelector
             onSelect={(data) => {
-              setCustomerData({
+              // Update customer data
+              const newCustomerData = {
                 ...customerData,
                 isExisting: data.type === 'existing',
                 newCustomer: data.type === 'new',
                 discountCategory: data.category
-              });
-              handleContinue();
+              };
+              setCustomerData(newCustomerData);
+              
+              // Navigate to next step directly without checking canContinue
+              // since we know the data is valid if onSelect was called
+              const currentIndex = steps.indexOf(currentStep);
+              if (currentIndex < steps.length - 1) {
+                const nextStep = steps[currentIndex + 1];
+                onAnswer('continue', nextStep);
+              }
             }}
             onNext={handleContinue}
           />

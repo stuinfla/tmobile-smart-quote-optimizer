@@ -12,12 +12,14 @@ const CustomerTypeSelector = ({ onSelect }) => {
   };
 
   const handleComplete = () => {
-    console.log('Continue clicked:', { customerStatus, discountCategory });
     if (customerStatus && discountCategory) {
-      onSelect({
-        type: customerStatus,
-        category: discountCategory
-      });
+      if (typeof onSelect === 'function') {
+        // Call onSelect which will set the data and then call handleContinue
+        onSelect({
+          type: customerStatus,
+          category: discountCategory
+        });
+      }
     }
   };
 
