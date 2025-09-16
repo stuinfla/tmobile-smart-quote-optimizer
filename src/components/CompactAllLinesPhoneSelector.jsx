@@ -99,14 +99,7 @@ function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, on
 
   const allSelected = selections.every(s => s.model && s.storage);
 
-  // Auto-advance when all selections are complete
-  useEffect(() => {
-    if (allSelected && onContinue) {
-      setTimeout(() => {
-        onContinue();
-      }, 800); // Brief delay to let user see their selection
-    }
-  }, [allSelected, onContinue]);
+  // Let flow controller handle advancement - just update state
 
   return (
     <div style={{

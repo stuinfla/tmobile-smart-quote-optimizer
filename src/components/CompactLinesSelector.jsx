@@ -21,12 +21,7 @@ function CompactLinesSelector({ onLinesUpdate, initialLines, onContinue, onBack 
       devices
     });
 
-    // Auto-advance after 300ms
-    setTimeout(() => {
-      if (onContinue) {
-        onContinue();
-      }
-    }, 300);
+    // Update parent state only - let flow controller handle advancement
   };
 
   return (
@@ -218,19 +213,33 @@ function CompactLinesSelector({ onLinesUpdate, initialLines, onContinue, onBack 
           </div>
         </div>
 
-        {/* Selected message */}
+        {/* Continue button when selection made */}
         {selected && (
           <div style={{
             marginTop: '1rem',
-            padding: '0.75rem',
-            background: '#e20074',
-            color: 'white',
-            borderRadius: '8px',
-            textAlign: 'center',
-            fontSize: '0.9rem',
-            fontWeight: '600'
+            textAlign: 'center'
           }}>
-            ✓ {selected} {selected === 1 ? 'line' : 'lines'} selected - navigating...
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (onContinue) onContinue();
+              }}
+              style={{
+                background: '#e20074',
+                color: 'white',
+                border: 'none',
+                borderRadius: '25px',
+                padding: '12px 24px',
+                fontSize: '16px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                boxShadow: '0 4px 12px rgba(226, 0, 116, 0.3)',
+                transition: 'all 0.2s ease'
+              }}
+            >
+              Continue with {selected} {selected === 1 ? 'line' : 'lines'} →
+            </button>
           </div>
         )}
       </div>

@@ -8,12 +8,7 @@ function CompactFinancingSelector({ onFinancingUpdate, initialTerm, onContinue }
     setSelected(term);
     onFinancingUpdate(term);
     
-    // Auto-advance after 300ms
-    setTimeout(() => {
-      if (onContinue) {
-        onContinue();
-      }
-    }, 300);
+    // Update state only - let flow controller handle advancement
   };
 
   return (
@@ -74,24 +69,40 @@ function CompactFinancingSelector({ onFinancingUpdate, initialTerm, onContinue }
         </div>
       </div>
 
-      {/* Auto-advance indicator */}
-      {selected && (
-        <div style={{
-          position: 'fixed',
-          bottom: '100px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          background: '#22c55e',
-          color: 'white',
-          padding: '0.5rem 1rem',
-          borderRadius: '20px',
-          fontSize: '0.9rem',
-          fontWeight: 600,
-          zIndex: 1000
-        }}>
-          ✓ Complete - Moving forward...
-        </div>
-      )}
+      {/* Continue button */}
+      <div style={{
+        background: 'white',
+        borderTop: '1px solid #e0e0e0',
+        padding: '1rem',
+        zIndex: 1000,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}>
+        <button 
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (onContinue) onContinue();
+          }}
+          disabled={!selected}
+          style={{
+            width: '100%',
+            maxWidth: '400px',
+            padding: '0.875rem',
+            background: selected ? '#e20074' : '#ccc',
+            color: 'white',
+            border: 'none',
+            borderRadius: '25px',
+            fontSize: '1rem',
+            fontWeight: 600,
+            cursor: selected ? 'pointer' : 'not-allowed',
+            transition: 'all 0.2s ease'
+          }}
+        >
+          Continue →
+        </button>
+      </div>
     </div>
   );
 }

@@ -22,10 +22,7 @@ function CompactPhoneSelector({ devices, onDevicesUpdate, onContinue, step }) {
     newDevices[deviceIndex].storage = storage;
     onDevicesUpdate(newDevices);
     
-    // Check if all devices are complete
-    if (newDevices.every(d => d.newPhone && d.storage)) {
-      setTimeout(() => onContinue && onContinue(), 300);
-    }
+    // Update state only - let flow controller handle advancement
   };
 
   const handleQuickSelect = (phoneId, storage) => {
@@ -35,7 +32,7 @@ function CompactPhoneSelector({ devices, onDevicesUpdate, onContinue, step }) {
       storage: storage
     }));
     onDevicesUpdate(newDevices);
-    setTimeout(() => onContinue && onContinue(), 300);
+    // Let flow controller handle advancement
   };
 
   const getPhoneInfo = (phoneId) => {
@@ -137,24 +134,40 @@ function CompactPhoneSelector({ devices, onDevicesUpdate, onContinue, step }) {
         </div>
       </div>
 
-      {/* Auto-advance indicator */}
-      {devices.every(d => d.newPhone && d.storage) && (
-        <div style={{
-          position: 'fixed',
-          bottom: '100px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          background: '#22c55e',
-          color: 'white',
-          padding: '0.5rem 1rem',
-          borderRadius: '20px',
-          fontSize: '0.9rem',
-          fontWeight: 600,
-          zIndex: 1000
-        }}>
-          ✓ Complete - Moving forward...
-        </div>
-      )}
+      {/* Continue button */}
+      <div style={{
+        background: 'white',
+        borderTop: '1px solid #e0e0e0',
+        padding: '1rem',
+        zIndex: 1000,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}>
+        <button 
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (onContinue) onContinue();
+          }}
+          disabled={!devices.every(d => d.newPhone && d.storage)}
+          style={{
+            width: '100%',
+            maxWidth: '400px',
+            padding: '0.875rem',
+            background: devices.every(d => d.newPhone && d.storage) ? '#e20074' : '#ccc',
+            color: 'white',
+            border: 'none',
+            borderRadius: '25px',
+            fontSize: '1rem',
+            fontWeight: 600,
+            cursor: devices.every(d => d.newPhone && d.storage) ? 'pointer' : 'not-allowed',
+            transition: 'all 0.2s ease'
+          }}
+        >
+          Continue →
+        </button>
+      </div>
     </div>
   );
 }

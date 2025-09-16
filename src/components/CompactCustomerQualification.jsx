@@ -56,12 +56,7 @@ function CompactCustomerQualification({ onQualificationUpdate, initialQualificat
       description: qualification.desc
     });
 
-    // Auto-advance after 300ms
-    setTimeout(() => {
-      if (onContinue) {
-        onContinue();
-      }
-    }, 300);
+    // Update state only - let flow controller handle advancement
   };
 
   useEffect(() => {

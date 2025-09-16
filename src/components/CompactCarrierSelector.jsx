@@ -23,12 +23,7 @@ function CompactCarrierSelector({ onCarrierUpdate, initialCarrier, onContinue, o
       defaultTradeIn: isCompetitor ? 'keep' : 'trade'
     });
     
-    // Auto-advance after 300ms
-    setTimeout(() => {
-      if (onContinue) {
-        onContinue();
-      }
-    }, 300);
+    // Update parent state only - let flow controller handle advancement
   };
 
   return (
@@ -135,22 +130,36 @@ function CompactCarrierSelector({ onCarrierUpdate, initialCarrier, onContinue, o
         </div>
       </div>
 
-      {/* Auto-advance when selection made */}
+      {/* Continue button when selection made */}
       {selected && (
         <div style={{
           position: 'fixed',
-          bottom: '100px',
+          bottom: '20px',
           left: '50%',
           transform: 'translateX(-50%)',
-          background: '#22c55e',
-          color: 'white',
-          padding: '0.5rem 1rem',
-          borderRadius: '20px',
-          fontSize: '0.9rem',
-          fontWeight: 600,
           zIndex: 1000
         }}>
-          ✓ Complete - Moving forward...
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (onContinue) onContinue();
+            }}
+            style={{
+              background: '#e20074',
+              color: 'white',
+              border: 'none',
+              borderRadius: '25px',
+              padding: '12px 24px',
+              fontSize: '16px',
+              fontWeight: 600,
+              cursor: 'pointer',
+              boxShadow: '0 4px 12px rgba(226, 0, 116, 0.3)',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            Continue →
+          </button>
         </div>
       )}
     </div>
