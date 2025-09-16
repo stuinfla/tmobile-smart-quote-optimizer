@@ -6,6 +6,9 @@ import { useSwipeGesture } from '../hooks/useSwipeGesture';
 import EnhancedAccessorySelector from './EnhancedAccessorySelector';
 import CustomerQualification from './CustomerQualification';
 import CompactCustomerQualification from './CompactCustomerQualification';
+import CompactLinesSelector from './CompactLinesSelector';
+import CompactPhoneSelector from './CompactPhoneSelector';
+import CompactFinancingSelector from './CompactFinancingSelector';
 import FinancingSelector from './FinancingSelector';
 import FloatingContinueButton from './FloatingContinueButton';
 import '../styles/insurance-fixes.css';
@@ -87,158 +90,43 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
       
       case 'lines':
         return (
-          <div className={`question-card ${isAnimating ? `slide-${direction}` : ''}`}>
-            <h2 className="question-text">How many phone lines do you need?</h2>
-            <div className="quick-select">
-              <button className="quick-btn" onClick={() => {
-                const newData = {...customerData, lines: 1, devices: [{ currentPhone: '', newPhone: '', storage: '', insurance: false }]};
-                setCustomerData(newData);
-                setTimeout(() => onAnswer('continue', 'newPhones'), 400);
-              }}>Single</button>
-              <button className="quick-btn popular" onClick={() => {
-                const newData = {...customerData, lines: 2, devices: Array(2).fill().map(() => ({ currentPhone: '', newPhone: '', storage: '', insurance: false }))};
-                setCustomerData(newData);
-                setTimeout(() => onAnswer('continue', 'newPhones'), 400);
-              }}>Couple</button>
-              <button className="quick-btn best-value" onClick={() => {
-                const newData = {...customerData, lines: 4, devices: Array(4).fill().map(() => ({ currentPhone: '', newPhone: '', storage: '', insurance: false }))};
-                setCustomerData(newData);
-                setTimeout(() => onAnswer('continue', 'newPhones'), 400);
-              }}>Family</button>
-            </div>
-            <div className="answer-options">
-              {[1, 2, 3, 4, 5].map(num => (
-                <button 
-                  key={num}
-                  className={`option-button ${customerData.lines === num ? 'selected' : ''}`}
-                  onClick={() => {
-                    const newData = {
-                      ...customerData, 
-                      lines: num,
-                      devices: Array(num).fill().map((_, i) => 
-                        customerData.devices[i] || { currentPhone: '', newPhone: '', storage: '', insurance: false }
-                      )
-                    };
-                    setCustomerData(newData);
-                    setTimeout(() => onAnswer('continue', 'newPhones'), 400);
-                  }}
-                >
-                  <div style={{fontSize: '1.25rem', fontWeight: 'bold'}}>{num} {num === 1 ? 'Line' : 'Lines'}</div>
-                  {num >= 3 && <span className="badge-free">3rd FREE!</span>}
-                  <div className="price-preview">
-                    ${(plans.postpaid.EXPERIENCE_BEYOND.pricing[num] * num).toFixed(0)}/mo total
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
+          <CompactLinesSelector
+            onLinesUpdate={(data) => {
+              setCustomerData({
+                ...customerData,
+                lines: data.lines,
+                devices: data.devices
+              });
+            }}
+            initialLines={customerData.lines}
+            onContinue={handleContinue}
+          />
         );
 
       case 'newPhones':
         return (
-          <div className={`question-card ${isAnimating ? `slide-${direction}` : ''}`}>
-            <h2 className="question-text">Which new phones would you like?</h2>
-            <div className="popular-picks">
-              <span className="label">Popular picks:</span>
-              <button className="pick-btn" onClick={() => {
-                const newDevices = customerData.devices.map(() => ({
-                  currentPhone: '',
-                  newPhone: 'iPhone_17',
-                  storage: '256GB',
-                  insurance: false
-                }));
-                setCustomerData({...customerData, devices: newDevices});
-              }}>All iPhone 17</button>
-              <button className="pick-btn" onClick={() => {
-                const newDevices = customerData.devices.map(() => ({
-                  currentPhone: '',
-                  newPhone: 'Galaxy_S25',
-                  storage: '256GB',
-                  insurance: false
-                }));
-                setCustomerData({...customerData, devices: newDevices});
-              }}>All Galaxy S25</button>
-            </div>
-            <div className="device-selector">
-              {customerData.devices.map((device, index) => (
-                <div key={index} className="device-card animated">
-                  <div className="input-group">
-                    <label className="input-label">Line {index + 1}</label>
-                    <select 
-                      className="input-field"
-                      value={device.newPhone}
-                      onChange={(e) => {
-                        const newDevices = [...customerData.devices];
-                        newDevices[index].newPhone = e.target.value;
-                        newDevices[index].storage = '';  // Clear storage when phone changes
-                        setCustomerData({...customerData, devices: newDevices});
-                      }}
-                    >
-                      <option value="">Select phone...</option>
-                      {Object.entries(phoneData.phones).map(([brand, phones]) => (
-                        <optgroup key={brand} label={brand.charAt(0).toUpperCase() + brand.slice(1)}>
-                          {Object.entries(phones).map(([key, phone]) => (
-                            <option key={key} value={key}>
-                              {phone.name} - from ${Object.values(phone.variants)[0]}
-                            </option>
-                          ))}
-                        </optgroup>
-                      ))}
-                    </select>
-                  </div>
-                  {device.newPhone && phoneData.phones[Object.keys(phoneData.phones).find(b => phoneData.phones[b][device.newPhone])]?.[device.newPhone] && (
-                    <div className="input-group storage-selector">
-                      {Object.entries(phoneData.phones[Object.keys(phoneData.phones).find(b => phoneData.phones[b][device.newPhone])][device.newPhone].variants).map(([storage, price]) => (
-                        <button
-                          key={storage}
-                          className={`storage-btn ${device.storage === storage ? 'selected' : ''}`}
-                          onClick={() => {
-                            const newDevices = [...customerData.devices];
-                            newDevices[index].storage = storage;
-                            setCustomerData({...customerData, devices: newDevices});
-                          }}
-                        >
-                          <span className="storage-size">{storage}</span>
-                          <span className="storage-price">${price}</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+          <CompactPhoneSelector
+            devices={customerData.devices}
+            onDevicesUpdate={(newDevices) => {
+              setCustomerData({...customerData, devices: newDevices});
+            }}
+            onContinue={handleContinue}
+            step="newPhones"
+          />
         );
 
       case 'financing':
-        // Calculate device retail prices for financing options
-        const devicesWithPrices = customerData.devices.map(device => {
-          if (!device.newPhone) return device;
-          
-          const brand = Object.keys(phoneData.phones).find(b => phoneData.phones[b][device.newPhone]);
-          const phoneInfo = brand ? phoneData.phones[brand][device.newPhone] : null;
-          const storagePrice = phoneInfo?.variants?.[device.storage] || 0;
-          
-          return {
-            ...device,
-            retailPrice: storagePrice
-          };
-        });
-        
         return (
-          <div className={`question-card ${isAnimating ? `slide-${direction}` : ''}`}>
-            <FinancingSelector 
-              devices={devicesWithPrices}
-              onFinancingUpdate={(financing) => {
-                setCustomerData({
-                  ...customerData,
-                  financingTerm: financing.term,
-                  financingDetails: financing
-                });
-              }}
-              initialFinancing={customerData.financingTerm || '24'}
-            />
-          </div>
+          <CompactFinancingSelector
+            onFinancingUpdate={(term) => {
+              setCustomerData({
+                ...customerData,
+                financingTerm: term
+              });
+            }}
+            initialTerm={customerData.financingTerm}
+            onContinue={handleContinue}
+          />
         );
 
       case 'insurance':

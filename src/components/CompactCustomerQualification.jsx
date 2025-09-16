@@ -86,7 +86,7 @@ function CompactCustomerQualification({ onQualificationUpdate, initialQualificat
         <div className="progress-bar-compact">
           <div className="progress-fill-compact" style={{ width: '10%' }} />
         </div>
-        <div style={{ fontSize: '0.75rem', color: '#666', textAlign: 'center' }}>
+        <div style={{ fontSize: '0.75rem', color: '#666', textAlign: 'center', marginTop: '2px' }}>
           Step 1 of 10
         </div>
       </div>
@@ -127,11 +127,9 @@ function CompactCustomerQualification({ onQualificationUpdate, initialQualificat
         >
           Continue →
         </button>
-      </div>
-
-      {/* Minimal version footer */}
-      <div className="version-footer-compact">
-        v2.5.1
+        <div className="version-footer-compact">
+          v2.6.0
+        </div>
       </div>
     </div>
   );
