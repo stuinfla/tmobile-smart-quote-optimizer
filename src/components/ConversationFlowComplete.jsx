@@ -140,6 +140,7 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
             }}
             initialLines={customerData.lines}
             onContinue={handleContinue}
+            onBack={handleBack}
           />
         );
 
@@ -156,6 +157,7 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
             }}
             initialCarrier={customerData.carrier}
             onContinue={handleContinue}
+            onBack={handleBack}
           />
         );
 

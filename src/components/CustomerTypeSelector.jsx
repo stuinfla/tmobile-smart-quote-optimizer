@@ -11,14 +11,22 @@ const CustomerTypeSelector = ({ onSelect }) => {
     setDiscountCategory(null);
   };
 
-  const handleComplete = () => {
+  const handleComplete = (e) => {
+    // Prevent any default behavior
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
     if (customerStatus && discountCategory) {
       if (typeof onSelect === 'function') {
-        // Call onSelect which will set the data and then call handleContinue
-        onSelect({
-          type: customerStatus,
-          category: discountCategory
-        });
+        // Use setTimeout to ensure Safari handles this properly
+        setTimeout(() => {
+          onSelect({
+            type: customerStatus,
+            category: discountCategory
+          });
+        }, 0);
       }
     }
   };

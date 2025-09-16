@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import '../styles/compact-ui.css';
 
-function CompactCarrierSelector({ onCarrierUpdate, initialCarrier, onContinue }) {
+function CompactCarrierSelector({ onCarrierUpdate, initialCarrier, onContinue, onBack }) {
   const [selected, setSelected] = useState(initialCarrier || '');
 
   const carriers = [
@@ -41,6 +41,24 @@ function CompactCarrierSelector({ onCarrierUpdate, initialCarrier, onContinue })
         <div style={{ fontSize: '0.75rem', color: '#666', textAlign: 'center', marginTop: '2px' }}>
           Step 3 of 9
         </div>
+        {onBack && (
+          <button
+            onClick={onBack}
+            style={{
+              position: 'absolute',
+              top: '0.5rem',
+              left: '0.5rem',
+              padding: '0.5rem',
+              background: 'transparent',
+              border: 'none',
+              fontSize: '1rem',
+              cursor: 'pointer',
+              color: '#333'
+            }}
+          >
+            ← Back
+          </button>
+        )}
         <button
           onClick={() => onContinue && onContinue()}
           disabled={!selected}
