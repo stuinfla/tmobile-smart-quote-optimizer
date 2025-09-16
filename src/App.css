@@ -144,7 +144,7 @@ body {
   transition: all 0.2s;
   white-space: nowrap;
   position: relative;
-  z-index: 100;
+  z-index: 10001; /* Higher than all other elements to prevent click blocking */
 }
 
 .new-button:hover {
