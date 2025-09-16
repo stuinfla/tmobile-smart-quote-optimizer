@@ -327,10 +327,10 @@ function AppComplete() {
     
     // Clear stale localStorage if app version changed
     const lastVersion = localStorage.getItem('tmobile-app-version');
-    if (lastVersion !== '2.6.1') {
+    if (lastVersion !== '2.6.2') {
       localStorage.removeItem('tmobile-current-step');
       localStorage.removeItem('tmobile-customer-data');
-      localStorage.setItem('tmobile-app-version', '2.6.1');
+      localStorage.setItem('tmobile-app-version', '2.6.2');
       setCurrentStep('qualification');
     }
     

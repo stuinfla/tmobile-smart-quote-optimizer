@@ -147,7 +147,7 @@ function CompactPhoneSelector({ devices, onDevicesUpdate, onContinue, step }) {
           Continue →
         </button>
         <div className="version-footer-compact">
-          v2.6.1
+          v2.6.2
         </div>
       </div>
     </div>
