@@ -1,12 +1,9 @@
 {
-  "version": "2.5.1",
+  "version": "2.6",
   "releaseDate": "2025-09-16",
   "features": [
-    "Fixed admin password visibility (white on white)",
-    "Enhanced accessory selector - fixed checkboxes",
-    "Optimized calculation logic - no more NaN",
-    "Professional proposal with T-Mobile branding",
-    "Improved customer flow with auto-advance",
-    "Global input fixes for all text visibility"
+    "Version 2.6.0 Release",
+    "Bug fixes and performance improvements",
+    "Updated dependencies"
   ]
 }
