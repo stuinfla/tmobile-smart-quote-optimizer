@@ -178,6 +178,31 @@ async function testToProposal() {
         continue;
       }
       
+      // Check for Protection 360 insurance screen
+      const protectionScreen = await page.locator('text=Protection 360').isVisible() || 
+                              await page.locator('text=Protect your devices').isVisible();
+      if (protectionScreen) {
+        console.log('🛡️ On Protection 360 screen - declining insurance');
+        
+        // Look for the specific button text from the component
+        const skipInsuranceBtn = await page.locator('button:has-text("Skip Insurance")');
+        
+        if (await skipInsuranceBtn.isVisible()) {
+          await skipInsuranceBtn.click();
+          await page.waitForTimeout(2000);
+          console.log('✅ Protection 360 screen complete - clicked Skip Insurance');
+        } else {
+          console.log('⚠️ Skip Insurance button not found, looking for Continue');
+          const continueBtn = await page.locator('button:has-text("Continue")').first();
+          if (await continueBtn.isVisible()) {
+            await continueBtn.click();
+            await page.waitForTimeout(2000);
+          }
+        }
+        stepCount++;
+        continue;
+      }
+      
       // Check for proposal/results screen
       const proposalScreen = await page.locator('text=Your T-Mobile').isVisible() ||
                             await page.locator('text=Deal Summary').isVisible() ||
