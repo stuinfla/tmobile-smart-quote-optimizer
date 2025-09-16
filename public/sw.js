@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tmobile-sales-edge-v2.6.24';
+const CACHE_NAME = 'tmobile-sales-edge-v2.6.25';
 const urlsToCache = [
   '/',
   '/index.html',
