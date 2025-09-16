@@ -84,7 +84,7 @@ function CompactFinancingSelector({ onFinancingUpdate, initialTerm, onContinue }
           Continue →
         </button>
         <div className="version-footer-compact">
-          v2.6.0
+          v2.6.1
         </div>
       </div>
     </div>
