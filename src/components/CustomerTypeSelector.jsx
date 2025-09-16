@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CustomerTypeSelector.css';
 
 const CustomerTypeSelector = ({ onSelect }) => {
@@ -30,6 +30,15 @@ const CustomerTypeSelector = ({ onSelect }) => {
       }
     }
   };
+
+  // Auto-advance when both selections are made
+  useEffect(() => {
+    if (customerStatus && discountCategory) {
+      setTimeout(() => {
+        handleComplete();
+      }, 800); // Brief delay to show completion
+    }
+  }, [customerStatus, discountCategory]);
 
   const discountCategories = [
     { id: 'consumer', label: 'Standard Consumer', icon: '👤' },
@@ -104,15 +113,23 @@ const CustomerTypeSelector = ({ onSelect }) => {
         </div>
       )}
 
-      {/* Continue Button */}
+      {/* Auto-advance when complete */}
       {customerStatus && discountCategory && (
-        <button 
-          className="continue-button-bottom"
-          onClick={handleComplete}
-          type="button"
-        >
-          Continue →
-        </button>
+        <div style={{
+          position: 'fixed',
+          bottom: '100px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: '#22c55e',
+          color: 'white',
+          padding: '0.5rem 1rem',
+          borderRadius: '20px',
+          fontSize: '0.9rem',
+          fontWeight: 600,
+          zIndex: 1000
+        }}>
+          ✓ Complete - Moving forward...
+        </div>
       )}
     </div>
   );

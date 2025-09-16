@@ -137,19 +137,24 @@ function CompactPhoneSelector({ devices, onDevicesUpdate, onContinue, step }) {
         </div>
       </div>
 
-      {/* Fixed continue button */}
-      <div className="continue-area-compact">
-        <button 
-          className="continue-btn-compact"
-          onClick={() => onContinue && onContinue()}
-          disabled={!devices.every(d => d.newPhone && d.storage)}
-        >
-          Continue →
-        </button>
-        <div className="version-footer-compact">
-          v2.6.2
+      {/* Auto-advance indicator */}
+      {devices.every(d => d.newPhone && d.storage) && (
+        <div style={{
+          position: 'fixed',
+          bottom: '100px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: '#22c55e',
+          color: 'white',
+          padding: '0.5rem 1rem',
+          borderRadius: '20px',
+          fontSize: '0.9rem',
+          fontWeight: 600,
+          zIndex: 1000
+        }}>
+          ✓ Complete - Moving forward...
         </div>
-      </div>
+      )}
     </div>
   );
 }

@@ -59,26 +59,6 @@ function CompactCarrierSelector({ onCarrierUpdate, initialCarrier, onContinue, o
             ← Back
           </button>
         )}
-        <button
-          onClick={() => onContinue && onContinue()}
-          disabled={!selected}
-          style={{
-            position: 'absolute',
-            top: '0.5rem',
-            right: '0.5rem',
-            padding: '0.5rem 1rem',
-            backgroundColor: selected ? '#e20074' : '#ccc',
-            color: 'white',
-            border: 'none',
-            borderRadius: '8px',
-            fontSize: '0.875rem',
-            fontWeight: '600',
-            cursor: selected ? 'pointer' : 'not-allowed',
-            transition: 'background-color 0.2s'
-          }}
-        >
-          Next →
-        </button>
       </div>
 
       {/* Main content - no scroll */}
@@ -155,19 +135,24 @@ function CompactCarrierSelector({ onCarrierUpdate, initialCarrier, onContinue, o
         </div>
       </div>
 
-      {/* Fixed continue button */}
-      <div className="continue-area-compact">
-        <button 
-          className="continue-btn-compact"
-          onClick={() => onContinue && onContinue()}
-          disabled={!selected}
-        >
-          Continue →
-        </button>
-        <div className="version-footer-compact">
-          v2.6.2
+      {/* Auto-advance when selection made */}
+      {selected && (
+        <div style={{
+          position: 'fixed',
+          bottom: '100px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: '#22c55e',
+          color: 'white',
+          padding: '0.5rem 1rem',
+          borderRadius: '20px',
+          fontSize: '0.9rem',
+          fontWeight: 600,
+          zIndex: 1000
+        }}>
+          ✓ Complete - Moving forward...
         </div>
-      </div>
+      )}
     </div>
   );
 }

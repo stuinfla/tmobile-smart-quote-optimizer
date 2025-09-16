@@ -240,44 +240,24 @@ function CompactCustomerQualification({ onQualificationUpdate, initialQualificat
         </div>
       </div>
 
-      {/* Fixed continue button */}
-      <div style={{
-        background: 'white',
-        borderTop: '1px solid #e0e0e0',
-        padding: '1rem',
-        zIndex: 1000,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
-      }}>
-        <button 
-          onClick={() => onContinue && onContinue()}
-          disabled={!selected}
-          style={{
-            width: '100%',
-            maxWidth: '400px',
-            padding: '0.875rem',
-            background: '#e20074',
-            color: 'white',
-            border: 'none',
-            borderRadius: '25px',
-            fontSize: '1rem',
-            fontWeight: 600,
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-            opacity: selected ? 1 : 0.5
-          }}
-        >
-          Continue →
-        </button>
+      {/* Auto-advance indicator */}
+      {selected && (
         <div style={{
-          fontSize: '0.55rem',
-          color: '#ccc',
-          marginTop: '0.5rem'
+          position: 'fixed',
+          bottom: '100px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: '#22c55e',
+          color: 'white',
+          padding: '0.5rem 1rem',
+          borderRadius: '20px',
+          fontSize: '0.9rem',
+          fontWeight: 600,
+          zIndex: 1000
         }}>
-          v2.6.4
+          ✓ Complete - Moving forward...
         </div>
-      </div>
+      )}
     </div>
   );
 }

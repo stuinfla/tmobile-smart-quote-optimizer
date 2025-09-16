@@ -52,6 +52,15 @@ function CompactTradeInSelector({ devices, onDevicesUpdate, onContinue, isCompet
 
   const allSelected = selections.every(s => s && s !== '');
 
+  // Auto-advance when all lines have selections
+  useEffect(() => {
+    if (allSelected && onContinue) {
+      setTimeout(() => {
+        onContinue();
+      }, 800);
+    }
+  }, [allSelected, onContinue]);
+
   return (
     <div style={{
       position: 'fixed',
@@ -80,23 +89,18 @@ function CompactTradeInSelector({ devices, onDevicesUpdate, onContinue, isCompet
           <div style={{ fontSize: '0.75rem', color: '#666' }}>
             Step 5 of 10
           </div>
-          <button 
-            onClick={() => onContinue && onContinue()}
-            disabled={!allSelected}
-            style={{
-              padding: '0.5rem 1.5rem',
-              background: allSelected ? '#e20074' : '#ccc',
+          {allSelected && (
+            <div style={{
+              background: '#22c55e',
               color: 'white',
-              border: 'none',
+              padding: '0.5rem 1rem',
               borderRadius: '20px',
               fontSize: '0.85rem',
-              fontWeight: 600,
-              cursor: allSelected ? 'pointer' : 'not-allowed',
-              transition: 'all 0.2s ease'
-            }}
-          >
-            Continue →
-          </button>
+              fontWeight: 600
+            }}>
+              ✓ Complete - Moving forward...
+            </div>
+          )}
         </div>
         <div style={{
           height: '3px',
@@ -296,43 +300,24 @@ function CompactTradeInSelector({ devices, onDevicesUpdate, onContinue, isCompet
         </div>
       </div>
 
-      {/* Continue button */}
-      <div style={{
-        background: 'white',
-        borderTop: '1px solid #e0e0e0',
-        padding: '1rem',
-        zIndex: 1000,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
-      }}>
-        <button 
-          onClick={() => onContinue && onContinue()}
-          disabled={!allSelected}
-          style={{
-            width: '100%',
-            maxWidth: '400px',
-            padding: '0.875rem',
-            background: allSelected ? '#e20074' : '#ccc',
-            color: 'white',
-            border: 'none',
-            borderRadius: '25px',
-            fontSize: '1rem',
-            fontWeight: 600,
-            cursor: allSelected ? 'pointer' : 'not-allowed',
-            transition: 'all 0.2s ease'
-          }}
-        >
-          Continue →
-        </button>
+      {/* Auto-advance indicator */}
+      {allSelected && (
         <div style={{
-          fontSize: '0.55rem',
-          color: '#ccc',
-          marginTop: '0.5rem'
+          position: 'fixed',
+          bottom: '100px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: '#22c55e',
+          color: 'white',
+          padding: '0.5rem 1rem',
+          borderRadius: '20px',
+          fontSize: '0.9rem',
+          fontWeight: 600,
+          zIndex: 1000
         }}>
-          v2.6.5
+          ✓ Complete - Moving forward...
         </div>
-      </div>
+      )}
     </div>
   );
 }

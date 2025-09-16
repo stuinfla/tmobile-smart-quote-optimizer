@@ -371,22 +371,18 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
               hasPromoPlan={customerData.selectedPlan === 'EXPERIENCE_BEYOND'}
             />
             
-            <div style={{marginTop: '1rem', display: 'flex', gap: '1rem', justifyContent: 'space-between'}}>
-              <button 
-                className="btn btn-primary"
-                onClick={() => onAnswer('continue', 'insurance')}
-                style={{
-                  padding: '0.75rem 1.5rem',
-                  background: 'var(--tmobile-magenta)',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  flex: 1
-                }}
-              >
-                Continue →
-              </button>
+            <div style={{marginTop: '1rem', textAlign: 'center'}}>
+              <div style={{
+                background: '#22c55e',
+                color: 'white',
+                padding: '0.5rem 1rem',
+                borderRadius: '20px',
+                fontSize: '0.9rem',
+                fontWeight: 600,
+                display: 'inline-block'
+              }}>
+                ✓ Continue via navigation dots below
+              </div>
             </div>
             
             {/* Skip button */}
@@ -629,15 +625,6 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
             onClick={handleBack}
           >
             ← Back
-          </button>
-        )}
-        {currentStep !== 'summary' && (
-          <button 
-            className={`nav-btn continue ${!canContinue() ? 'disabled' : ''}`}
-            onClick={handleContinue}
-            disabled={!canContinue()}
-          >
-            Continue →
           </button>
         )}
       </div>
