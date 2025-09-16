@@ -5,7 +5,14 @@ const CustomerTypeSelector = ({ onSelect }) => {
   const [customerStatus, setCustomerStatus] = useState(null);
   const [discountCategory, setDiscountCategory] = useState(null);
 
+  const handleCustomerStatusChange = (status) => {
+    setCustomerStatus(status);
+    // Clear discount category when changing customer status
+    setDiscountCategory(null);
+  };
+
   const handleComplete = () => {
+    console.log('Continue clicked:', { customerStatus, discountCategory });
     if (customerStatus && discountCategory) {
       onSelect({
         type: customerStatus,
@@ -35,8 +42,9 @@ const CustomerTypeSelector = ({ onSelect }) => {
         <h3 className="section-label">Are you a current T-Mobile customer?</h3>
         <div className="customer-type-buttons">
           <button
-            onClick={() => setCustomerStatus('existing')}
+            onClick={() => handleCustomerStatusChange('existing')}
             className={`customer-type-button ${customerStatus === 'existing' ? 'selected' : ''}`}
+            type="button"
           >
             <div className="button-icon">✅</div>
             <div className="button-text">
@@ -46,8 +54,9 @@ const CustomerTypeSelector = ({ onSelect }) => {
           </button>
           
           <button
-            onClick={() => setCustomerStatus('new')}
+            onClick={() => handleCustomerStatusChange('new')}
             className={`customer-type-button ${customerStatus === 'new' ? 'selected' : ''}`}
+            type="button"
           >
             <div className="button-icon">🆕</div>
             <div className="button-text">
@@ -63,11 +72,16 @@ const CustomerTypeSelector = ({ onSelect }) => {
         <div className="section-group discount-section">
           <h3 className="section-label">Which category applies to you?</h3>
           <div className="discount-grid">
-            {discountCategories.map(cat => (
+            {discountCategories.map((cat, index) => (
               <button
                 key={cat.id}
-                onClick={() => setDiscountCategory(cat.id)}
+                onClick={() => {
+                  console.log('Clicking category:', cat.id);
+                  setDiscountCategory(cat.id);
+                }}
                 className={`discount-button ${discountCategory === cat.id ? 'selected' : ''}`}
+                type="button"
+                style={{ zIndex: 10 - index }} // Prevent overlap issues
               >
                 <span className="discount-icon">{cat.icon}</span>
                 <span className="discount-label">{cat.label}</span>
@@ -85,6 +99,7 @@ const CustomerTypeSelector = ({ onSelect }) => {
         <button 
           className="continue-button-bottom"
           onClick={handleComplete}
+          type="button"
         >
           Continue →
         </button>
