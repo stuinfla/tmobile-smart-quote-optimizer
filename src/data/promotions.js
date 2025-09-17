@@ -1,22 +1,11 @@
 export const promotions = {
   phone_deals: {
-    GO5G_NEXT_BOGO: {
-      name: "GO5G Next BOGO",
+    EXPERIENCE_BOGO: {
+      name: "Experience BOGO",
       description: "Buy One Get One $830 off",
       value: 830,
       requirements: {
-        plan: "GO5G_Next",
-        new_line: true,
-        eligible_phones: ["flagship"]
-      },
-      stackable: false
-    },
-    GO5G_PLUS_BOGO: {
-      name: "GO5G Plus BOGO",
-      description: "Buy One Get One $830 off",
-      value: 830,
-      requirements: {
-        plan: "GO5G_Plus",
+        plan: ["EXPERIENCE_BEYOND", "EXPERIENCE_MORE"],
         new_line: true,
         eligible_phones: ["flagship"]
       },
@@ -27,7 +16,7 @@ export const promotions = {
       description: "$830 off with any trade-in",
       value: 830,
       requirements: {
-        plan: ["GO5G_Plus", "GO5G_Next"],
+        plan: ["EXPERIENCE_BEYOND", "EXPERIENCE_MORE"],
         trade_in: "any_condition",
         upgrade_eligible: true
       },
@@ -107,7 +96,7 @@ export const promotions = {
       value: 60,
       monthly_savings: 60,
       requirements: {
-        plan: ["GO5G_Plus", "GO5G_Next"],
+        plan: ["EXPERIENCE_BEYOND", "EXPERIENCE_MORE"],
         voice_lines: 2
       }
     },

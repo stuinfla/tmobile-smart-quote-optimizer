@@ -9,7 +9,7 @@
     "fees": {
       "regulatory_fee_per_line": 3.99,
       "federal_local_surcharge_per_line": 2.50,
-      "activation_fee_per_line": 10
+      "device_connection_charge": 35
     },
     "counties": {
       "palm_beach": {

@@ -116,14 +116,14 @@ export const experiencePlans = {
   }
 };
 
-// GO5G Plans - DISCONTINUED April 2025
-// These plans are no longer available for new customers
-export const go5gPlans = {};
+// Legacy Plans - All discontinued
+// Only Experience plans are available for new customers
+export const legacyPlans = {};
 
 // Plan Categories for Organization
 export const planCategories = {
   experience: ['essentials', 'experience_more', 'experience_beyond'],
-  go5g: [], // Discontinued April 2025
+  // All legacy plans discontinued
   legacy: [] // All legacy plans discontinued
 };
 

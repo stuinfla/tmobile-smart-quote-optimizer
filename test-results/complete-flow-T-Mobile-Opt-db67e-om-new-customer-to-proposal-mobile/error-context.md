@@ -1,0 +1,59 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e5]:
+      - generic [ref=e6]:
+        - img "T-Mobile" [ref=e7]
+        - generic [ref=e8]: Sales Edge
+      - button "New" [ref=e9] [cursor=pointer]
+  - main [ref=e10]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - heading "Welcome to T-Mobile!" [level=2] [ref=e13]
+        - paragraph [ref=e14]: Let's get you the best deal
+      - generic [ref=e15]:
+        - heading "Are you a current T-Mobile customer?" [level=3] [ref=e16]
+        - generic [ref=e17]:
+          - button "✅ Yes, I'm a Customer I currently have T-Mobile service" [ref=e18] [cursor=pointer]:
+            - generic [ref=e19] [cursor=pointer]: ✅
+            - generic [ref=e20] [cursor=pointer]:
+              - generic [ref=e21] [cursor=pointer]: Yes, I'm a Customer
+              - generic [ref=e22] [cursor=pointer]: I currently have T-Mobile service
+          - button "🆕 No, I'm New I want to switch to T-Mobile" [ref=e23] [cursor=pointer]:
+            - generic [ref=e24] [cursor=pointer]: 🆕
+            - generic [ref=e25] [cursor=pointer]:
+              - generic [ref=e26] [cursor=pointer]: No, I'm New
+              - generic [ref=e27] [cursor=pointer]: I want to switch to T-Mobile
+      - generic [ref=e28]:
+        - heading "Which category applies to you?" [level=3] [ref=e29]
+        - generic [ref=e30]:
+          - button "👤 Standard Consumer" [ref=e31] [cursor=pointer]:
+            - generic [ref=e32] [cursor=pointer]: 👤
+            - generic [ref=e33] [cursor=pointer]: Standard Consumer
+          - button "👴 55+ Senior 15% off" [ref=e34] [cursor=pointer]:
+            - generic [ref=e35] [cursor=pointer]: 👴
+            - generic [ref=e36] [cursor=pointer]: 55+ Senior
+            - generic [ref=e37] [cursor=pointer]: 15% off
+          - button "🎖️ Military/Veteran 40% off lines 2-6" [ref=e38] [cursor=pointer]:
+            - generic [ref=e39] [cursor=pointer]: 🎖️
+            - generic [ref=e40] [cursor=pointer]: Military/Veteran
+            - generic [ref=e41] [cursor=pointer]: 40% off lines 2-6
+          - button "🚑 First Responder 40% off lines 2-6" [ref=e42] [cursor=pointer]:
+            - generic [ref=e43] [cursor=pointer]: 🚑
+            - generic [ref=e44] [cursor=pointer]: First Responder
+            - generic [ref=e45] [cursor=pointer]: 40% off lines 2-6
+          - button "📚 Teacher/Education Special pricing" [ref=e46] [cursor=pointer]:
+            - generic [ref=e47] [cursor=pointer]: 📚
+            - generic [ref=e48] [cursor=pointer]: Teacher/Education
+            - generic [ref=e49] [cursor=pointer]: Special pricing
+          - button "💼 Business Business rates" [ref=e50] [cursor=pointer]:
+            - generic [ref=e51] [cursor=pointer]: 💼
+            - generic [ref=e52] [cursor=pointer]: Business
+            - generic [ref=e53] [cursor=pointer]: Business rates
+  - button "⚙️" [ref=e54] [cursor=pointer]
+  - contentinfo:
+    - generic: v2.6.27 • Released 2025-09-16
+    - generic: © 2025 Created by ISOVision.ai for T-Mobile Corporate • Stuart Kerr • sikerr@gmail.com • (312) 953-9668
+```

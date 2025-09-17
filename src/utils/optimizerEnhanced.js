@@ -123,22 +123,26 @@ export class DealOptimizer {
       return { baseMonthly: 0, withAutoPay: 0, autoPay: 0 };
     }
     
-    // Use TOTAL pricing for the line count
+    // Use TOTAL pricing for the line count (NOT per-line)
+    // These are TOTAL prices from completePricingDatabase
     let totalMonthly = 0;
     
-    if (lineCount === 1) {
-      totalMonthly = plan.pricing[1] || 105;
-    } else if (lineCount === 2) {
-      totalMonthly = (plan.pricing[2] || 90) * 2;
-    } else if (lineCount === 3) {
-      totalMonthly = (plan.pricing[3] || 76.67) * 3;
-    } else if (lineCount === 4) {
-      totalMonthly = (plan.pricing[4] || 70) * 4;
-    } else if (lineCount === 5) {
-      totalMonthly = (plan.pricing[5] || 66) * 5;
+    // Map plan keys to actual total prices
+    const totalPricing = {
+      'EXPERIENCE_BEYOND': { 1: 105, 2: 180, 3: 230, 4: 280, 5: 330, 6: 380 },
+      'EXPERIENCE_MORE': { 1: 90, 2: 150, 3: 185, 4: 220, 5: 255, 6: 290 },
+      'ESSENTIALS_SAVER': { 1: 55, 2: 95, 3: 120, 4: 145, 5: 170, 6: 195 }
+    };
+    
+    const planTotals = totalPricing[planKey] || totalPricing['EXPERIENCE_BEYOND'];
+    
+    if (lineCount <= 6) {
+      totalMonthly = planTotals[lineCount] || planTotals[1] * lineCount;
     } else {
-      // For 6+ lines
-      totalMonthly = (plan.pricing[6] || 62) * lineCount;
+      // For 7+ lines, add incremental cost
+      const baseCost = planTotals[6];
+      const perLineAdditional = planTotals[1] * 0.6; // Approximate discount for additional lines
+      totalMonthly = baseCost + ((lineCount - 6) * perLineAdditional);
     }
     
     // Apply AutoPay discount

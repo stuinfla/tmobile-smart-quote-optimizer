@@ -204,7 +204,7 @@ function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, on
             flexWrap: 'wrap'
           }}>
             <button
-              onClick={() => handleQuickSelect('iPhone_17')}
+              onClick={() => handleQuickSelect('iPhone_17_Pro')}
               style={{
                 padding: '0.4rem 0.8rem',
                 background: '#e20074',
@@ -216,10 +216,10 @@ function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, on
                 cursor: 'pointer'
               }}
             >
-              All iPhone 17
+              All iPhones
             </button>
             <button
-              onClick={() => handleQuickSelect('iPhone_17_Pro')}
+              onClick={() => handleQuickSelect('Galaxy_S25_Plus')}
               style={{
                 padding: '0.4rem 0.8rem',
                 background: 'white',
@@ -231,7 +231,37 @@ function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, on
                 cursor: 'pointer'
               }}
             >
-              All iPhone 17 Pro
+              All Samsung
+            </button>
+            <button
+              onClick={() => handleQuickSelect('iPhone_17')}
+              style={{
+                padding: '0.4rem 0.8rem',
+                background: 'white',
+                color: '#666',
+                border: '2px solid #e0e0e0',
+                borderRadius: '16px',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                cursor: 'pointer'
+              }}
+            >
+              iPhone 17
+            </button>
+            <button
+              onClick={() => handleQuickSelect('iPhone_17_Pro')}
+              style={{
+                padding: '0.4rem 0.8rem',
+                background: 'white',
+                color: '#666',
+                border: '2px solid #e0e0e0',
+                borderRadius: '16px',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                cursor: 'pointer'
+              }}
+            >
+              iPhone 17 Pro
             </button>
             <button
               onClick={() => handleQuickSelect('Galaxy_S25')}
@@ -246,7 +276,7 @@ function CompactAllLinesPhoneSelector({ devices, onDevicesUpdate, onContinue, on
                 cursor: 'pointer'
               }}
             >
-              All Galaxy S25
+              Galaxy S25
             </button>
           </div>
         </div>

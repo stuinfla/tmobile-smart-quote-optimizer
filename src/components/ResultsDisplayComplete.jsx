@@ -1,20 +1,25 @@
 import { useState } from 'react';
 import '../styles/results-enhanced.css';
+import taxConfig from '../data/taxConfig.json';
 
 function ResultsDisplayComplete({ results, customerData }) {
   const [expandedScenario, setExpandedScenario] = useState(null);
   const [showPerLineBreakdown, setShowPerLineBreakdown] = useState(false);
   
-  // Florida wireless service taxes and fees for Delray Beach (33483)
-  const FLORIDA_COMMUNICATIONS_TAX = 0.0688; // 6.88% FL communications services tax
-  const PALM_BEACH_COUNTY_TAX = 0.01; // 1% local tax
-  const FEDERAL_USF_FEE = 0.0124; // 1.24% Federal Universal Service Fund
-  const REGULATORY_FEE_PER_LINE = 3.99; // T-Mobile Regulatory Programs fee per line
-  const FEDERAL_LOCAL_SURCHARGE_PER_LINE = 2.50; // Average federal/local surcharges per line
-  const ACTIVATION_FEE_PER_LINE = 10; // $10 per line activation fee
+  // Get tax configuration for customer's location (default to Palm Beach)
+  const location = customerData.location || 'palm_beach';
+  const countyTax = taxConfig.florida.counties[location] || taxConfig.florida.counties.palm_beach;
+  
+  // Use tax rates from config file
+  const FLORIDA_COMMUNICATIONS_TAX = taxConfig.florida.taxes.state_communications_tax;
+  const FEDERAL_USF_FEE = taxConfig.florida.taxes.federal_usf;
+  const COUNTY_TAX = countyTax.county_tax;
+  const REGULATORY_FEE_PER_LINE = taxConfig.florida.fees.regulatory_fee_per_line;
+  const FEDERAL_LOCAL_SURCHARGE_PER_LINE = taxConfig.florida.fees.federal_local_surcharge_per_line;
+  const DEVICE_CONNECTION_CHARGE = taxConfig.florida.fees.device_connection_charge; // $35 per device
   
   // Total percentage-based tax rate for wireless services
-  const TOTAL_TAX_RATE = FLORIDA_COMMUNICATIONS_TAX + PALM_BEACH_COUNTY_TAX + FEDERAL_USF_FEE;
+  const TOTAL_TAX_RATE = countyTax.total_service_tax || (FLORIDA_COMMUNICATIONS_TAX + COUNTY_TAX + FEDERAL_USF_FEE);
   
   if (!results || results.length === 0) {
     return (
@@ -91,11 +96,16 @@ function ResultsDisplayComplete({ results, customerData }) {
       deviceTaxes = scenario.deviceTaxes;
     }
     
-    // Calculate activation fees
-    const lineCount = customerData.lines || 1;
-    const activationFees = lineCount * ACTIVATION_FEE_PER_LINE;
+    // Calculate device connection charges for all devices (phones, tablets, watches)
+    const phoneLines = customerData.lines || 1;
+    const accessoryDevices = (customerData.accessoryLines?.watch ? 1 : 0) + 
+                            (customerData.accessoryLines?.tablet ? 1 : 0) +
+                            (customerData.accessoryLines?.homeInternet ? 1 : 0);
+    const totalDevices = phoneLines + accessoryDevices;
+    const activationFees = totalDevices * DEVICE_CONNECTION_CHARGE; // $35 per device
     
     // First month service + taxes and fees
+    const lineCount = customerData.lines || 1;
     const firstMonthService = parseFloat(scenario.monthlyTotal) || 0;
     const firstMonthTaxesAndFees = calculateServiceTaxesAndFees(
       parseFloat(scenario.monthlyService) || firstMonthService, 

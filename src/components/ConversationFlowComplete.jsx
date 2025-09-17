@@ -22,7 +22,7 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
   const getSteps = () => {
     // Base flow for existing customers
     if (customerData.isExisting) {
-      return ['customerType', 'lines', 'currentPhones', 'newPhones', 'plan', 'insurance', 'accessories', 'summary'];
+      return ['customerType', 'lines', 'currentPhones', 'newPhones', 'plan', 'accessoryLines', 'accessoryDevices', 'insurance', 'summary'];
     }
     
     // Smart flow for new customers: carrier first, then decide on trade-in
@@ -31,14 +31,14 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
       const isKeepAndSwitchEligible = ['Verizon', 'AT&T'].includes(customerData.carrier);
       if (isKeepAndSwitchEligible && customerData.carrier) {
         // Fast path: Skip trade-in for Keep & Switch customers
-        return ['customerType', 'lines', 'carrier', 'newPhones', 'plan', 'insurance', 'accessories', 'summary'];
+        return ['customerType', 'lines', 'carrier', 'newPhones', 'plan', 'accessoryLines', 'accessoryDevices', 'insurance', 'summary'];
       }
       // Standard new customer flow
-      return ['customerType', 'lines', 'carrier', 'currentPhones', 'newPhones', 'plan', 'insurance', 'accessories', 'summary'];
+      return ['customerType', 'lines', 'carrier', 'currentPhones', 'newPhones', 'plan', 'accessoryLines', 'accessoryDevices', 'insurance', 'summary'];
     }
     
     // Default flow
-    return ['customerType', 'lines', 'carrier', 'currentPhones', 'newPhones', 'plan', 'insurance', 'accessories', 'summary'];
+    return ['customerType', 'lines', 'carrier', 'currentPhones', 'newPhones', 'plan', 'accessoryLines', 'accessoryDevices', 'insurance', 'summary'];
   };
   
   const steps = getSteps();
@@ -90,14 +90,29 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
     switch(currentStep) {
       case 'customerType':
         return customerData.isExisting !== undefined;
+      case 'lines':
+        return customerData.lines > 0 && customerData.devices.length === customerData.lines;
+      case 'carrier':
+        return customerData.carrier && customerData.carrier !== '';
       case 'newPhones':
         return customerData.devices.every(d => d.newPhone && d.storage);
       case 'currentPhones':
-        return customerData.devices.every(d => d.currentPhone && d.currentPhone !== '');
+        // Fix: Allow any non-null value as valid (including empty string for no trade-in)
+        return customerData.devices.every(d => d.currentPhone !== undefined && d.currentPhone !== null);
+      case 'plan':
+        return customerData.selectedPlan && customerData.selectedPlan !== '';
+      case 'accessoryLines':
+        return true; // Always allow continuation from accessory lines (can skip)
       case 'accessoryDevices':
-        return !customerData.accessoryLines || 
-               (customerData.accessoryLines.watch ? customerData.watchDevice !== undefined : true) &&
-               (customerData.accessoryLines.tablet ? customerData.tabletDevice !== undefined : true);
+        // Check if devices are selected when accessory lines are chosen
+        if (!customerData.accessoryLines) return true;
+        const needsWatchDevice = customerData.accessoryLines?.watch && customerData.watchDevice === undefined;
+        const needsTabletDevice = customerData.accessoryLines?.tablet && customerData.tabletDevice === undefined;
+        return !needsWatchDevice && !needsTabletDevice;
+      case 'insurance':
+        return true; // Always allow continuation from insurance (optional)
+      case 'summary':
+        return true; // Always can calculate from summary
       default:
         return true;
     }
@@ -192,8 +207,10 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
                 onClick={() => {
                   const newDevices = customerData.devices.map(d => ({...d, insurance: true}));
                   setCustomerData({...customerData, devices: newDevices});
-                  // Advance to next step after updating state
-                  setTimeout(() => onAnswer('continue', 'insurance'), 400);
+                  // Advance to next step after updating state  
+                  const currentIndex = steps.indexOf('insurance');
+                  const nextStep = steps[currentIndex + 1];
+                  setTimeout(() => onAnswer('continue', nextStep), 400);
                 }}
               >
                 Protect All Lines
@@ -203,8 +220,10 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
                 onClick={() => {
                   const newDevices = customerData.devices.map(d => ({...d, insurance: false}));
                   setCustomerData({...customerData, devices: newDevices});
-                  // Advance to next step after updating state
-                  setTimeout(() => onAnswer('continue', 'insurance'), 400);
+                  // Advance to next step after updating state  
+                  const currentIndex = steps.indexOf('insurance');
+                  const nextStep = steps[currentIndex + 1];
+                  setTimeout(() => onAnswer('continue', nextStep), 400);
                 }}
               >
                 Skip Insurance
@@ -342,7 +361,10 @@ function ConversationFlowComplete({ currentStep, customerData, onAnswer, setCust
                   className={`plan-card ${customerData.selectedPlan === key ? 'selected' : ''} ${key === 'EXPERIENCE_BEYOND' ? 'popular' : ''}`}
                   onClick={() => {
                     setCustomerData({...customerData, selectedPlan: key});
-                    setTimeout(() => onAnswer('continue', 'accessoryLines'), 400);
+                    // Navigate to next step in the flow
+                    const currentIndex = steps.indexOf('plan');
+                    const nextStep = steps[currentIndex + 1];
+                    setTimeout(() => onAnswer('continue', nextStep), 400);
                   }}
                 >
                   {key === 'EXPERIENCE_BEYOND' && <span className="badge-popular">MOST POPULAR</span>}
